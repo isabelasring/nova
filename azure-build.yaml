@@ -1,0 +1,139 @@
+name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
+
+trigger:
+  branches:
+    include:
+      - trunk
+      - feature/*
+  paths:
+    include:
+      - nova
+
+variables:
+  - name: projectDirectory
+    value: nova
+  - name: repositoryNameArtifactory
+    value: {{repositoryNameArtifactory}}
+
+stages:
+  - stage: pipeline_build
+    displayName: 'Pipeline Build'
+    dependsOn: []
+    jobs:
+      - job: Build
+        pool:
+          name: Build
+          demands:
+            - agent.os -equals linux
+            - npm
+        steps:
+          - bash: echo "##vso[task.setvariable variable=GitHub.Repository.Name]${BUILD_REPOSITORY_NAME##*/}"
+            displayName: Set GitHub.Repository.Name
+          - task: SonarQubePrepare@5
+            displayName: 'Prepare analysis on SonarQube $(projectDirectory)'
+            inputs:
+              SonarQube: SonarQube
+              scannerMode: CLI
+              configMode: manual
+              cliProjectKey: $(GitHub.Repository.Name)
+              cliProjectName: $(GitHub.Repository.Name)
+              cliProjectVersion: $(Build.BuildNumber)
+              cliSources: $(projectDirectory)/src
+              extraProperties: |
+                sonar.exclusions=**/*.js, **/*.css, **/*.html, **/*.scss, **/node_modules/**, **/coverage/**, **/*.spec.ts, **/assets/**, **/*.json, **/*.mock.ts,  **/test.ts, **/acceptancetest/**, **/playwright.config.ts, **/main.ts, **/environments/*
+                sonar.test.inclusions=**/*.spec.ts
+                sonar.language=ts
+                sonar.typescript.lcov.reportPaths=$(System.DefaultWorkingDirectory)/$(projectDirectory)/coverage/lcov.info
+          
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '22.x'
+              checkLatest: true 
+            displayName: install node
+
+          - task: Npm@1
+            displayName: 'update npm'
+            inputs:
+              command: custom
+              verbose: false
+              customCommand: 'install -g npm@latest'
+
+          - task: Npm@1
+            displayName: 'npm install'
+            inputs:
+              command: custom
+              workingDir: $(projectDirectory)
+              verbose: false
+              customCommand: 'install --verbose'
+
+          - task: Npm@1
+            displayName: 'npm build'
+            inputs:
+              command: custom
+              workingDir: $(projectDirectory)
+              verbose: false
+              customCommand: 'run build'
+
+          - task: Npm@1
+            displayName: 'npm test'
+            inputs:
+              command: custom
+              workingDir: $(projectDirectory)
+              verbose: false
+              customCommand: 'run test'
+
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish code coverage from $(System.DefaultWorkingDirectory)/$(projectDirectory)/coverage/clover.xml'
+            inputs:
+              codeCoverageTool: Cobertura
+              summaryFileLocation: '$(System.DefaultWorkingDirectory)/$(projectDirectory)/coverage/clover.xml'
+              pathToSources: '$(System.DefaultWorkingDirectory)/$(projectDirectory)/src'
+              reportDirectory: '$(System.DefaultWorkingDirectory)/$(projectDirectory)/coverage'
+
+          - task: SonarQubeAnalyze@5
+            displayName: 'Run Code Analysis'
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish AcceptanceTest Artifact'
+            inputs:
+              PathtoPublish: $(System.DefaultWorkingDirectory)/$(projectDirectory)/acceptance-test
+              ArtifactName: AcceptanceTest
+
+          - ${{ if  eq(variables['Build.SourceBranch'], 'refs/heads/trunk') }}:
+          - bash: |
+              mkdir $(Build.Repository.LocalPath)/$(projectDirectory)-build
+              cp -r $(Build.Repository.LocalPath)/$(projectDirectory)/dist/* $(Build.Repository.LocalPath)/$(projectDirectory)-build
+              ls $(Build.Repository.LocalPath)/$(projectDirectory)-build
+            displayName: 'Create Project Folder'
+
+          - task: ArchiveFiles@2
+            displayName: 'Compress Dist'
+            inputs:
+              rootFolderOrFile: $(projectDirectory)-build
+              archiveFile: '$(Build.StagingDirectory)/$(projectDirectory)-front.zip'
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact: Artifact'
+            inputs:
+              PathtoPublish: '$(Build.StagingDirectory)/$(projectDirectory)-front.zip'
+              ArtifactName: Artifact
+
+          - task: ArtifactoryGenericUpload@2
+            displayName: 'Artifactory Generic Upload'
+            inputs:
+              artifactoryService: 'Artifactory'
+              specSource: 'taskConfiguration'
+              fileSpec: |
+                {
+                  "files": [
+                    {
+                      "pattern": "$(Build.StagingDirectory)/$(projectDirectory)-front.zip",
+                      "target": "$(repositoryNameArtifactory)/$(Repository.FullNameComponent)/$(Build.BuildNumber)/"
+                    }
+                  ]
+                }
+              collectBuildInfo: true
+              includeEnvVars: true
+              buildName: '$(Build.DefinitionName)'
+              buildNumber: '$(Build.BuildNumber)'
+              failNoOp: true
