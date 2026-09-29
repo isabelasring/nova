@@ -1,0 +1,22 @@
+@use '../../styles/abstracts/colors' as *;
+@use '../../styles/abstracts/variables' as *;
+
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: $background-body;
+}
+
+.main-column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-container {
+  flex: 1;
+  overflow-x: auto;
+  background: $background-body;
+}
