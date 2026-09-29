@@ -1,0 +1,425 @@
+@if (visible()) {
+
+<div class="modal-backdrop">
+
+  <div class="modal-container">
+
+    <div class="modal-header">
+
+      <div>
+
+        <h2>Información de Aplicación</h2>
+
+        <span class="codigo-app">
+          {{ contacto()?.codigoAplicacion || '—' }}
+        </span>
+
+      </div>
+
+      <button
+        class="close-button"
+        type="button"
+        (click)="close()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="tabs">
+
+      <button
+        type="button"
+        class="tab"
+        [class.active]="activeTab === 'detalle'"
+        (click)="selectTab('detalle')"
+      >
+        Detalle
+      </button>
+
+      <button
+        type="button"
+        class="tab"
+        [class.active]="activeTab === 'contacto'"
+        (click)="selectTab('contacto')"
+      >
+        Contacto
+      </button>
+
+      <button
+        type="button"
+        class="tab"
+        [class.active]="activeTab === 'standby'"
+        (click)="selectTab('standby')"
+      >
+        Programación Standby
+      </button>
+
+      <button
+        type="button"
+        class="tab"
+        [class.active]="activeTab === 'mantenimiento'"
+        (click)="selectTab('mantenimiento')"
+      >
+        Ventana de mantenimiento
+      </button>
+
+    </div>
+
+    <div
+      class="modal-body"
+      [class.modal-body--standby]="activeTab === 'standby'"
+    >
+
+      @if (activeTab === 'detalle') {
+
+        <div class="detalle-container">
+
+          <div class="detalle-item">
+            <label>TÍTULO DE APP</label>
+            <span>{{ contacto()?.nombreAplicacion || '—' }}</span>
+          </div>
+
+          <div class="detalle-item">
+            <label>CÓDIGO DE APP</label>
+            <span>{{ contacto()?.codigoAplicacion || '—' }}</span>
+          </div>
+
+          <div class="detalle-item">
+            <label>EVC</label>
+            <span>{{ contacto()?.evc || '—' }}</span>
+          </div>
+
+          <div class="detalle-item">
+            <label>LÍNEA</label>
+            <span>{{ contacto()?.linea || '—' }}</span>
+          </div>
+
+          <div class="detalle-item">
+            <label>RESPONSABLE</label>
+            <span>{{ contacto()?.nombre || '—' }}</span>
+          </div>
+
+        </div>
+
+      }
+
+      @if (activeTab === 'contacto') {
+
+        <div
+          class="contacto-container"
+          [class.contacto-container--readonly]="!canEditContactoTab"
+          [formGroup]="contactoForm"
+        >
+
+          <div class="form-row">
+
+            <div class="field">
+
+              <label>NOMBRE</label>
+
+              <input
+                type="text"
+                [value]="contacto()?.nombre || ''"
+                readonly
+                class="field-locked"
+              />
+
+            </div>
+
+            <div class="field">
+
+              <label>CELULAR</label>
+
+              <app-phone-input
+                formControlName="celular"
+              />
+
+            </div>
+
+          </div>
+
+          <div class="distribution-card">
+
+            <h4 class="distribution-header">
+              PDN
+            </h4>
+
+            <div class="distribution-content">
+
+              <div class="field">
+
+                <label>LISTA DE DISTRIBUCIÓN</label>
+
+                <select [disabled]="!canEditContactoTab">
+                  <option>
+                    {{ contacto()?.correo || '—' }}
+                  </option>
+                </select>
+
+              </div>
+
+              <div class="field">
+
+                <label>CORREO CANAL TEAMS</label>
+
+                <input
+                  type="text"
+                  formControlName="correoTeams"
+                  [readonly]="!canEditContactoTab"
+                  [class.field-locked]="!canEditContactoTab"
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="distribution-card">
+
+            <h4 class="distribution-header">
+              QA
+            </h4>
+
+            <div class="distribution-content">
+
+              <div class="field">
+
+                <label>LISTA DE DISTRIBUCIÓN</label>
+
+                <select [disabled]="!canEditContactoTab">
+                  <option>
+                    {{ contacto()?.correo || '—' }}
+                  </option>
+                </select>
+
+              </div>
+
+              <div class="field">
+
+                <label>CORREO CANAL TEAMS</label>
+
+                <input
+                  type="text"
+                  formControlName="correoTeams"
+                  [readonly]="!canEditContactoTab"
+                  [class.field-locked]="!canEditContactoTab"
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="distribution-card">
+
+            <h4 class="distribution-header">
+              DEV
+            </h4>
+
+            <div class="distribution-content">
+
+              <div class="field">
+
+                <label>LISTA DE DISTRIBUCIÓN</label>
+
+                <select [disabled]="!canEditContactoTab">
+                  <option>
+                    {{ contacto()?.correo || '—' }}
+                  </option>
+                </select>
+
+              </div>
+
+              <div class="field">
+
+                <label>CORREO CANAL TEAMS</label>
+
+                <input
+                  type="text"
+                  formControlName="correoTeams"
+                  [readonly]="!canEditContactoTab"
+                  [class.field-locked]="!canEditContactoTab"
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+          @if (canEditContactoTab) {
+
+            <div class="footer-actions">
+
+              <button
+                type="button"
+                class="btn-primary btn-save"
+                (click)="saveContacto()"
+              >
+                Guardar
+              </button>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+      @if (activeTab === 'standby') {
+
+        <div
+          class="standby-panel"
+          [class.standby-panel--locked]="editMode()"
+        >
+
+          <app-standby-month-view
+            [assignments]="standbyAssignments()"
+            [showPeopleList]="true"
+            [outlineMode]="false"
+            [hideAppChips]="true"
+            [tooltipBelow]="false"
+            [peopleListAtBottom]="false"
+          />
+
+          @if (!editMode()) {
+
+            <div class="standby-actions">
+
+              <button
+                type="button"
+                class="btn-standby"
+                (click)="goToStandby()"
+              >
+                Programar Standby
+              </button>
+
+            </div>
+
+          } @else {
+
+            <p class="locked-hint">
+              Desde edición solo puedes modificar la pestaña Contacto.
+            </p>
+
+          }
+
+        </div>
+
+      }
+
+      @if (activeTab === 'mantenimiento') {
+
+        <div class="mantenimiento-container">
+
+          <div class="maintenance-section">
+
+            <h4 class="maintenance-title">
+              Ventana activa
+            </h4>
+
+            <div class="maintenance-grid">
+
+              <div class="maintenance-item">
+                <label>Estado</label>
+                <span>Programada</span>
+              </div>
+
+              <div class="maintenance-item">
+                <label>Frecuencia</label>
+                <span>Semanal</span>
+              </div>
+
+              <div class="maintenance-item">
+                <label>Fecha inicio</label>
+                <span>20/08/2026 22:00</span>
+              </div>
+
+              <div class="maintenance-item">
+                <label>Fecha fin</label>
+                <span>21/08/2026 02:00</span>
+              </div>
+
+              <div class="maintenance-item">
+                <label>Zona horaria</label>
+                <span>América / Bogotá</span>
+              </div>
+
+              <div class="maintenance-item">
+                <label>Aplicación</label>
+                <span>{{ contacto()?.codigoAplicacion || '—' }}</span>
+              </div>
+
+              <div class="maintenance-item maintenance-item--full">
+                <label>Observación</label>
+                <span>Reinicio coordinado con operaciones</span>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="maintenance-section">
+
+            <h4 class="maintenance-title">
+              Historial
+            </h4>
+
+            <div class="maintenance-history">
+
+              <div class="history-item">
+                <strong>20/08/2026</strong>
+                <span>Ventana programada</span>
+              </div>
+
+              <div class="history-item">
+                <strong>10/07/2026</strong>
+                <span>Ventana ejecutada</span>
+              </div>
+
+              <div class="history-item">
+                <strong>15/06/2026</strong>
+                <span>Ventana ejecutada</span>
+              </div>
+
+            </div>
+
+          </div>
+
+          @if (!editMode()) {
+
+            <div class="maintenance-actions">
+
+              <button
+                type="button"
+                class="btn-maintenance"
+                (click)="goToMaintenance()"
+              >
+                Programar ventana
+              </button>
+
+            </div>
+
+          } @else {
+
+            <p class="locked-hint">
+              Desde edición solo puedes modificar la pestaña Contacto.
+            </p>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+</div>
+
+}
