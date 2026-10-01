@@ -51,13 +51,13 @@
 
         <div class="field">
 
-          <label>LdC</label>
+          <label>LC</label>
 
           <select
             formControlName="linea"
             (change)="onLineaChange()"
           >
-            <option value="">Seleccione una LdC</option>
+            <option value="">Seleccione una LC</option>
             @for (linea of lineaOptions(); track linea) {
               <option [value]="linea">{{ linea }}</option>
             }
@@ -127,11 +127,12 @@
 
         <label>Horario</label>
 
-        <select formControlName="horario">
-          <option value="24/7">24/7</option>
-          <option value="L-V 8-18">L-V 8-18</option>
-          <option value="Personalizado">Personalizado</option>
-        </select>
+        <input
+          type="text"
+          formControlName="horario"
+          value="24/7"
+          readonly
+        />
 
       </div>
 

@@ -1,0 +1,163 @@
+@use 'abstracts/colors' as *;
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.phone-input {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  height: 48px;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-sm;
+
+  background: $surface;
+
+  overflow: visible;
+}
+
+.phone-input--disabled {
+  background: $background-body;
+}
+
+.phone-input__prefix {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  height: 100%;
+  padding: 0 $space-12 0 $space-16;
+
+  border: none;
+  border-right: 1px solid $border-light;
+  border-radius: $radius-sm 0 0 $radius-sm;
+
+  background: transparent;
+
+  color: $text-primary;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.phone-input__prefix:disabled {
+  cursor: not-allowed;
+  color: $text-secondary;
+}
+
+.phone-input__flag {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.phone-input__dial {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.phone-input__caret {
+  font-size: 10px;
+  color: $text-secondary;
+}
+
+.phone-input__number {
+  flex: 1;
+  min-width: 0;
+
+  height: 100%;
+  padding: 0 $space-16;
+
+  border: none;
+  border-radius: 0 $radius-sm $radius-sm 0;
+
+  background: transparent;
+  color: $text-primary;
+
+  font-size: $font-size-md;
+  font-family: inherit;
+  outline: none;
+}
+
+.phone-input__number[readonly] {
+  color: $text-secondary;
+  cursor: not-allowed;
+}
+
+.phone-input__dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+
+  width: min(340px, 90vw);
+
+  background: $surface;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+
+  overflow: hidden;
+}
+
+.phone-input__search {
+  width: 100%;
+
+  padding: $space-12 $space-16;
+
+  border: none;
+  border-bottom: 1px solid $border-light;
+
+  font-size: $font-size-sm;
+  font-family: inherit;
+  outline: none;
+}
+
+.phone-input__list {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.phone-input__option {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: $space-8;
+  align-items: center;
+
+  padding: $space-8 $space-16;
+
+  border: none;
+  background: transparent;
+
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.phone-input__option:hover,
+.phone-input__option.active {
+  background: $background-body;
+}
+
+.phone-input__option-name {
+  font-size: $font-size-sm;
+  color: $text-primary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.phone-input__option-dial {
+  font-size: $font-size-xs;
+  color: $text-secondary;
+}
+
+.phone-input__empty {
+  margin: 0;
+  padding: $space-16;
+  text-align: center;
+  color: $text-secondary;
+  font-size: $font-size-sm;
+}

@@ -12,10 +12,10 @@ import {
 } from '@angular/forms';
 
 import { ContactoModalComponent }
-from '../../components/contacto-modal/contacto-modal';
+from '../../components/modal-contact/modal-contact';
 
 import { NuevoContactoModalComponent }
-from '../../components/nuevo-contacto-modal/nuevo-contacto-modal';
+from '../../components/new-contacto-modal/new-modal-contact';
 
 import { PhoneInputComponent }
 from '../../../../shared/components/phone-input/phone-input';
@@ -24,13 +24,16 @@ import { PortalFilterBarComponent }
 from '../../../../shared/components/portal-filter-bar/portal-filter-bar';
 
 import { Contacto }
-from '../../models/contacto.model';
+from '../../models/contact-model';
 
 import { ContactosService }
-from '../../services/contactos.service';
+from '../../services/service-contacts';
+
+import { StandbyScheduleService }
+from '../../../stanby/services/standby-schedule-service';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success.service';
+from '../../../../shared/services/save-success-service';
 
 @Component({
   selector: 'app-contactos-page',
@@ -42,8 +45,8 @@ from '../../../../shared/services/save-success.service';
     PhoneInputComponent,
     PortalFilterBarComponent
   ],
-  templateUrl: './contactos-page.html',
-  styleUrl: './contactos-page.scss',
+  templateUrl: './contact-page.html',
+  styleUrl: './contact-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactosPageComponent {
@@ -51,6 +54,8 @@ export class ContactosPageComponent {
   private readonly fb = inject(FormBuilder);
 
   readonly contactosService = inject(ContactosService);
+
+  private readonly standbySchedule = inject(StandbyScheduleService);
 
   private readonly saveSuccess = inject(SaveSuccessService);
 
@@ -117,6 +122,33 @@ export class ContactosPageComponent {
         correo: values.correo ?? ''
       });
     });
+
+  }
+
+  standbyDe(codigoAplicacion: string): { nombre: string; celular: string }[] {
+
+    const seen = new Set<string>();
+    const people: { nombre: string; celular: string }[] = [];
+
+    for (const assignment of this.standbySchedule.savedAssignments) {
+
+      const covers = (assignment.aplicaciones ?? []).some(
+        app => app.codigoAplicacion === codigoAplicacion
+      );
+
+      if (!covers || seen.has(assignment.responsable)) {
+        continue;
+      }
+
+      seen.add(assignment.responsable);
+      people.push({
+        nombre: assignment.responsable,
+        celular: assignment.celular
+      });
+
+    }
+
+    return people;
 
   }
 

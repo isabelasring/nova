@@ -1,0 +1,176 @@
+@use './colors' as *;
+@use './variables' as *;
+
+// ======================================================
+// FLEX
+// ======================================================
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// ======================================================
+// CARD
+// ======================================================
+
+@mixin card {
+  background: $background-surface;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+}
+
+// ======================================================
+// TRANSICIONES
+// ======================================================
+
+@mixin transition {
+  transition: all 0.2s ease;
+}
+
+// ======================================================
+// BADGES
+// ======================================================
+
+@mixin badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-4;
+
+  padding: 6px 14px;
+
+  border-radius: $radius-pill;
+
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+}
+
+// ======================================================
+// INPUTS
+// ======================================================
+
+@mixin input-base {
+  height: 48px;
+
+  border: 1px solid $border-color;
+
+  border-radius: $radius-sm;
+
+  background: $surface;
+  color: $text-primary;
+
+  padding: 0 $space-16;
+
+  font-size: $font-size-md;
+
+  @include transition;
+
+  &::placeholder {
+    color: $text-disabled;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $border-color;
+    box-shadow: 0 0 0 3px rgba(44, 42, 41, 0.08);
+  }
+}
+
+// ======================================================
+// BOTONES
+// ======================================================
+
+@mixin button-base {
+  border: 0;
+
+  border-radius: $radius-sm;
+
+  cursor: pointer;
+
+  font-family: $font-family-base;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+
+  padding: $space-12 $space-24;
+
+  @include transition;
+}
+
+@mixin button-primary {
+  @include button-base;
+
+  background: $amarillo-macondo;
+  color: $on-yellow;
+
+  &:hover {
+    background: $negro-cib;
+    color: $amarillo-macondo;
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+
+  background: $surface;
+  color: $text-primary;
+
+  &:hover {
+    border-color: $violeta-orquidea;
+    color: $violeta-orquidea;
+  }
+}
+
+@mixin corporate-strip {
+  height: 6px;
+  background: $amarillo-macondo;
+}
+
+@mixin text-label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@mixin text-value {
+  font-size: $font-size-md;
+  font-weight: $font-weight-regular;
+  color: $text-primary;
+}
+
+@mixin page-title-tab {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+
+  margin: 0;
+  padding: $space-12 $space-32;
+
+  background: $surface;
+  color: $text-primary !important;
+
+  font-size: $font-size-h2;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+
+  border: 2px solid $amarillo-macondo;
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
+
+  box-shadow: none;
+}

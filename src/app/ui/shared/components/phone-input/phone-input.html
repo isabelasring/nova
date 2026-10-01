@@ -1,0 +1,84 @@
+<div
+  class="phone-input"
+  [class.phone-input--disabled]="disabled() || isDisabled()"
+>
+
+  <button
+    type="button"
+    class="phone-input__prefix"
+    [disabled]="disabled() || isDisabled()"
+    (click)="toggleDropdown(); $event.stopPropagation()"
+  >
+    <span class="phone-input__flag">
+      {{ selectedCountry().flag }}
+    </span>
+    <span class="phone-input__dial">
+      +{{ selectedCountry().dial }}
+    </span>
+    <span class="phone-input__caret">▾</span>
+  </button>
+
+  <input
+    class="phone-input__number"
+    type="tel"
+    [value]="localNumber()"
+    [readonly]="disabled() || isDisabled()"
+    placeholder="Número"
+    (input)="onLocalNumberChange($any($event.target).value)"
+  />
+
+  @if (dropdownOpen()) {
+
+    <div
+      class="phone-input__dropdown"
+      (click)="$event.stopPropagation()"
+    >
+
+      <input
+        class="phone-input__search"
+        type="text"
+        [value]="search()"
+        placeholder="Buscar país o prefijo..."
+        (input)="onSearchChange($any($event.target).value)"
+      />
+
+      <div class="phone-input__list">
+
+        @for (
+          country of filteredCountries();
+          track country.iso + country.dial
+        ) {
+
+          <button
+            type="button"
+            class="phone-input__option"
+            [class.active]="
+              country.iso === selectedCountry().iso &&
+              country.dial === selectedCountry().dial
+            "
+            (click)="selectCountry(country)"
+          >
+            <span>{{ country.flag }}</span>
+            <span class="phone-input__option-name">
+              {{ country.name }}
+            </span>
+            <span class="phone-input__option-dial">
+              +{{ country.dial }}
+            </span>
+          </button>
+
+        }
+
+        @if (filteredCountries().length === 0) {
+          <p class="phone-input__empty">
+            Sin resultados
+          </p>
+        }
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

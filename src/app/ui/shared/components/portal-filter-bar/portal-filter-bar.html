@@ -1,0 +1,71 @@
+<div
+  class="portal-filter portal-filter--inline"
+  (click)="$event.stopPropagation()"
+>
+
+  <div class="portal-filter__chips">
+    @for (chip of allChips(); track chip.key) {
+      <div
+        class="portal-chip"
+        [class.portal-chip--open]="openDimension() === chip.key"
+        [class.portal-chip--active]="isActive(chip.key)"
+      >
+        <div class="portal-chip__shell">
+          <button
+            type="button"
+            class="portal-chip__trigger"
+            (click)="toggleMenu(chip.key, $event)"
+          >
+            <span class="portal-chip__name">{{ chip.label }}</span>
+            @if (selectedValue(chip.key); as selected) {
+              <span class="portal-chip__value">{{ selected }}</span>
+            }
+            <span class="portal-chip__caret" aria-hidden="true">▾</span>
+          </button>
+
+          @if (isActive(chip.key)) {
+            <button
+              type="button"
+              class="portal-chip__x"
+              aria-label="Quitar filtro {{ chip.label }}"
+              (click)="clearDimension(chip.key, $event)"
+            >
+              ×
+            </button>
+          }
+        </div>
+
+        @if (openDimension() === chip.key) {
+          <div class="portal-chip__menu">
+            @for (
+              option of optionsFor(chip.key);
+              track option.value
+            ) {
+              <button
+                type="button"
+                class="portal-chip__option"
+                [class.portal-chip__option--selected]="
+                  portalFilter.filters()[chip.key] === option.value
+                "
+                (click)="selectOption(chip.key, option.value, $event)"
+              >
+                {{ option.label }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  @if (portalFilter.hasActiveFilters()) {
+    <button
+      type="button"
+      class="portal-filter__clear"
+      (click)="clearAll($event)"
+    >
+      Limpiar
+    </button>
+  }
+
+</div>

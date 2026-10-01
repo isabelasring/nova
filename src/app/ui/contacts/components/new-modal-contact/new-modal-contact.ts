@@ -18,19 +18,19 @@ import { PhoneInputComponent }
 from '../../../../shared/components/phone-input/phone-input';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success.service';
+from '../../../../shared/services/save-success-service';
 
 import { STANDBY_APPLICATIONS }
-from '../../../stanby/mocks/standby-applications.mock';
+from '../../../stanby/mocks/standby-applications-mock';
 
 import { ContactosService }
-from '../../services/contactos.service';
+from '../../services/service-contacts';
 
 @Component({
   selector: 'app-nuevo-contacto-modal',
   standalone: true,
-  templateUrl: './nuevo-contacto-modal.html',
-  styleUrl: './nuevo-contacto-modal.scss',
+  templateUrl: './new-modal-contact.html',
+  styleUrl: './new-modal-contact.scss',
   imports: [
     ReactiveFormsModule,
     PhoneInputComponent

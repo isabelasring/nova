@@ -1,0 +1,463 @@
+<div class="alertas-page">
+
+  <div class="alertas-main">
+
+  <header class="list-hero">
+    <h2 class="list-title">Alertas</h2>
+  </header>
+
+  <div class="list-filters">
+
+    <div class="list-toolbar">
+      <input
+        type="search"
+        class="search-input"
+        placeholder="Buscar por problema, plataforma o código app…"
+        [value]="alertasService.search()"
+        (input)="alertasService.search.set($any($event.target).value)"
+      />
+    </div>
+
+    <div class="filter-toolbar">
+
+      <div class="filter-group">
+        <span class="filter-group__label">Severidad</span>
+        <div class="filter-links" role="group" aria-label="Severidad">
+          <button
+            type="button"
+            class="filter-link"
+            [class.filter-link--active]="alertasService.filterSeveridad() === ''"
+            (click)="setFilterSeveridad('')"
+          >
+            Todas
+          </button>
+          <button
+            type="button"
+            class="filter-link filter-link--high"
+            [class.filter-link--active]="alertasService.filterSeveridad() === 'High'"
+            (click)="setFilterSeveridad('High')"
+          >
+            High
+          </button>
+          <button
+            type="button"
+            class="filter-link filter-link--medium"
+            [class.filter-link--active]="alertasService.filterSeveridad() === 'Medium'"
+            (click)="setFilterSeveridad('Medium')"
+          >
+            Medium
+          </button>
+          <button
+            type="button"
+            class="filter-link filter-link--low"
+            [class.filter-link--active]="alertasService.filterSeveridad() === 'Low'"
+            (click)="setFilterSeveridad('Low')"
+          >
+            Low
+          </button>
+          <button
+            type="button"
+            class="filter-link filter-link--info"
+            [class.filter-link--active]="alertasService.filterSeveridad() === 'Information'"
+            (click)="setFilterSeveridad('Information')"
+          >
+            Information
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="alertas-tabs" role="tablist" aria-label="Vista de alertas">
+    <button
+      type="button"
+      role="tab"
+      class="alertas-tabs__tab"
+      [class.alertas-tabs__tab--active]="alertasService.filterEstado() === 'PROBLEM'"
+      [attr.aria-selected]="alertasService.filterEstado() === 'PROBLEM'"
+      (click)="setFilterEstado('PROBLEM')"
+    >
+      Activas
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="alertas-tabs__tab alertas-tabs__tab--resolved"
+      [class.alertas-tabs__tab--active]="alertasService.filterEstado() === 'RESOLVED'"
+      [attr.aria-selected]="alertasService.filterEstado() === 'RESOLVED'"
+      (click)="setFilterEstado('RESOLVED')"
+    >
+      Resueltas
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="alertas-tabs__tab alertas-tabs__tab--assigned"
+      [class.alertas-tabs__tab--active]="alertasService.filterEstado() === 'ASIGNADAS'"
+      [attr.aria-selected]="alertasService.filterEstado() === 'ASIGNADAS'"
+      (click)="setFilterEstado('ASIGNADAS')"
+    >
+      Asignadas
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="alertas-tabs__tab alertas-tabs__tab--mine"
+      [class.alertas-tabs__tab--active]="alertasService.filterEstado() === 'MIAS'"
+      [attr.aria-selected]="alertasService.filterEstado() === 'MIAS'"
+      (click)="setFilterEstado('MIAS')"
+    >
+      Asignadas a mí
+    </button>
+  </div>
+
+  @if (alertasService.filteredAlerts().length === 0) {
+
+    <div class="empty-list">
+      <p>
+        @if (alertasService.filterEstado() === 'RESOLVED') {
+          No hay alertas resueltas con los filtros actuales.
+        } @else if (alertasService.filterEstado() === 'ASIGNADAS') {
+          No hay problemas asignados a un CGM con los filtros actuales.
+        } @else if (alertasService.filterEstado() === 'MIAS') {
+          No tienes problemas asignados con los filtros actuales.
+        } @else {
+          No hay alertas activas con los filtros actuales.
+        }
+      </p>
+    </div>
+
+  } @else {
+
+    <div class="table-card">
+      <table class="alertas-table">
+        <thead>
+          <tr>
+            <th scope="col">Hora</th>
+            <th scope="col">Severidad</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Plataforma</th>
+            <th scope="col">Problema</th>
+            <th scope="col">Aplicaciones</th>
+            @if (
+              alertasService.filterEstado() === 'ASIGNADAS' ||
+              alertasService.filterEstado() === 'MIAS'
+            ) {
+              <th scope="col">Asignada a</th>
+            }
+            <th scope="col">Duración</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (alerta of alertasService.filteredAlerts(); track alerta.id) {
+            <tr
+              class="alertas-table__row"
+              [class.alertas-table__row--open]="selectedAlert()?.id === alerta.id"
+              (click)="openDetail(alerta, $event)"
+            >
+              <td class="col-hora">{{ alerta.hora }}</td>
+              <td>
+                <span
+                  class="severity-badge"
+                  [ngClass]="severityClass(alerta.severidad)"
+                >
+                  {{ alerta.severidad }}
+                </span>
+              </td>
+              <td>
+                <span
+                  class="estado-badge"
+                  [ngClass]="estadoClass(alerta.estado)"
+                >
+                  {{ alerta.estado }}
+                </span>
+              </td>
+              <td class="col-host">{{ alerta.detalle.plataforma }}</td>
+              <td class="col-problema">{{ alerta.problema }}</td>
+              <td class="col-apps">
+                @for (app of alerta.aplicacionesAfectadas ?? []; track app.codigo) {
+                  <span class="app-chip">{{ app.codigo }}</span>
+                }
+              </td>
+              @if (
+                alertasService.filterEstado() === 'ASIGNADAS' ||
+                alertasService.filterEstado() === 'MIAS'
+              ) {
+                <td class="col-assignee">{{ alerta.asignacion?.cgm }}</td>
+              }
+              <td>{{ alerta.duracion }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="comments-btn"
+                  title="Comentarios CGM"
+                  (click)="openComments(alerta, $event)"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <span>{{ alerta.comentarios }}</span>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  }
+
+  </div>
+
+  @if (selectedAlert(); as alerta) {
+
+    <button
+      type="button"
+      class="detail-scrim"
+      (click)="closeDetail()"
+      aria-label="Cerrar detalle"
+    ></button>
+
+    <aside
+      class="detail-drawer"
+      [class.detail-drawer--closing]="sheetClosing()"
+      role="complementary"
+      aria-labelledby="alerta-detail-title"
+    >
+
+      <div
+        class="alert-board"
+        [ngClass]="[severityClass(alerta.severidad), estadoClass(alerta.estado)]"
+      >
+
+        <header class="alert-board__top">
+          <div class="alert-board__signal">
+            <span class="alert-board__severity">{{ alerta.severidad }}</span>
+            <span
+              class="estado-badge"
+              [ngClass]="estadoClass(alerta.estado)"
+            >
+              {{ alerta.estado }}
+            </span>
+            <span class="alert-board__platform">{{ alerta.detalle.plataforma }}</span>
+          </div>
+
+          <div class="alert-board__clock">
+            <span class="alert-board__clock-value">{{ alerta.duracion }}</span>
+            <span class="alert-board__clock-label">
+              {{ alerta.estado === 'RESOLVED' ? 'Tiempo hasta recuperación' : 'Tiempo abierta' }}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            class="drawer-close"
+            (click)="closeDetail()"
+            aria-label="Cerrar detalle"
+          >
+            ✕
+          </button>
+        </header>
+
+        <div class="alert-board__hero">
+          <p class="alert-board__eyebrow">{{ alerta.detalle.nombreAlarma }}</p>
+          <h2 id="alerta-detail-title">{{ alerta.problema }}</h2>
+          <p class="alert-board__desc">{{ alerta.descripcion }}</p>
+          <p class="alert-board__when">
+            Inicio {{ alerta.fechaHora }}
+            @if (alerta.horaRecuperacion) {
+              · Recuperación {{ alerta.horaRecuperacion }}
+            }
+          </p>
+        </div>
+
+        <div class="alert-board__layout">
+
+          <section class="alert-card alert-card--story">
+            <h3>Impacto ahora</h3>
+            <p>{{ alerta.detalle.serviciosImpactados }}</p>
+            <ul class="affected-apps">
+              @for (app of alerta.aplicacionesAfectadas ?? []; track app.codigo) {
+                <li>
+                  <strong>{{ app.codigo }}</strong>
+                  <span>{{ app.nombre }}</span>
+                </li>
+              }
+            </ul>
+          </section>
+
+          <section class="alert-card">
+            <h3>Quién atiende</h3>
+            <ul class="alert-contact">
+              <li>
+                <span>Stand by</span>
+                <strong>{{ alerta.detalle.standby ?? '—' }}</strong>
+              </li>
+              <li>
+                <span>Teléfono</span>
+                <strong>{{ alerta.detalle.telefono ?? '—' }}</strong>
+              </li>
+              <li>
+                <span>Correo</span>
+                <strong>{{ alerta.detalle.correo ?? '—' }}</strong>
+              </li>
+              <li>
+                <span>Teams</span>
+                <strong>{{ alerta.detalle.teams ?? '—' }}</strong>
+              </li>
+              @if (alerta.asignacion) {
+                <li>
+                  <span>Asignada a</span>
+                  <strong>{{ alerta.asignacion.cgm }}</strong>
+                </li>
+              }
+            </ul>
+          </section>
+
+          <section class="alert-card alert-card--thread">
+            <h3>Comentarios y acciones</h3>
+
+            @if ((alerta.trazas ?? []).length === 0) {
+              <p class="comments-empty">Todavía no hay trazabilidad.</p>
+            } @else {
+              <table class="trace-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Time</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (traza of alerta.trazas ?? []; track traza.id) {
+                    <tr>
+                      <td>{{ traza.fechaHora }}</td>
+                      <td>{{ traza.usuario }}</td>
+                      <td>{{ traza.mensaje }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+
+            <div class="comment-composer alert-composer">
+              <label class="sr-only" for="detalle-comentario">Nuevo comentario</label>
+              <textarea
+                id="detalle-comentario"
+                rows="2"
+                placeholder="Escribir nota…"
+                [ngModel]="draftComment()"
+                (ngModelChange)="draftComment.set($event)"
+              ></textarea>
+              <button
+                type="button"
+                class="btn-primary"
+                [disabled]="!draftComment().trim()"
+                (click)="submitComment(alerta.id)"
+              >
+                Publicar
+              </button>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+    </aside>
+
+  }
+
+  @if (commentsAlert(); as alerta) {
+
+    <div
+      class="detail-backdrop"
+      (click)="closeComments()"
+    >
+      <div
+        class="detail-modal comments-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="alerta-comments-title"
+        (click)="$event.stopPropagation()"
+      >
+
+        <header class="detail-modal__header">
+          <div>
+            <p class="detail-modal__eyebrow">Comentarios CGM</p>
+            <h2 id="alerta-comments-title">{{ alerta.detalle.nombreAlarma }}</h2>
+            <p class="detail-modal__subtitle">{{ alerta.problema }}</p>
+          </div>
+          <button
+            type="button"
+            class="panel-close"
+            (click)="closeComments()"
+            aria-label="Cerrar"
+          >
+            ✕
+          </button>
+        </header>
+
+        <div class="detail-modal__body">
+
+          @if (alerta.comentariosCgm.length === 0) {
+            <p class="comments-empty">
+              No hay comentarios gestionados por usuarios CGM.
+            </p>
+          } @else {
+            <ul class="comments-list">
+              @for (comentario of alerta.comentariosCgm; track comentario.id) {
+                <li class="comment-item">
+                  <div class="comment-item__meta">
+                    <strong>{{ comentario.autor }}</strong>
+                    <span class="comment-item__rol">{{ comentario.rol }}</span>
+                    <time>{{ comentario.fechaHora }}</time>
+                  </div>
+                  <p>{{ comentario.texto }}</p>
+                </li>
+              }
+            </ul>
+          }
+
+          <div class="comment-composer">
+            <label class="sr-only" for="panel-comentario">Nuevo comentario CGM</label>
+            <textarea
+              id="panel-comentario"
+              rows="3"
+              placeholder="Agregar comentario CGM…"
+              [ngModel]="draftComment()"
+              (ngModelChange)="draftComment.set($event)"
+            ></textarea>
+            <button
+              type="button"
+              class="btn-primary"
+              [disabled]="!draftComment().trim()"
+              (click)="submitComment(alerta.id)"
+            >
+              Agregar comentario
+            </button>
+          </div>
+
+        </div>
+
+        <footer class="detail-modal__footer">
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="closeComments()"
+          >
+            Cerrar
+          </button>
+        </footer>
+
+      </div>
+    </div>
+
+  }
+
+</div>

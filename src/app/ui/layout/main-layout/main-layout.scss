@@ -5,6 +5,11 @@
   display: flex;
   min-height: 100vh;
   background-color: $background-body;
+  --content-offset: #{$sidebar-width};
+}
+
+.main-layout--collapsed {
+  --content-offset: #{$sidebar-width-collapsed};
 }
 
 .main-column {

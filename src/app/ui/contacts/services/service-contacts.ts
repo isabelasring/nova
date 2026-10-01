@@ -82,7 +82,8 @@ export class ContactosService {
 
     const created: Contacto = {
       id: nextId,
-      ...data
+      ...data,
+      horario: '24/7'
     };
 
     this.contactosSource.update(list => [
@@ -102,7 +103,7 @@ export class ContactosService {
     this.contactosSource.update(list =>
       list.map(item =>
         item.id === id
-          ? { ...item, ...patch }
+          ? { ...item, ...patch, horario: '24/7' }
           : item
       )
     );

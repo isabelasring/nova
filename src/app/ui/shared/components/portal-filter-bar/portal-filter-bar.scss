@@ -1,0 +1,173 @@
+@use 'abstracts/colors' as *;
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+:host {
+  display: contents;
+}
+
+.portal-filter--inline {
+  display: contents;
+}
+
+.portal-filter__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-8;
+}
+
+.portal-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.portal-chip__shell {
+  display: inline-flex;
+  align-items: stretch;
+
+  min-height: 40px;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-sm;
+  background: $surface;
+  overflow: hidden;
+
+  @include transition;
+}
+
+.portal-chip__shell:hover {
+  border-color: $text-secondary;
+  background: $background-body;
+}
+
+.portal-chip--active .portal-chip__shell {
+  border-color: $border-color;
+  background: $background-body;
+}
+
+.portal-chip--open .portal-chip__shell {
+  border-color: $text-secondary;
+}
+
+.portal-chip__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  min-height: 100%;
+  padding: $space-8 $space-12;
+
+  border: 0;
+  background: transparent;
+
+  color: $text-primary;
+  cursor: pointer;
+}
+
+.portal-chip__name {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.portal-chip__value {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: $font-size-xs;
+  font-weight: $font-weight-regular;
+  color: $text-secondary;
+}
+
+.portal-chip__caret {
+  font-size: 10px;
+  color: $text-secondary;
+}
+
+.portal-chip__x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  border: 0;
+  border-left: 1px solid $border-light;
+  background: transparent;
+
+  color: $text-secondary;
+  font-size: $font-size-md;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.portal-chip__x:hover {
+  color: $text-primary;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.portal-chip__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 40;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  min-width: 220px;
+  max-width: 300px;
+  max-height: 260px;
+  overflow-y: auto;
+
+  padding: $space-8;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-sm;
+  background: $surface;
+  box-shadow: $shadow-md;
+}
+
+.portal-chip__option {
+  width: 100%;
+  padding: $space-8 $space-12;
+
+  border: 0;
+  border-radius: $radius-sm;
+  background: transparent;
+
+  text-align: left;
+  font-size: $font-size-sm;
+  color: $text-primary;
+  cursor: pointer;
+}
+
+.portal-chip__option:hover {
+  background: $background-body;
+}
+
+.portal-chip__option--selected {
+  background: $background-body;
+  font-weight: $font-weight-semibold;
+}
+
+.portal-filter__clear {
+  @include button-base;
+
+  min-height: 40px;
+  padding: $space-8 $space-12;
+
+  border: 1px solid $border-color;
+  background: transparent;
+  color: $text-secondary;
+  font-size: $font-size-sm;
+  white-space: nowrap;
+}
+
+.portal-filter__clear:hover {
+  color: $text-primary;
+  border-color: $text-secondary;
+}

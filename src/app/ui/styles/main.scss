@@ -1,0 +1,144 @@
+@use './abstracts/colors';
+@use './abstracts/variables';
+@use './abstracts/mixins';
+
+@use './base/reset';
+@use './base/typography';
+
+@use './layout/header';
+@use './layout/sidebar';
+@use './layout/footer';
+
+// ======================================================
+// TEMAS
+// ======================================================
+
+:root,
+[data-theme='light'] {
+  --bg-body: #f7f8fa;
+  --surface: #ffffff;
+  --text-primary: #2c2a29;
+  --text-secondary: #6b7280;
+  --text-disabled: #a4acb9;
+  --border-color: #e5e7eb;
+  --border-light: #f0f2f5;
+  --on-yellow: #2c2a29;
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --bg-body: #1a1918;
+  --surface: #2c2a29;
+  --text-primary: #f3f2f1;
+  --text-secondary: #c4bfb9;
+  --text-disabled: #8a8580;
+  --border-color: #4a4745;
+  --border-light: #3a3836;
+  --on-yellow: #2c2a29;
+  color-scheme: dark;
+}
+
+// ======================================================
+// TEXTO LEGIBLE EN MODO OSCURO (toda la interfaz)
+// ======================================================
+
+[data-theme='dark'] {
+  color: var(--text-primary);
+  background-color: var(--bg-body);
+}
+
+[data-theme='dark'] body {
+  color: var(--text-primary);
+  background-color: var(--bg-body);
+}
+
+/* Controles nativos: nunca texto oscuro sobre superficie oscura */
+[data-theme='dark'] input,
+[data-theme='dark'] select,
+[data-theme='dark'] textarea,
+[data-theme='dark'] option,
+[data-theme='dark'] button {
+  color: var(--text-primary);
+  color-scheme: dark;
+}
+
+[data-theme='dark'] input,
+[data-theme='dark'] select,
+[data-theme='dark'] textarea,
+[data-theme='dark'] option {
+  background-color: var(--surface);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] input::placeholder,
+[data-theme='dark'] textarea::placeholder {
+  color: var(--text-disabled);
+}
+
+/* Sidebar siempre oscuro: no heredar overrides del tema */
+[data-theme='dark'] .sidebar,
+[data-theme='dark'] .sidebar a,
+[data-theme='dark'] .sidebar button,
+[data-theme='dark'] .sidebar span,
+[data-theme='dark'] .sidebar small,
+[data-theme='dark'] .sidebar strong {
+  color: inherit;
+}
+
+[data-theme='dark'] .sidebar .menu-item {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme='dark'] .sidebar .menu-item:hover {
+  color: #fdda24;
+}
+
+[data-theme='dark'] .sidebar .menu-item.active {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .sidebar .user-info span {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .sidebar .user-info small {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+[data-theme='dark'] .sidebar .theme-toggle {
+  color: #fdda24;
+}
+
+/*
+ * Solo sobre amarillo sólido la letra debe ser oscura.
+ * Fondos semitransparentes / grises usan texto claro del tema.
+ */
+[data-theme='dark'] .btn-primary,
+[data-theme='dark'] .btn-add,
+[data-theme='dark'] .btn-corporate,
+[data-theme='dark'] .btn-new-contact:hover,
+[data-theme='dark'] .close-button,
+[data-theme='dark'] .type-modal__close,
+[data-theme='dark'] .avatar,
+[data-theme='dark'] .calendar-nav:hover {
+  color: var(--on-yellow) !important;
+}
+
+/* Días seleccionados: tinte amarillo sobre oscuro → texto claro */
+[data-theme='dark'] .calendar-day.selected,
+[data-theme='dark'] .calendar-day.selected:hover {
+  color: var(--text-primary) !important;
+}
+
+/* Tabs / títulos con borde amarillo usan texto del tema */
+.page-title-tab,
+h1.page-title-tab {
+  color: var(--text-primary) !important;
+}
+
+/* Modal de éxito: tarjeta blanca → texto oscuro a propósito */
+[data-theme='dark'] #pu-save-ok-title,
+[data-theme='dark'] .pu-save-ok h2,
+[data-theme='dark'] .pu-save-ok p {
+  color: #111827 !important;
+}

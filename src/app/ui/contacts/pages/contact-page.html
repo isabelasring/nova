@@ -140,13 +140,13 @@
 
       <div>Aplicación</div>
 
-      <div>Contacto</div>
+      <div>Stand by</div>
 
       <div>Correo</div>
 
       <div>Horario</div>
 
-      <div>Célula / LdC</div>
+      <div>Célula / LC</div>
 
       <div class="contact-row__actions-header">Acciones</div>
 
@@ -208,11 +208,19 @@
 
 
 
-        <div class="contact-row__person">
+        <div class="contact-row__person contact-row__standby">
 
-          <strong>{{ contacto.nombre }}</strong>
-
-          <small>{{ contacto.celular }}</small>
+          @for (
+            person of standbyDe(contacto.codigoAplicacion);
+            track person.nombre
+          ) {
+            <div class="standby-person">
+              <strong>{{ person.nombre }}</strong>
+              <small>{{ person.celular }}</small>
+            </div>
+          } @empty {
+            <span class="standby-empty">Sin programación</span>
+          }
 
         </div>
 
@@ -230,19 +238,7 @@
 
         <div class="contact-row__schedule">
 
-          @if (contacto.horario === '24/7') {
-
-            <strong>{{ contacto.horario }}</strong>
-
-          } @else {
-
-            <span class="badge badge-personalizado">
-
-              {{ contacto.horario }}
-
-            </span>
-
-          }
+          <strong>24/7</strong>
 
           <small>Horario</small>
 

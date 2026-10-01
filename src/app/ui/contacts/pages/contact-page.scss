@@ -125,7 +125,7 @@
   grid-template-columns:
     36px
     minmax(140px, 1.1fr)
-    minmax(160px, 1.2fr)
+    minmax(200px, 1.5fr)
     minmax(180px, 1.4fr)
     minmax(90px, 0.7fr)
     minmax(140px, 1fr)
@@ -223,6 +223,22 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.contact-row__standby {
+  gap: $space-8;
+}
+
+.standby-person {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.standby-empty {
+  font-size: $font-size-sm;
+  color: $text-secondary;
 }
 
 .contact-row__schedule {
