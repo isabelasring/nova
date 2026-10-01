@@ -1,0 +1,588 @@
+@if (visible()) {
+
+<div class="modal-backdrop">
+
+  <div class="modal-container">
+
+    <div class="modal-header">
+
+      <div class="modal-header__info">
+
+        <h2>
+          {{ editMode() ? 'Editar Standby' : 'Agregar Standby' }}
+        </h2>
+
+        @if (sessionApps.length > 0) {
+
+          @if (hasMultipleProducts) {
+
+            <div class="program-scope" role="group" aria-label="Alcance de programación">
+              <button
+                type="button"
+                class="program-scope__btn"
+                [class.program-scope__btn--active]="programMode === 'all'"
+                (click)="setProgramMode('all')"
+              >
+                Todas juntas
+              </button>
+              <button
+                type="button"
+                class="program-scope__btn"
+                [class.program-scope__btn--active]="programMode === 'single'"
+                (click)="setProgramMode('single')"
+              >
+                Una a una
+              </button>
+            </div>
+
+          }
+
+          <div class="product-tabs-row">
+
+            <div
+              class="product-tabs"
+              role="tablist"
+              aria-label="Productos a programar"
+            >
+              @for (
+                app of sessionApps;
+                track app.codigoAplicacion;
+                let i = $index
+              ) {
+                <button
+                  type="button"
+                  class="product-tab"
+                  role="tab"
+                  [class.product-tab--active]="
+                    isProgramAll || activeAppIndex === i
+                  "
+                  [class.product-tab--done]="
+                    isAppConfigured(app.codigoAplicacion)
+                  "
+                  [attr.aria-selected]="
+                    isProgramAll || activeAppIndex === i
+                  "
+                  (click)="selectActiveApp(i)"
+                >
+                  <span class="product-tab__label">
+                    @if (serviceMode()) {
+                      {{ app.service || app.nombreAplicacion }}
+                    } @else {
+                      {{ app.codigoAplicacion }}
+                    }
+                  </span>
+                  <span
+                    class="product-tab__remove"
+                    role="button"
+                    tabindex="0"
+                    title="Quitar"
+                    [attr.aria-label]="
+                      serviceMode()
+                        ? 'Quitar servicio'
+                        : 'Quitar aplicación'
+                    "
+                    (click)="removeApplication(app.codigoAplicacion, $event)"
+                    (keydown.enter)="removeApplication(app.codigoAplicacion, $event)"
+                  >
+                    ×
+                  </span>
+                </button>
+              }
+            </div>
+
+            <div class="add-app">
+              <button
+                type="button"
+                class="add-app__trigger"
+                [disabled]="addableApplications.length === 0"
+                (click)="toggleAddAppMenu()"
+              >
+                {{ serviceMode() ? '+ Servicio' : '+ App' }}
+              </button>
+
+              @if (showAddAppMenu) {
+                <div class="add-app__menu" role="listbox">
+                  <input
+                    type="search"
+                    class="add-app__search"
+                    [placeholder]="
+                      serviceMode()
+                        ? 'Buscar servicio...'
+                        : 'Buscar aplicación...'
+                    "
+                    [ngModel]="addAppSearch"
+                    (ngModelChange)="addAppSearch = $event"
+                  />
+
+                  <div class="add-app__list">
+                    @for (app of filteredAddableApps; track app.id) {
+                      <button
+                        type="button"
+                        class="add-app__option"
+                        (click)="addApplication(app)"
+                      >
+                        @if (serviceMode()) {
+                          <strong>{{ app.service || app.nombreAplicacion }}</strong>
+                          <span>{{ app.celula }} · {{ app.bvc }}</span>
+                        } @else {
+                          <strong>{{ app.codigoAplicacion }}</strong>
+                          <span>{{ app.nombreAplicacion }}</span>
+                        }
+                      </button>
+                    }
+
+                    @if (filteredAddableApps.length === 0) {
+                      <p class="add-app__empty">
+                        @if (serviceMode()) {
+                          No hay más servicios disponibles.
+                        } @else {
+                          No hay más aplicaciones disponibles.
+                        }
+                      </p>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+          </div>
+
+          @if (hasMultipleProducts) {
+            <p class="product-tabs-hint">
+              @if (isProgramAll) {
+                Misma persona y fechas para
+                {{ serviceMode() ? 'todos los servicios' : 'todas las aplicaciones' }}
+                seleccionados. Usa
+                {{ serviceMode() ? '+ Servicio' : '+ App' }}
+                si faltó alguno.
+              } @else {
+                Programa cada
+                {{ serviceMode() ? 'servicio' : 'producto' }}
+                por separado. Pulsa un ítem para enfocarlo o
+                {{ serviceMode() ? '+ Servicio' : '+ App' }}
+                para añadir otro.
+              }
+            </p>
+          } @else {
+            <p class="product-tabs-hint">
+              Usa
+              {{ serviceMode() ? '+ Servicio' : '+ App' }}
+              si quieres incluir otro
+              {{ serviceMode() ? 'servicio' : 'aplicación' }}
+              en esta programación.
+            </p>
+          }
+
+        }
+
+      </div>
+
+      <button
+        type="button"
+        class="close-button"
+        (click)="close()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="modal-content">
+
+      <div
+        #usersSection
+        class="users-section"
+        [class.users-section--pick]="addingCoResponsable"
+      >
+
+        <h3>Responsables</h3>
+
+        @if (addingCoResponsable && standbyWeeks.length > 0) {
+
+          <div
+            class="co-responsable-callout"
+            role="status"
+            aria-live="polite"
+          >
+
+            <strong>Añadir al mismo standby</strong>
+
+            <p>
+              Selecciona otra persona en esta lista para el
+              mismo turno. Las fechas ya están definidas.
+              Para pasar a otro standby, usa «Aceptar selección».
+            </p>
+
+            @if (standbyWeeks.length === 1) {
+              <span class="co-responsable-callout__dates">
+                {{ standbyWeeks[0].start | date:'dd/MM/yyyy' }}
+                →
+                {{ standbyWeeks[0].end | date:'dd/MM/yyyy' }}
+              </span>
+            } @else {
+              <span class="co-responsable-callout__dates">
+                {{ standbyWeeks.length }} periodos seleccionados
+              </span>
+            }
+
+          </div>
+
+        }
+
+        <input
+          #userSearchInput
+          class="user-search"
+          type="text"
+          placeholder="Buscar contacto..."
+          [(ngModel)]="userSearch"
+          name="userSearch"
+        />
+
+        <div class="users-list">
+
+          @for (
+            user of filteredUsers;
+            track user
+          ) {
+
+            <div
+              class="user-card"
+              [class.selected]="
+                selectedUser === user ||
+                coResponsables.includes(user)
+              "
+              [class.user-card--disabled]="
+                addingCoResponsable &&
+                responsablesForSummary.includes(user)
+              "
+              (click)="selectUser(user)"
+            >
+              {{ user }}
+            </div>
+
+          }
+
+          @if (filteredUsers.length === 0) {
+            <p class="users-empty">
+              No se encontraron contactos.
+            </p>
+          }
+
+        </div>
+
+      </div>
+
+      <div class="calendar-section">
+
+        @if (!selectedUser && !addingCoResponsable) {
+
+          <div class="info-message">
+
+            @if (hasMultipleProducts && appsForProgrammingLabel) {
+              @if (isProgramAll) {
+                {{ serviceMode() ? 'Servicios' : 'Aplicaciones' }}:
+                <strong>{{ appsForProgrammingLabel }}</strong>
+                ·
+              } @else if (activeApp) {
+                {{ serviceMode() ? 'Servicio activo' : 'Producto activo' }}:
+                <strong>
+                  {{
+                    serviceMode()
+                      ? (activeApp.service || activeApp.nombreAplicacion)
+                      : activeApp.codigoAplicacion
+                  }}
+                </strong>
+                ·
+              }
+            }
+            Selecciona un responsable para habilitar
+            la programación de standby.
+            Luego elige un viernes de inicio.
+
+          </div>
+
+        } @else if (selectedUser && !addingCoResponsable) {
+
+          <div class="info-message success">
+
+            @if (hasMultipleProducts && appsForProgrammingLabel) {
+              <strong>{{ appsForProgrammingLabel }}</strong>
+              ·
+            }
+            Responsable seleccionado:
+            {{ selectedUser }}
+            · Selecciona un viernes (standby de viernes a jueves)
+            <button
+              type="button"
+              class="link-clear"
+              (click)="clearSelectedUser()"
+            >
+              Quitar responsable
+            </button>
+
+          </div>
+
+        }
+
+        <app-standby-calendar
+          [enabled]="!!selectedUser || addingCoResponsable"
+          [occupiedRanges]="occupiedRanges"
+          [showAddPerson]="showAddPersonOnCalendar"
+          [lockSelection]="lockCalendarSelection"
+          (selectionChange)="onSelectionChange($event)"
+          (addPerson)="startAddCoResponsable()"
+          (conflict)="onConflict($event)">
+        </app-standby-calendar>
+
+      </div>
+
+    </div>
+
+    <div class="selection-summary">
+
+      @if (standbyWeeks.length > 0) {
+
+        <div class="summary-card">
+
+          <label>
+            Resumen de programación
+            @if (hasMultipleProducts && appsForProgrammingLabel) {
+              · {{ appsForProgrammingLabel }}
+            }
+          </label>
+
+          <small>
+            Cada standby dura 7 días: de viernes a jueves
+          </small>
+
+          @if (responsablesForSummaryDisplay.length > 0) {
+            <div class="summary-people">
+              @for (
+                name of responsablesForSummaryDisplay;
+                track name
+              ) {
+                <span class="person-chip person-chip--removable">
+                  {{ name }}
+                  <button
+                    type="button"
+                    class="person-chip__remove"
+                    title="Quitar persona"
+                    aria-label="Quitar persona"
+                    (click)="
+                      name === selectedUser
+                        ? clearSelectedUser()
+                        : removeCoResponsable(name)
+                    "
+                  >
+                    ×
+                  </button>
+                </span>
+              }
+            </div>
+          }
+
+          <ul class="week-list">
+
+            @for (
+              week of standbyWeeks;
+              track week.start
+            ) {
+
+              <li class="week-row">
+                <span>
+                  De
+                  {{ week.start | date:'dd/MM/yyyy' }}
+                  a
+                  {{ week.end | date:'dd/MM/yyyy' }}
+                </span>
+
+                @if (showAddPersonOnCalendar) {
+                  <button
+                    type="button"
+                    class="add-person-btn"
+                    title="Añadir otra persona"
+                    (click)="startAddCoResponsable()"
+                  >
+                    +
+                  </button>
+                }
+              </li>
+
+            }
+
+          </ul>
+
+          @if (hasPendingStandbyDraft && !addingCoResponsable) {
+            <p class="standby-flow-hint">
+              Puedes seguir agregando personas a este standby con +.
+              Para pasar a otro standby o cambiar fechas, selecciona
+              «Aceptar selección».
+            </p>
+          }
+
+          @if (addingCoResponsable) {
+            <p class="summary-hint summary-hint--muted">
+              Elige la persona en el listado de la izquierda.
+            </p>
+          }
+
+          <div class="summary-actions">
+            <button
+              type="button"
+              class="btn-secondary add-person-link"
+              [disabled]="!showAddPersonOnCalendar"
+              (click)="startAddCoResponsable()"
+            >
+              + Añadir otra persona
+            </button>
+
+            <button
+              type="button"
+              class="btn-primary accept-button"
+              [disabled]="!canAccept"
+              (click)="acceptSelection()"
+            >
+              Aceptar selección
+            </button>
+          </div>
+
+        </div>
+
+      }
+
+      @if (groupedAccepted.length > 0) {
+
+        <div class="summary-card trace">
+
+          <label>Selecciones aceptadas</label>
+
+          <ul class="week-list">
+
+            @for (
+              group of groupedAccepted;
+              track group.appsKey + group.start.getTime()
+            ) {
+
+              <li class="trace-item">
+
+                <button
+                  type="button"
+                  class="trace-item__remove"
+                  title="Quitar esta selección"
+                  aria-label="Quitar esta selección"
+                  (click)="removeAcceptedGroup(group, $event)"
+                >
+                  ×
+                </button>
+
+                @if (group.aplicaciones.length > 0) {
+                  <div class="trace-apps">
+                    @for (
+                      app of group.aplicaciones;
+                      track app.codigoAplicacion
+                    ) {
+                      <span class="app-chip app-chip--trace">
+                        @if (serviceMode()) {
+                          {{ app.nombreAplicacion }}
+                        } @else {
+                          {{ app.codigoAplicacion }}
+                          ·
+                          {{ app.nombreAplicacion }}
+                        }
+                      </span>
+                    }
+                  </div>
+                }
+
+                <div class="trace-item__main">
+                  De
+                  {{ group.start | date:'dd/MM/yyyy' }}
+                  a
+                  {{ group.end | date:'dd/MM/yyyy' }}
+                </div>
+
+                <div class="trace-responsables">
+                  @for (
+                    name of group.responsables;
+                    track name
+                  ) {
+                    <span class="person-chip person-chip--removable">
+                      {{ name }}
+                      <button
+                        type="button"
+                        class="person-chip__remove"
+                        title="Quitar persona"
+                        aria-label="Quitar persona"
+                        (click)="removeAcceptedPerson(group, name, $event)"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  }
+
+                  <button
+                    type="button"
+                    class="add-person-btn add-person-btn--inline"
+                    title="Añadir otra persona"
+                    (click)="startAddToAcceptedWeek(group)"
+                  >
+                    +
+                  </button>
+                </div>
+
+              </li>
+
+            }
+
+          </ul>
+
+        </div>
+
+      }
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn-primary"
+        [disabled]="!canSave"
+        (click)="save()"
+      >
+        Guardar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+}
+
+<app-standby-alert
+  [visible]="showAcceptConfirmAlert"
+  [confirmMode]="true"
+  title="¿Finalizar este standby?"
+  message="¿Seguro que no quieres agregar otra persona a este standby? Para programar otro periodo, confirma con «Aceptar selección»."
+  confirmLabel="Sí, aceptar selección"
+  cancelLabel="No, agregar otra persona"
+  (confirmed)="confirmAcceptSelection()"
+  (cancelled)="onCancelAcceptConfirm()"
+  (closed)="closeAcceptConfirmAlert()"
+/>
+
+<app-standby-alert
+  [visible]="showAcceptAlert"
+  title="Selección aceptada"
+  [message]="acceptAlertMessage"
+  (closed)="closeAcceptAlert()">
+</app-standby-alert>
+
+<app-standby-alert
+  [visible]="showConflictAlert"
+  title="Standby ocupado"
+  [message]="conflictMessage"
+  (closed)="closeConflictAlert()">
+</app-standby-alert>

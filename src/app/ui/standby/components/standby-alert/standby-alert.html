@@ -1,0 +1,65 @@
+@if (visible()) {
+
+<div class="alert-backdrop">
+
+  <div class="alert-container">
+
+    <div class="alert-header">
+
+      <h2>{{ title() }}</h2>
+
+      <button
+        type="button"
+        class="close-button"
+        (click)="close()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="alert-body">
+
+      <p>{{ message() }}</p>
+
+      @if (confirmMode()) {
+
+        <div class="alert-actions">
+
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="cancel()"
+          >
+            {{ cancelLabel() }}
+          </button>
+
+          <button
+            type="button"
+            class="btn-corporate"
+            (click)="confirm()"
+          >
+            {{ confirmLabel() }}
+          </button>
+
+        </div>
+
+      } @else {
+
+        <button
+          type="button"
+          class="btn-corporate"
+          (click)="close()"
+        >
+          Aceptar
+        </button>
+
+      }
+
+    </div>
+
+  </div>
+
+</div>
+
+}

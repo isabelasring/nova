@@ -1,0 +1,203 @@
+@use 'abstracts/colors' as *;
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: $space-16;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-container {
+  width: 880px;
+  max-width: 95vw;
+  max-height: 92vh;
+
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid $border-light;
+  border-radius: $radius-md;
+  background: $surface;
+  box-shadow: $shadow-lg;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-16;
+
+  padding: $space-20 $space-24;
+  border-bottom: 1px solid $border-light;
+  background: $surface;
+}
+
+.modal-header h2 {
+  margin: 0 0 4px;
+  font-size: $font-size-h3;
+  color: $text-primary;
+}
+
+.modal-header p {
+  margin: 0;
+  max-width: 36rem;
+  font-size: $font-size-sm;
+  line-height: 1.45;
+  color: $text-secondary;
+}
+
+.close-button {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+
+  border: none;
+  border-radius: $radius-sm;
+  background: $background-body;
+  color: $text-primary;
+
+  font-size: $font-size-md;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  background: $border-light;
+}
+
+.modal-body {
+  padding: $space-24;
+  overflow-y: auto;
+  background: $background-body;
+}
+
+.person-form {
+  @include flex-column;
+  gap: $space-16;
+}
+
+.form-block {
+  padding: $space-20;
+
+  border: 1px solid $border-light;
+  border-radius: $radius-md;
+  background: $surface;
+}
+
+.form-block h3 {
+  margin: 0 0 $space-16;
+  padding-bottom: $space-12;
+
+  border-bottom: 1px solid $border-light;
+
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-16;
+}
+
+.form-grid--stack {
+  grid-template-columns: 1fr;
+}
+
+.field {
+  @include flex-column;
+  gap: 6px;
+}
+
+.field span {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+}
+
+.field input,
+.field select,
+.field textarea {
+  @include input-base;
+  width: 100%;
+}
+
+.field textarea {
+  height: auto;
+  min-height: 96px;
+  padding: $space-12 $space-16;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.field small {
+  font-size: $font-size-xs;
+  color: $text-secondary;
+  line-height: 1.4;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-12;
+
+  padding: $space-16 $space-24;
+  border-top: 1px solid $border-light;
+  background: $surface;
+}
+
+.btn-cancel {
+  @include button-base;
+
+  min-height: 40px;
+  padding: $space-8 $space-16;
+
+  border: 1px solid $border-color;
+  background: transparent;
+  color: $text-secondary;
+}
+
+.btn-cancel:hover {
+  color: $text-primary;
+  border-color: $text-primary;
+}
+
+.btn-save {
+  @include button-primary;
+}
+
+.btn-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+:host-context([data-theme='dark']) {
+  .modal-body {
+    background: #242322;
+  }
+
+  .form-block {
+    background: $surface;
+    border-color: $border-color;
+  }
+
+  .close-button {
+    background: #3a3836;
+    color: $text-primary;
+  }
+}
+
+@media (max-width: 720px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

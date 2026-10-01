@@ -1,0 +1,590 @@
+<div
+  class="standby-page"
+  [class.standby-page--panel-open]="showSidePanel"
+  [class.standby-page--areas]="isAreasMode"
+>
+
+  <div class="standby-main">
+
+    @if (delegationService.activeOutgoing(); as outgoing) {
+
+      <div class="relevo-status relevo-status--outgoing">
+
+        <div class="relevo-status__copy">
+          <strong>Delegación activa</strong>
+          <p>
+            {{ outgoing.toLeader }} programa standby por ti hasta el
+            {{ formatDelegationDate(outgoing.fechaFin) }}
+            ({{ delegationService.reasonLabel(outgoing.motivo) }}).
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="relevo-status__action"
+          (click)="revokeRelevo()"
+        >
+          Recuperar programación
+        </button>
+
+      </div>
+
+    }
+
+    @if (delegationService.activeIncoming(); as incoming) {
+
+      <div class="relevo-status relevo-status--incoming">
+
+        <div class="relevo-status__copy">
+          <strong>Delegación recibida</strong>
+          <p>
+            Programas standby en nombre de
+            {{ incoming.fromLeader }} hasta el
+            {{ formatDelegationDate(incoming.fechaFin) }}.
+          </p>
+        </div>
+
+      </div>
+
+    }
+
+    @if (
+      panelView() === 'program' &&
+      hasSelection &&
+      !delegationService.hasDelegatedOut()
+    ) {
+
+      <div class="selection-banner">
+        <p>
+          {{ selectedApplications.length }}
+          {{ itemLabel }}(s) listo(s) para programar
+        </p>
+        <div class="selection-banner__actions">
+          <button
+            type="button"
+            class="btn-ghost"
+            (click)="cancelSelectionMode()"
+          >
+            Limpiar selección
+          </button>
+          <button
+            type="button"
+            class="btn-add"
+            (click)="continueSelection()"
+          >
+            Continuar programación
+          </button>
+        </div>
+      </div>
+
+    }
+
+    <section class="standby-section">
+
+      <header class="section-header section-header--split">
+
+        <div class="section-header__copy">
+
+          @if (panelView() === 'apps') {
+
+            <h2 class="section-title">Standby programados</h2>
+            <p class="section-subtitle">
+              @if (isAreasMode) {
+                Cobertura activa y próxima por persona, servicio
+                y célula. Cada turno va de viernes a jueves.
+              } @else {
+                Cobertura activa y próxima por persona, aplicación
+                y célula. Cada turno va de viernes a jueves.
+              }
+            </p>
+
+          } @else if (panelView() === 'program') {
+
+            <h2 class="section-title">Programar standby</h2>
+            <p class="section-subtitle">
+              @if (delegationService.hasDelegatedOut()) {
+                Tienes una delegación activa: otro líder programa por ti.
+              } @else if (delegationService.isActingForAnotherLeader()) {
+                Programa standby en nombre de
+                <strong>{{ delegationService.activeIncoming()?.fromLeader }}</strong>.
+              } @else if (isAreasMode) {
+                Filtra y selecciona los servicios que quieres programar.
+              } @else {
+                Filtra y selecciona las aplicaciones que quieres programar.
+              }
+            </p>
+
+          } @else if (panelView() === 'policies') {
+
+            <h2 class="section-title">Políticas de standby</h2>
+            <p class="section-subtitle">
+              {{ policyMeta.subtitle }}
+            </p>
+
+          } @else {
+
+            <h2 class="section-title">Delegar programación</h2>
+            <p class="section-subtitle">
+              Asigna a otro líder la programación de standby de tu equipo.
+            </p>
+
+          }
+
+        </div>
+
+        <nav class="section-tabs" aria-label="Secciones de standby">
+
+          <button
+            type="button"
+            class="section-tabs__btn"
+            [class.section-tabs__btn--active]="panelView() === 'apps'"
+            (click)="setPanelView('apps')"
+          >
+            Standby
+          </button>
+
+          <button
+            type="button"
+            class="section-tabs__btn"
+            [class.section-tabs__btn--active]="panelView() === 'program'"
+            (click)="setPanelView('program')"
+          >
+            Programar
+          </button>
+
+          <button
+            type="button"
+            class="section-tabs__btn"
+            [class.section-tabs__btn--active]="panelView() === 'policies'"
+            (click)="setPanelView('policies')"
+          >
+            Políticas
+          </button>
+
+          <button
+            type="button"
+            class="section-tabs__btn"
+            [class.section-tabs__btn--active]="panelView() === 'delegate'"
+            (click)="setPanelView('delegate')"
+          >
+            Delegar
+          </button>
+
+        </nav>
+
+      </header>
+
+      @if (panelView() === 'apps') {
+
+        <div class="filters">
+
+          <app-portal-filter-bar
+            [hiddenDimensions]="filterHiddenDimensions"
+          />
+
+          <input
+            type="text"
+            class="filters__search"
+            [class.filters__search--compact]="
+              appSearch().trim().length > 0 ||
+              portalFilter.hasActiveFilters()
+            "
+            placeholder="Buscar..."
+            [ngModel]="appSearch()"
+            (ngModelChange)="appSearch.set($event)"
+          />
+
+        </div>
+
+        <div class="list-toolbar">
+          <button
+            type="button"
+            class="btn-person-sm"
+            (click)="openPersonModal()"
+          >
+            + Agregar persona
+          </button>
+        </div>
+
+        <div class="standby-board">
+
+          <div class="standby-board__head" aria-hidden="true">
+            <span>Fecha</span>
+            <span>Nombre completo</span>
+            @if (!isAreasMode) {
+              <span>Aplicación</span>
+            }
+            <span>BVC</span>
+            <span>LdC</span>
+            <span>Célula</span>
+            <span>Servicio</span>
+          </div>
+
+            @for (row of standbyListRows; track row.id) {
+              <article
+                class="standby-row"
+                [attr.id]="'standby-row-' + row.id"
+                [class.standby-row--flash]="
+                  highlightedAppCodigo &&
+                  row.appCodes.includes(highlightedAppCodigo)
+                "
+                role="button"
+                tabindex="0"
+                (click)="openStandbyRow(row)"
+                (keydown.enter)="openStandbyRow(row)"
+                (keydown.space)="$event.preventDefault(); openStandbyRow(row)"
+              >
+              <div class="standby-row__date">
+                <strong>{{ row.fechaLabel }}</strong>
+              </div>
+
+              <div class="standby-row__person">
+                <span
+                  class="standby-row__avatar"
+                  [style.background]="avatarTone(row.nombre).background"
+                  [style.color]="avatarTone(row.nombre).color"
+                >
+                  {{ initials(row.nombre) }}
+                </span>
+                <strong>{{ row.nombre }}</strong>
+              </div>
+
+              @if (!isAreasMode) {
+                <div class="standby-row__apps">
+                  @for (code of row.appCodes; track code) {
+                    <span>{{ code }}</span>
+                  }
+                  @if (row.appNames[0]) {
+                    <small>{{ row.appNames[0] }}</small>
+                  }
+                </div>
+              }
+
+              <span>{{ row.bvc }}</span>
+              <span>{{ row.ldc }}</span>
+              <span>{{ row.celula }}</span>
+              <span>{{ row.service }}</span>
+
+              <button
+                type="button"
+                class="standby-row__edit"
+                title="Editar standby"
+                aria-label="Editar standby"
+                (click)="openEditForRow(row, $event)"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                  />
+                </svg>
+              </button>
+
+              <p class="standby-row__footer">
+                {{ row.footerLabel }}
+              </p>
+            </article>
+          }
+
+          @if (standbyListRows.length === 0) {
+            <div class="standby-board__empty">
+              Aún no hay standby programado. Ve a Programar para empezar.
+            </div>
+          }
+
+        </div>
+
+      } @else if (panelView() === 'program') {
+
+        <div class="filters">
+
+          <app-portal-filter-bar
+            [hiddenDimensions]="filterHiddenDimensions"
+          />
+
+          <input
+            type="text"
+            class="filters__search"
+            [class.filters__search--compact]="
+              appSearch().trim().length > 0 ||
+              portalFilter.hasActiveFilters()
+            "
+            placeholder="Buscar..."
+            [ngModel]="appSearch()"
+            (ngModelChange)="appSearch.set($event)"
+          />
+
+        </div>
+
+        <div class="list-toolbar">
+          <button
+            type="button"
+            class="btn-person-sm"
+            (click)="openPersonModal()"
+          >
+            + Agregar persona
+          </button>
+        </div>
+
+        <div class="select-all-row">
+          <label class="select-all">
+            <input
+              type="checkbox"
+              [checked]="allSelected"
+              [disabled]="delegationService.hasDelegatedOut()"
+              (change)="toggleSelectAll($any($event.target).checked)"
+            />
+            <span>
+              Seleccionar {{ isAreasMode ? 'todos' : 'todas' }}
+            </span>
+          </label>
+          @if (hasSelection) {
+            <small>
+              {{ selectedApplications.length }} seleccionado(s)
+            </small>
+          }
+        </div>
+
+        <div class="cards-list">
+
+          @for (
+            application of unprogrammedApplications;
+            track application.id
+          ) {
+            <app-standby-card
+              [application]="application"
+              [hasStandby]="false"
+              [activeThisMonth]="false"
+              [isSelected]="application.selected"
+              [serviceMode]="isAreasMode"
+              (selected)="toggleCard($event)"
+            />
+          }
+
+        </div>
+
+        @if (unprogrammedApplications.length === 0) {
+          <div class="standby-board__empty">
+            No hay {{ itemsLabel }} disponibles con los filtros actuales.
+          </div>
+        }
+
+      } @else if (panelView() === 'policies') {
+
+        <div class="inline-panel">
+
+          <div class="inline-panel__meta">
+            <span>{{ policyMeta.version }}</span>
+            <span>·</span>
+            <span>Actualizado {{ policyMeta.lastUpdated }}</span>
+            <span>·</span>
+            <span>{{ policyMeta.owner }}</span>
+          </div>
+
+          <div class="inline-panel__principles">
+            @for (item of policyHighlights; track item.label) {
+              <article class="principle-chip">
+                <strong>{{ item.label }}</strong>
+                <span>{{ item.detail }}</span>
+              </article>
+            }
+          </div>
+
+          <div class="inline-panel__sections">
+            @for (section of policySections; track section.id) {
+              <article class="policy-block">
+                <header>
+                  <span>{{ section.number }}</span>
+                  <h3>{{ section.title }}</h3>
+                </header>
+                <p>{{ section.summary }}</p>
+                <ul>
+                  @for (bullet of section.bullets; track bullet) {
+                    <li>{{ bullet }}</li>
+                  }
+                </ul>
+                @if (section.highlight) {
+                  <p class="policy-block__highlight">
+                    {{ section.highlight }}
+                  </p>
+                }
+              </article>
+            }
+          </div>
+
+        </div>
+
+      } @else {
+
+        <div class="inline-panel inline-panel--delegate">
+
+          <p class="inline-panel__lead">
+            Conservas tu rol de líder titular. La persona delegada podrá
+            programar standby de tu equipo durante el periodo que indiques.
+          </p>
+
+          @if (delegationService.activeOutgoing(); as outgoing) {
+
+            <div class="delegate-card">
+              <strong>Ya tienes una delegación activa</strong>
+              <p>
+                {{ outgoing.toLeader }} programa por ti hasta el
+                {{ formatDelegationDate(outgoing.fechaFin) }}.
+              </p>
+              <button
+                type="button"
+                class="btn-add"
+                (click)="revokeRelevo()"
+              >
+                Recuperar programación
+              </button>
+            </div>
+
+          } @else {
+
+            <div class="delegate-card">
+              <strong>Nueva delegación</strong>
+              <p>
+                Elige un líder, el motivo y las fechas para transferir
+                temporalmente la programación.
+              </p>
+              <button
+                type="button"
+                class="btn-add"
+                (click)="openRelevoModal()"
+              >
+                Iniciar delegación
+              </button>
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+  </div>
+
+  @if (showSidePanel) {
+
+    <aside class="standby-panel">
+
+      <div class="standby-panel__header">
+
+        <div>
+          <h2>Agregadas al standby</h2>
+          <p>
+            {{ panelApplications.length }}
+            {{ itemLabel }}(es)
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="panel-close"
+          (click)="closeSidePanel()"
+          aria-label="Cerrar panel"
+        >
+          ✕
+        </button>
+
+      </div>
+
+      <div class="standby-panel__list">
+
+        @for (
+          app of panelApplications;
+          track app.id
+        ) {
+
+          <div class="panel-item">
+
+            <div class="panel-item__info">
+              @if (isAreasMode) {
+                <strong>{{ app.service || app.nombreAplicacion }}</strong>
+                <span>{{ app.celula }} · {{ app.bvc }}</span>
+              } @else {
+                <strong>{{ app.codigoAplicacion }}</strong>
+                <span>{{ app.nombreAplicacion }}</span>
+              }
+              <small>
+                {{ app.celula }} · {{ app.responsable }}
+              </small>
+            </div>
+
+            <button
+              type="button"
+              class="panel-item__remove"
+              title="Quitar"
+              (click)="removeFromPanel(app.id)"
+            >
+              ✕
+            </button>
+
+          </div>
+
+        }
+
+        @if (panelApplications.length === 0) {
+          <p class="panel-empty">
+            No hay {{ itemsLabel }} en el panel.
+          </p>
+        }
+
+      </div>
+
+      <div class="standby-panel__footer">
+
+        <button
+          type="button"
+          class="btn-add"
+          [disabled]="panelApplications.length === 0"
+          (click)="openStandbyModal()"
+        >
+          Continuar programación
+        </button>
+
+      </div>
+
+    </aside>
+
+  }
+
+  <app-standby-modal
+    [visible]="showStandbyModal"
+    [aplicaciones]="panelApplications"
+    [catalog]="applications"
+    [serviceMode]="isAreasMode"
+    [editMode]="editingStandby"
+    (closed)="closeStandbyModal()"
+    (saved)="onStandbySaved($event)"
+  />
+
+  <app-standby-view-modal
+    [visible]="showViewModal"
+    [assignments]="viewAssignments"
+    [aplicacionCodigo]="viewAppCodigo"
+    [aplicacionNombre]="viewAppNombre"
+    [personName]="viewPersonName"
+    [personPhone]="viewPersonPhone"
+    [rowDetail]="viewRowDetail"
+    [showPeopleList]="false"
+    [serviceMode]="isAreasMode"
+    (closed)="closeViewModal()"
+  />
+
+  <app-standby-relevo-modal
+    [visible]="showRelevoModal"
+    (closed)="closeRelevoModal()"
+    (delegated)="onRelevoDelegated()"
+  />
+
+  <app-standby-person-modal
+    [visible]="showPersonModal"
+    [serviceMode]="isAreasMode"
+    (closed)="closePersonModal()"
+    (saved)="onPersonSaved($event)"
+  />
+
+</div>

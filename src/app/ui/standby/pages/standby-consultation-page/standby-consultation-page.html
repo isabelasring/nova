@@ -1,0 +1,114 @@
+<div class="consulta-page">
+
+  <header class="consulta-header">
+
+    <div>
+      <h1>Consulta por persona</h1>
+      <p>
+        Revisa la lista de responsables y filtra por nombre.
+        Haz clic en una fila para ver el standby en detalle.
+      </p>
+    </div>
+
+  </header>
+
+  <section class="consulta-panel">
+
+    <div class="consulta-search__field">
+
+      <app-portal-filter-bar />
+
+      <input
+        id="person-search"
+        type="search"
+        class="consulta-search__input"
+        [class.consulta-search__input--expanded]="
+          searchTerm().trim().length > 0
+        "
+        placeholder="Buscar..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="onSearchChange($event)"
+      />
+
+      @if (searchTerm()) {
+        <button
+          type="button"
+          class="consulta-search__clear"
+          (click)="clearSearch()"
+        >
+          Limpiar
+        </button>
+      }
+
+    </div>
+
+    <p class="consulta-search__meta">
+      {{ visiblePeopleCount() }}
+      {{ visiblePeopleCount() === 1 ? 'persona' : 'personas' }}
+    </p>
+
+    <div class="consulta-table">
+
+      <div
+        class="consulta-row consulta-row--header"
+        aria-hidden="true"
+      >
+        <div>Responsable</div>
+        <div>Celular</div>
+        <div>Turnos</div>
+        <div>Estado / próximo standby</div>
+      </div>
+
+      @for (row of peopleRows(); track row.name) {
+        <button
+          type="button"
+          class="consulta-row"
+          (click)="openPersonStandby(row.name)"
+        >
+          <div class="consulta-row__person">
+            <span
+              class="consulta-row__avatar"
+              [style.background]="avatarTone(row.name).background"
+              [style.color]="avatarTone(row.name).color"
+            >
+              {{ personInitials(row.name) }}
+            </span>
+            <strong>{{ row.name }}</strong>
+          </div>
+
+          <div class="consulta-row__phone">
+            {{ row.phone }}
+          </div>
+
+          <div class="consulta-row__count">
+            {{ row.turnCount }}
+          </div>
+
+          <div class="consulta-row__status">
+            <span [class]="'consulta-status ' + row.statusClass">
+              {{ row.statusLabel }}
+            </span>
+          </div>
+        </button>
+      }
+
+      @if (peopleRows().length === 0) {
+        <div class="consulta-table__empty">
+          No se encontraron personas con esa búsqueda.
+        </div>
+      }
+
+    </div>
+
+  </section>
+
+  <app-standby-view-modal
+    [visible]="showViewModal()"
+    [assignments]="viewAssignments()"
+    [personName]="viewPerson() ?? ''"
+    [personPhone]="viewPersonPhone()"
+    [showPeopleList]="false"
+    (closed)="closeViewModal()"
+  />
+
+</div>

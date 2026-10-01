@@ -1,0 +1,404 @@
+<div class="perfil-page">
+
+  <div class="page-toolbar">
+
+    <div class="page-toolbar__actions">
+
+      @if (!profileService.editing()) {
+
+        <button
+          class="btn-primary"
+          type="button"
+          (click)="startEdit()"
+        >
+          Editar
+        </button>
+
+      } @else {
+
+        <button
+          class="btn-outline"
+          type="button"
+          (click)="cancelEdit()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          class="btn-save"
+          type="button"
+          (click)="saveEdit()"
+        >
+          Guardar
+        </button>
+
+      }
+
+    </div>
+
+  </div>
+
+  <section class="top-grid">
+
+    <article class="card identity-card">
+
+      <div class="identity-card__avatar">
+        {{ profileService.profile().initials }}
+      </div>
+
+      <h2>{{ profileService.profile().nombre }}</h2>
+
+      @if (profileService.editing()) {
+
+        <form [formGroup]="profileForm" class="identity-card__edit">
+
+          <label class="field-label">Celular</label>
+          <input
+            class="field-input field-input--center"
+            type="text"
+            formControlName="celular"
+          />
+
+        </form>
+
+      } @else {
+
+        <a class="identity-card__phone">
+          {{ profileService.profile().celular }}
+        </a>
+
+      }
+
+      <p class="identity-card__email">
+        {{ profileService.profile().correo }}
+      </p>
+
+    </article>
+
+    <article class="card info-card">
+
+      <div class="card__header">
+        <h3>Información general</h3>
+      </div>
+
+      <div class="info-row info-row--locked">
+        <label>Cargo</label>
+        <span>{{ profileService.profile().cargo }}</span>
+      </div>
+
+      <div class="info-row info-row--locked">
+        <label>Área</label>
+        <span>{{ profileService.profile().area }}</span>
+      </div>
+
+      <div class="info-row info-row--locked">
+        <label>Ubicación</label>
+        <span>{{ profileService.profile().ubicacion }}</span>
+      </div>
+
+      <div class="info-row info-row--locked">
+        <label>Fecha de ingreso</label>
+        <span>{{ profileService.profile().fechaIngreso }}</span>
+      </div>
+
+      <div class="info-row info-row--locked">
+        <label>Líder</label>
+        <span>{{ profileService.profile().lider }}</span>
+      </div>
+
+    </article>
+
+    <article class="card info-card">
+
+      <div class="card__header">
+        <h3>Datos operativos</h3>
+      </div>
+
+      <div class="info-row info-row--locked">
+        <label>EVC</label>
+        <span>{{ profileService.profile().evc }}</span>
+      </div>
+
+      <div class="info-row info-row--locked">
+        <label>Línea</label>
+        <span>{{ profileService.profile().linea }}</span>
+      </div>
+
+      <div class="info-row info-row--locked">
+        <label>Próximo standby</label>
+        @if (nextStandby()) {
+          <span>
+            {{ nextStandby()!.fechaInicio | date:'dd/MM/yyyy' }}
+            →
+            {{ nextStandby()!.fechaFin | date:'dd/MM/yyyy' }}
+          </span>
+        } @else {
+          <span>Sin turnos</span>
+        }
+      </div>
+
+    </article>
+
+  </section>
+
+  <section class="bottom-grid">
+
+    <article class="card activity-card">
+
+      <div class="tabs">
+
+        <button
+          type="button"
+          class="tab"
+          [class.active]="activeTab() === 'proximos'"
+          (click)="selectTab('proximos')"
+        >
+          Próximos standby ({{ upcomingStandby().length }})
+        </button>
+
+        <button
+          type="button"
+          class="tab"
+          [class.active]="activeTab() === 'historial'"
+          (click)="selectTab('historial')"
+        >
+          Historial ({{ pastStandby().length }})
+        </button>
+
+      </div>
+
+      <div class="activity-body">
+
+        @if (activeTab() === 'proximos') {
+
+          <div class="visit-list">
+
+            @for (
+              assignment of pagedUpcoming();
+              track assignment.id
+            ) {
+
+              <div
+                class="visit-row"
+                [class.visit-row--past]="standbyPeriod(assignment) === 'past'"
+                [class.visit-row--current]="standbyPeriod(assignment) === 'current'"
+                [class.visit-row--next]="standbyPeriod(assignment) === 'next'"
+              >
+
+                <div class="visit-row__date">
+                  <strong>
+                    {{ assignment.fechaInicio | date:'dd/MM/yyyy' }}
+                  </strong>
+                  <small>
+                    → {{ assignment.fechaFin | date:'dd/MM/yyyy' }}
+                  </small>
+                </div>
+
+                <div class="visit-row__service">
+                  Turno standby
+                </div>
+
+                <div class="visit-row__doctor">
+                  {{ profileService.profile().nombre }}
+                </div>
+
+                <span
+                  class="status-pill"
+                  [class.status-pill--past]="standbyPeriod(assignment) === 'past'"
+                  [class.status-pill--current]="standbyPeriod(assignment) === 'current'"
+                  [class.status-pill--next]="standbyPeriod(assignment) === 'next'"
+                >
+                  @if (standbyPeriod(assignment) === 'past') {
+                    Pasado
+                  } @else if (standbyPeriod(assignment) === 'current') {
+                    Mes actual
+                  } @else {
+                    Próximo
+                  }
+                </span>
+
+                @if (
+                  assignment.aplicaciones &&
+                  assignment.aplicaciones.length > 0
+                ) {
+
+                  <div class="visit-row__apps">
+                    <span class="visit-row__apps-label">
+                      Aplicaciones asociadas
+                    </span>
+                    @for (
+                      app of assignment.aplicaciones;
+                      track app.codigoAplicacion
+                    ) {
+                      <span class="visit-app-chip">
+                        {{ app.codigoAplicacion }}
+                        ·
+                        {{ app.nombreAplicacion }}
+                      </span>
+                    }
+                  </div>
+
+                }
+
+              </div>
+
+            }
+
+            @if (upcomingStandby().length === 0) {
+              <p class="empty">No hay standby próximos.</p>
+            }
+
+          </div>
+
+          @if (upcomingStandby().length > pageSize) {
+
+            <div class="pager">
+
+              <button
+                type="button"
+                class="pager__btn"
+                [disabled]="proximosPage() <= 1"
+                (click)="previousProximosPage()"
+              >
+                ‹
+              </button>
+
+              <span class="pager__label">
+                {{ proximosPage() }} / {{ upcomingTotalPages() }}
+              </span>
+
+              <button
+                type="button"
+                class="pager__btn"
+                [disabled]="proximosPage() >= upcomingTotalPages()"
+                (click)="nextProximosPage()"
+              >
+                ›
+              </button>
+
+            </div>
+
+          }
+
+        }
+
+        @if (activeTab() === 'historial') {
+
+          <div class="visit-list">
+
+            @for (
+              assignment of pagedPast();
+              track assignment.id
+            ) {
+
+              <div
+                class="visit-row visit-row--past"
+              >
+
+                <div class="visit-row__date">
+                  <strong>
+                    {{ assignment.fechaInicio | date:'dd/MM/yyyy' }}
+                  </strong>
+                  <small>
+                    → {{ assignment.fechaFin | date:'dd/MM/yyyy' }}
+                  </small>
+                </div>
+
+                <div class="visit-row__service">
+                  Turno standby
+                </div>
+
+                <div class="visit-row__doctor">
+                  {{ profileService.profile().nombre }}
+                </div>
+
+                <span class="status-pill status-pill--past">
+                  Finalizado
+                </span>
+
+                @if (
+                  assignment.aplicaciones &&
+                  assignment.aplicaciones.length > 0
+                ) {
+
+                  <div class="visit-row__apps">
+                    <span class="visit-row__apps-label">
+                      Aplicaciones asociadas
+                    </span>
+                    @for (
+                      app of assignment.aplicaciones;
+                      track app.codigoAplicacion
+                    ) {
+                      <span class="visit-app-chip">
+                        {{ app.codigoAplicacion }}
+                        ·
+                        {{ app.nombreAplicacion }}
+                      </span>
+                    }
+                  </div>
+
+                }
+
+              </div>
+
+            }
+
+            @if (pastStandby().length === 0) {
+              <p class="empty">Sin historial aún.</p>
+            }
+
+          </div>
+
+          @if (pastStandby().length > pageSize) {
+
+            <div class="pager">
+
+              <button
+                type="button"
+                class="pager__btn"
+                [disabled]="historialPage() <= 1"
+                (click)="previousHistorialPage()"
+              >
+                ‹
+              </button>
+
+              <span class="pager__label">
+                {{ historialPage() }} / {{ historialTotalPages() }}
+              </span>
+
+              <button
+                type="button"
+                class="pager__btn"
+                [disabled]="historialPage() >= historialTotalPages()"
+                (click)="nextHistorialPage()"
+              >
+                ›
+              </button>
+
+            </div>
+
+          }
+
+        }
+
+      </div>
+
+    </article>
+
+    <article class="card calendar-side-card">
+
+      <div class="card__header">
+        <h3>Mi calendario</h3>
+      </div>
+
+      <app-standby-month-view
+        [assignments]="myStandby()"
+        [showPeopleList]="false"
+        [outlineMode]="true"
+      />
+
+    </article>
+
+  </section>
+
+</div>

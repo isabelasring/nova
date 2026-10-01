@@ -1,0 +1,209 @@
+@use 'abstracts/colors' as *;
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.standby-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $space-8;
+
+  height: 100%;
+  min-height: 240px;
+  padding: $space-24;
+
+  background: $surface;
+  border: 1px solid $border-light;
+  border-radius: $radius-lg;
+
+  cursor: pointer;
+  text-align: left;
+
+  box-shadow: $shadow-sm;
+  @include transition;
+}
+
+.standby-card:hover {
+  border-color: $border-color;
+  box-shadow: $shadow-md;
+  transform: translateY(-2px);
+}
+
+.standby-card--highlight {
+  border-color: $verde-andino !important;
+  box-shadow:
+    0 0 0 3px rgba(0, 195, 137, 0.28),
+    $shadow-md !important;
+  animation: standby-highlight-pulse 1.2s ease-in-out 2;
+}
+
+@keyframes standby-highlight-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px rgba(0, 195, 137, 0.28),
+      $shadow-md;
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(0, 195, 137, 0.16),
+      $shadow-md;
+  }
+}
+
+.standby-card.selected {
+  border-color: $amarillo-macondo;
+  box-shadow: $shadow-md;
+  transform: translateY(-2px);
+}
+
+.standby-card.active-this-month {
+  cursor: default;
+  transform: none;
+}
+
+.standby-card.active-this-month::after {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  border: 2px solid $violeta-orquidea;
+  border-radius: $radius-lg;
+
+  pointer-events: none;
+}
+
+.standby-card.active-this-month:hover {
+  border-color: $border-light;
+  box-shadow: $shadow-sm;
+  transform: none;
+}
+
+.standby-card__top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  margin-bottom: $space-4;
+}
+
+.app-code {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $link-color;
+  letter-spacing: 0.02em;
+}
+
+.app-name {
+  margin: 0;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
+  line-height: 1.25;
+}
+
+.app-description {
+  margin: 0;
+  flex: 1;
+
+  font-size: $font-size-sm;
+  line-height: 1.5;
+  color: $text-secondary;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.standby-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-4;
+
+  margin-top: $space-8;
+  padding-top: $space-12;
+  border-top: 1px solid $border-light;
+  width: 100%;
+
+  font-size: $font-size-sm;
+  color: $text-secondary;
+}
+
+.dot {
+  opacity: 0.6;
+}
+
+.app-owner {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-primary;
+}
+
+.selected-pill {
+  @include badge;
+
+  background: rgba(253, 218, 36, 0.2);
+  color: $text-primary;
+  border: 1px solid rgba(253, 218, 36, 0.55);
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
+}
+
+.btn-view {
+  @include button-base;
+
+  padding: $space-8 $space-16;
+  min-height: 36px;
+
+  background: $surface;
+  color: $text-primary;
+  border: 1px solid $border-color;
+
+  font-size: $font-size-sm;
+  white-space: nowrap;
+}
+
+.btn-view:hover {
+  border-color: $violeta-orquidea;
+  color: $violeta-orquidea;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-sm;
+
+  background: $surface;
+  color: $text-primary;
+
+  cursor: pointer;
+
+  @include transition;
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.icon-btn:hover {
+  border-color: $violeta-orquidea;
+  color: $violeta-orquidea;
+}

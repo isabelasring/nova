@@ -1,0 +1,258 @@
+@use 'abstracts/colors' as *;
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.consulta-page {
+  padding: $space-32;
+  min-height: calc(100vh - 32px);
+}
+
+.consulta-header {
+  margin-bottom: $space-24;
+}
+
+.consulta-header h1 {
+  margin: 0 0 $space-8;
+
+  font-size: $font-size-h3;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+
+.consulta-header p {
+  margin: 0;
+  max-width: 40rem;
+
+  font-size: $font-size-sm;
+  line-height: 1.55;
+  color: $text-secondary;
+}
+
+.consulta-panel {
+  @include card;
+
+  padding: $space-24;
+}
+
+.consulta-search__field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-12;
+  margin-bottom: $space-12;
+}
+
+.consulta-search__input {
+  @include input-base;
+
+  width: 160px;
+  flex: 0 1 auto;
+
+  transition:
+    width 0.28s ease,
+    min-width 0.28s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.consulta-search__input:focus,
+.consulta-search__input--expanded {
+  width: min(100%, 360px);
+  border-color: $link-color;
+  box-shadow: 0 0 0 3px rgba(0, 153, 216, 0.12);
+}
+
+.consulta-search__clear {
+  @include button-base;
+
+  min-height: 40px;
+  padding: $space-8 $space-16;
+
+  background: transparent;
+  border: 1px solid $border-color;
+  color: $text-secondary;
+  font-size: $font-size-sm;
+}
+
+.consulta-search__clear:hover {
+  border-color: $link-color;
+  color: $link-color;
+}
+
+.consulta-search__meta {
+  margin: 0 0 $space-16;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+}
+
+.consulta-table {
+  @include flex-column;
+  gap: $space-8;
+}
+
+.consulta-row {
+  display: grid;
+  grid-template-columns:
+    minmax(180px, 1.5fr)
+    minmax(140px, 1fr)
+    80px
+    minmax(200px, 1.2fr);
+  gap: $space-16;
+  align-items: center;
+
+  width: 100%;
+  padding: $space-16 $space-12;
+
+  border: 1.5px solid transparent;
+  border-radius: $radius-md;
+  background: $surface;
+
+  text-align: left;
+  cursor: pointer;
+
+  @include transition;
+}
+
+.consulta-row--header {
+  padding: $space-8 $space-12 $space-12;
+
+  border-bottom: 3px solid $amarillo-macondo;
+  border-radius: 0;
+
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: default;
+}
+
+.consulta-row:not(.consulta-row--header):hover {
+  background: $background-body;
+  border-color: rgba(0, 153, 216, 0.18);
+}
+
+.consulta-row__person {
+  display: flex;
+  align-items: center;
+  gap: $space-12;
+  min-width: 0;
+}
+
+.consulta-row__avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: $amarillo-macondo;
+  color: $on-yellow;
+
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+}
+
+.consulta-row__person strong {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.consulta-row__phone,
+.consulta-row__count {
+  font-size: $font-size-sm;
+  color: $text-primary;
+}
+
+.consulta-row__count {
+  font-weight: $font-weight-semibold;
+}
+
+.consulta-row__status {
+  min-width: 0;
+}
+
+.consulta-status {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100;
+
+  padding: 4px 10px;
+
+  border-radius: $radius-pill;
+  border: 1px solid $border-light;
+  background: $background-body;
+
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.consulta-status--current {
+  color: #008f63;
+  border-color: rgba(0, 195, 137, 0.35);
+  background: rgba(0, 195, 137, 0.08);
+}
+
+.consulta-status--next {
+  color: $link-color;
+  border-color: rgba(0, 153, 216, 0.25);
+  background: rgba(0, 153, 216, 0.08);
+}
+
+.consulta-status--past {
+  color: $text-secondary;
+}
+
+.consulta-status--empty {
+  color: $text-disabled;
+}
+
+.consulta-table__empty {
+  padding: $space-32;
+  text-align: center;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+}
+
+@media (max-width: 960px) {
+  .consulta-page {
+    padding: $space-24;
+  }
+
+  .consulta-row,
+  .consulta-row--header {
+    grid-template-columns: 1fr;
+    gap: $space-8;
+  }
+
+  .consulta-row--header {
+    display: none;
+  }
+
+  .consulta-row:not(.consulta-row--header) {
+    padding: $space-16;
+  }
+
+  .consulta-row__count::before {
+    content: 'Turnos: ';
+    color: $text-secondary;
+    font-weight: $font-weight-medium;
+  }
+
+  .consulta-row__phone::before {
+    content: 'Celular: ';
+    color: $text-secondary;
+  }
+}

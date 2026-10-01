@@ -1,0 +1,315 @@
+@use 'abstracts/colors' as *;
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.relevo-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: $space-24;
+  background: rgba(44, 42, 41, 0.55);
+}
+
+.relevo-modal {
+  width: min(560px, 100%);
+  max-height: min(90vh, 720px);
+
+  display: flex;
+  flex-direction: column;
+
+  background: $surface;
+  border: 1px solid $border-light;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  overflow: hidden;
+}
+
+.relevo-modal__header {
+  display: flex;
+  justify-content: space-between;
+  gap: $space-16;
+
+  padding: $space-24;
+  border-bottom: 1px solid $border-light;
+  background: $surface;
+}
+
+.relevo-modal__header h2 {
+  margin: 0 0 $space-8;
+
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
+}
+
+.relevo-modal__subtitle {
+  margin: 0;
+  max-width: 28rem;
+
+  font-size: $font-size-sm;
+  line-height: 1.5;
+  color: $text-secondary;
+}
+
+.relevo-modal__close {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+
+  border: none;
+  border-radius: $radius-sm;
+  background: $background-body;
+  color: $text-primary;
+
+  cursor: pointer;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+}
+
+.relevo-modal__close:hover {
+  background: $border-light;
+}
+
+.relevo-modal__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: $space-24;
+
+  display: flex;
+  flex-direction: column;
+  gap: $space-16;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-16;
+}
+
+.leader-search {
+  @include input-base;
+  width: 100%;
+  margin-bottom: $space-12;
+}
+
+.leader-selected {
+  margin: 0 0 $space-12;
+
+  font-size: $font-size-sm;
+  color: $text-secondary;
+}
+
+.leader-selected strong {
+  color: $text-primary;
+}
+
+.leader-picked {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+}
+
+.leader-picked .leader-option {
+  cursor: default;
+}
+
+.leader-change {
+  align-self: flex-start;
+
+  padding: 0;
+  border: 0;
+  background: none;
+
+  font-size: $font-size-sm;
+  color: $link-color;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.leader-change:hover {
+  opacity: 0.85;
+}
+
+.leader-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+
+  max-height: 200px;
+  overflow-y: auto;
+
+  padding: $space-4;
+  border: 1px solid $border-light;
+  border-radius: $radius-md;
+  background: $background-body;
+}
+
+.leader-option {
+  display: flex;
+  align-items: center;
+  gap: $space-12;
+
+  width: 100%;
+  padding: $space-12;
+
+  border: 1px solid transparent;
+  border-radius: $radius-sm;
+  background: $surface;
+
+  text-align: left;
+  cursor: pointer;
+}
+
+.leader-option:hover {
+  border-color: $border-color;
+}
+
+.leader-option--selected {
+  border-color: $link-color;
+  background: rgba(0, 153, 216, 0.08);
+}
+
+.leader-option__avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: $amarillo-macondo;
+  color: $on-yellow;
+
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+}
+
+.leader-option__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.leader-option__info strong {
+  font-size: $font-size-sm;
+  color: $text-primary;
+}
+
+.leader-option__info small {
+  font-size: $font-size-xs;
+  color: $text-secondary;
+}
+
+.leader-hint {
+  margin: 0;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+}
+
+.leader-empty {
+  margin: 0;
+  padding: $space-16;
+
+  text-align: center;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+}
+
+.field label {
+  @include text-label;
+}
+
+.field input,
+.field select,
+.field textarea {
+  @include input-base;
+  width: 100%;
+}
+
+.field input,
+.field select {
+  height: 44px;
+}
+
+.field textarea {
+  height: auto;
+  min-height: 96px;
+  padding: $space-12 $space-16;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.field-error {
+  font-size: $font-size-xs;
+  color: #e11d48;
+  line-height: 1.4;
+}
+
+.field-hint {
+  font-size: $font-size-xs;
+  color: $text-secondary;
+  line-height: 1.4;
+}
+
+.field-required {
+  color: #e11d48;
+}
+
+.field--required textarea {
+  border-color: rgba(225, 29, 72, 0.35);
+}
+
+.relevo-note {
+  margin: 0;
+  padding: $space-12 $space-16;
+
+  border-left: 3px solid $amarillo-macondo;
+  border-radius: 0 $radius-sm $radius-sm 0;
+  background: $background-body;
+
+  font-size: $font-size-sm;
+  line-height: 1.5;
+  color: $text-secondary;
+}
+
+.relevo-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-12;
+
+  padding: $space-16 $space-24;
+  border-top: 1px solid $border-light;
+}
+
+.btn-secondary {
+  @include button-secondary;
+}
+
+.btn-primary {
+  @include button-primary;
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

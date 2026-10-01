@@ -1,0 +1,82 @@
+<div
+  class="standby-card"
+  [class.selected]="isSelected() && !hasStandby()"
+  [class.active-this-month]="activeThisMonth()"
+  [class.standby-card--highlight]="highlighted()"
+  (click)="toggleSelection()"
+>
+
+  @if (hasStandby() || isSelected()) {
+
+    <div class="standby-card__top">
+
+      @if (hasStandby()) {
+
+        <div class="card-actions" (click)="$event.stopPropagation()">
+
+          <button
+            type="button"
+            class="btn-view"
+            (click)="onView($event)"
+          >
+            Ver standby
+          </button>
+
+          <button
+            type="button"
+            class="icon-btn"
+            title="Editar standby"
+            (click)="onEdit($event)"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+              />
+            </svg>
+          </button>
+
+        </div>
+
+      } @else {
+
+        <span class="selected-pill">
+          {{ serviceMode() ? 'Seleccionado' : 'Seleccionada' }}
+        </span>
+
+      }
+
+    </div>
+
+  }
+
+  <strong class="app-code">
+    @if (serviceMode()) {
+      {{ application().service || application().nombreAplicacion }}
+    } @else {
+      {{ application().codigoAplicacion }}
+    }
+  </strong>
+
+  @if (!serviceMode()) {
+    <h3 class="app-name">
+      {{ application().nombreAplicacion }}
+    </h3>
+  }
+
+  <p class="app-description">
+    {{ application().descripcion }}
+  </p>
+
+  <div class="standby-card__meta">
+    <span>{{ application().celula }}</span>
+    <span class="dot">·</span>
+    <span>{{ application().ldc }}</span>
+    <span class="dot">·</span>
+    <span>{{ application().bvc }}</span>
+  </div>
+
+  <span class="app-owner">
+    {{ application().responsable }}
+  </span>
+
+</div>

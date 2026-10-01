@@ -1,0 +1,104 @@
+<div
+  class="calendar-wrapper"
+  [class.calendar-wrapper--locked]="lockSelection()"
+>
+
+  <div class="calendar-header">
+
+    <button
+      type="button"
+      class="calendar-nav"
+      (click)="previousMonth()"
+    >
+      ‹
+    </button>
+
+    <h3>
+      {{ monthLabel }}
+    </h3>
+
+    <button
+      type="button"
+      class="calendar-nav"
+      (click)="nextMonth()"
+    >
+      ›
+    </button>
+
+  </div>
+
+  <div class="weekdays">
+
+    @for (
+      day of weekDays;
+      track day
+    ) {
+
+      <div>
+        {{ day }}
+      </div>
+
+    }
+
+  </div>
+
+  <div class="days-grid">
+
+    @for (
+      day of days;
+      track $index
+    ) {
+
+      @if (day.currentMonth) {
+
+        <div
+          class="calendar-day"
+          [class.friday]="isFriday(day.date)"
+          [class.disabled]="
+            !isOccupied(day) &&
+            !isInSelectedRange(day) &&
+            (
+              !enabled() ||
+              !isSelectableDay(day)
+            )
+          "
+          [class.selectable]="isSelectableDay(day)"
+          [class.selected]="isInSelectedRange(day) && !isOccupied(day)"
+          [class.occupied]="isOccupied(day)"
+          [class.calendar-day--last-selected]="
+            isLastSelectedDay(day)
+          "
+          (click)="selectDate(day)"
+        >
+
+          <span class="calendar-day__number">
+            {{ day.dayNumber }}
+          </span>
+
+          @if (
+            isLastSelectedDay(day) &&
+            showAddPerson()
+          ) {
+            <button
+              type="button"
+              class="calendar-add-person"
+              title="Añadir otra persona"
+              (click)="onAddPersonClick($event)"
+            >
+              +
+            </button>
+          }
+
+        </div>
+
+      } @else {
+
+        <div class="empty-day"></div>
+
+      }
+
+    }
+
+  </div>
+
+</div>

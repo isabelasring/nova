@@ -1,0 +1,163 @@
+<div class="policies-page">
+
+  <header class="policies-hero">
+
+    <div class="policies-hero__strip"></div>
+
+    <div class="policies-hero__content">
+
+      <a
+        routerLink="/standby"
+        class="policies-back"
+      >
+        ← Volver a Standby
+      </a>
+
+      <div class="policies-hero__badge">
+        Documento corporativo
+      </div>
+
+      <h1>{{ meta.title }}</h1>
+
+      <p class="policies-hero__lead">
+        {{ meta.subtitle }}
+      </p>
+
+      <div class="policies-hero__meta">
+
+        <span>{{ meta.version }}</span>
+        <span class="policies-hero__dot"></span>
+        <span>Actualizado {{ meta.lastUpdated }}</span>
+        <span class="policies-hero__dot"></span>
+        <span>{{ meta.owner }}</span>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <div class="policies-layout">
+
+    <nav
+      class="policies-nav"
+      aria-label="Contenido del documento"
+    >
+
+      <p class="policies-nav__title">Contenido</p>
+
+      <ul>
+        @for (section of sections; track section.id) {
+          <li>
+            <button
+              type="button"
+              (click)="scrollToSection(section.id)"
+            >
+              <span>{{ section.number }}</span>
+              {{ section.title }}
+            </button>
+          </li>
+        }
+      </ul>
+
+    </nav>
+
+    <article class="policies-body">
+
+      <section class="policies-intro">
+
+        <h2>Resumen ejecutivo</h2>
+
+        <p>
+          Estas políticas definen cómo se planifica, ejecuta y audita el
+          standby en el banco. Antes de programar un turno, todo responsable
+          debe conocer la ventana <strong>viernes a jueves</strong>, las reglas
+          de disponibilidad en calendario y el protocolo de escalamiento.
+        </p>
+
+        <div class="principles-grid">
+
+          @for (item of principles; track item.label) {
+
+            <div class="principle-card">
+
+              <span
+                class="principle-card__icon"
+                [class.principle-card__icon--calendar]="item.icon === 'calendar'"
+                [class.principle-card__icon--week]="item.icon === 'week'"
+                [class.principle-card__icon--shield]="item.icon === 'shield'"
+                [class.principle-card__icon--alert]="item.icon === 'alert'"
+                aria-hidden="true"
+              ></span>
+
+              <strong>{{ item.label }}</strong>
+              <small>{{ item.detail }}</small>
+
+            </div>
+
+          }
+
+        </div>
+
+      </section>
+
+      @for (section of sections; track section.id) {
+
+        <section
+          class="policy-section"
+          [id]="section.id"
+        >
+
+          <div class="policy-section__head">
+
+            <span class="policy-section__number">
+              {{ section.number }}
+            </span>
+
+            <div>
+              <h2>{{ section.title }}</h2>
+              <p>{{ section.summary }}</p>
+            </div>
+
+          </div>
+
+          <ul class="policy-section__list">
+            @for (item of section.bullets; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+
+          @if (section.highlight) {
+            <aside class="policy-section__callout">
+              <span class="policy-section__callout-label">
+                Importante
+              </span>
+              {{ section.highlight }}
+            </aside>
+          }
+
+        </section>
+
+      }
+
+      <footer class="policies-footer">
+
+        <p>
+          ¿Dudas sobre estas políticas? Contacta al equipo de
+          continuidad operativa antes de confirmar un turno crítico.
+        </p>
+
+        <a
+          routerLink="/standby"
+          class="policies-footer__btn"
+        >
+          Ir a programar standby
+        </a>
+
+      </footer>
+
+    </article>
+
+  </div>
+
+</div>

@@ -1,0 +1,170 @@
+@if (visible()) {
+
+<div class="modal-backdrop">
+
+  <div class="modal-container">
+
+    <header class="modal-header">
+
+      <div>
+        <h2>Agregar persona</h2>
+        <p>
+          @if (serviceMode()) {
+            Registra al funcionario con hasta 4 servicios
+            de cobertura.
+          } @else {
+            Registra al funcionario con hasta 4 servicios y
+            4 servicios TI (aplicaciones).
+          }
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="close-button"
+        (click)="close()"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
+    </header>
+
+    <div class="modal-body">
+
+      <form class="person-form" [formGroup]="form">
+
+        <section class="form-block">
+
+          <h3>Datos del funcionario</h3>
+
+          <div class="form-grid">
+
+            <label class="field">
+              <span>Funcionario *</span>
+              <input
+                type="text"
+                formControlName="funcionario"
+                placeholder="Nombres y apellidos completos"
+              />
+            </label>
+
+            <label class="field">
+              <span>Cédula *</span>
+              <input
+                type="text"
+                formControlName="cedula"
+                placeholder="Documento único"
+              />
+              <small>
+                Si no permite guardar, la cédula ya está registrada.
+              </small>
+            </label>
+
+            <div class="field">
+              <span>Celular *</span>
+              <app-phone-input formControlName="celular" />
+            </div>
+
+            <label class="field">
+              <span>Empresa *</span>
+              <select formControlName="empresa">
+                <option value="">Seleccione empresa</option>
+                @for (empresa of empresaOptions; track empresa) {
+                  <option [value]="empresa">{{ empresa }}</option>
+                }
+              </select>
+            </label>
+
+          </div>
+
+        </section>
+
+        <section class="form-block">
+
+          <app-capped-slot-adder
+            title="Servicios (PS)"
+            hint="Producto / servicio soportado. Agrega de a uno, máximo 4."
+            emptyLabel="Agregar servicio"
+            fullLabel="Ya tienes 4 servicios · no se pueden agregar más"
+            [options]="serviceOptions"
+            [(values)]="servicios"
+          />
+
+        </section>
+
+        @if (!serviceMode()) {
+
+          <section class="form-block">
+
+            <app-capped-slot-adder
+              title="Servicios TI"
+              hint="Aplicaciones de la CMDB. Agrega de a una, máximo 4."
+              emptyLabel="Agregar servicio TI"
+              fullLabel="Ya tienes 4 servicios TI · cupo completo"
+              [options]="tiOptions"
+              [(values)]="serviciosTi"
+            />
+
+          </section>
+
+        }
+
+        <section class="form-block">
+
+          <h3>Alcance y notas</h3>
+
+          <div class="form-grid form-grid--stack">
+
+            <label class="field">
+              <span>Función</span>
+              <input
+                type="text"
+                formControlName="funcion"
+                placeholder="Alcance de la persona programada"
+              />
+            </label>
+
+            <label class="field">
+              <span>Observaciones</span>
+              <textarea
+                formControlName="observaciones"
+                rows="3"
+                placeholder="Información adicional a tener en cuenta"
+              ></textarea>
+            </label>
+
+          </div>
+
+        </section>
+
+      </form>
+
+    </div>
+
+    <footer class="modal-footer">
+
+      <button
+        type="button"
+        class="btn-cancel"
+        (click)="close()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="btn-save"
+        [disabled]="!canSave()"
+        (click)="save()"
+      >
+        Guardar
+      </button>
+
+    </footer>
+
+  </div>
+
+</div>
+
+}

@@ -1,0 +1,242 @@
+@if (visible()) {
+
+<div
+  class="relevo-backdrop"
+  (click)="close()"
+>
+
+  <div
+    class="relevo-modal"
+    role="dialog"
+    aria-labelledby="relevo-title"
+    (click)="$event.stopPropagation()"
+  >
+
+    <header class="relevo-modal__header">
+
+      <div>
+        <h2 id="relevo-title">Delegar programación</h2>
+        <p class="relevo-modal__subtitle">
+          Transfiere temporalmente la programación de standby a otro
+          líder. {{ owner.nombre }} permanece como líder titular.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="relevo-modal__close"
+        (click)="close()"
+      >
+        ✕
+      </button>
+
+    </header>
+
+    <form
+      class="relevo-modal__body"
+      [formGroup]="form"
+      (ngSubmit)="save()"
+    >
+
+      <div class="field">
+        <label for="relevo-motivo">Motivo</label>
+        <select
+          id="relevo-motivo"
+          formControlName="motivo"
+          (change)="onMotivoChange($event)"
+        >
+          <option value="">Seleccione un motivo</option>
+          @for (reason of reasons; track reason.id) {
+            <option [value]="reason.id">
+              {{ reason.label }}
+            </option>
+          }
+        </select>
+      </div>
+
+      @if (motivoIsOther()) {
+
+        <div class="field field--required">
+
+          <label for="relevo-detalle">
+            Especifica el motivo
+            <span class="field-required">*</span>
+          </label>
+
+          <textarea
+            id="relevo-detalle"
+            formControlName="nota"
+            rows="3"
+            placeholder="Indica por qué delegas la programación."
+          ></textarea>
+
+          <small class="field-hint">
+            Campo obligatorio para «Otro motivo» (mínimo 10 caracteres).
+          </small>
+
+          @if (
+            form.controls.nota.touched &&
+            form.controls.nota.invalid
+          ) {
+            <small class="field-error">
+              Escribe al menos 10 caracteres explicando el motivo.
+            </small>
+          }
+
+        </div>
+
+      }
+
+      <div class="field">
+        <label for="relevo-buscar">Líder que recibe</label>
+
+        @if (selectedLeader(); as leader) {
+
+          <div class="leader-picked">
+            <div class="leader-option leader-option--selected">
+              <span
+                class="leader-option__avatar"
+                [style.background]="avatarTone(leader.nombre).background"
+                [style.color]="avatarTone(leader.nombre).color"
+              >
+                {{ leader.initials }}
+              </span>
+              <span class="leader-option__info">
+                <strong>{{ leader.nombre }}</strong>
+                <small>{{ leader.evc }} · {{ leader.linea }}</small>
+              </span>
+            </div>
+
+            <button
+              type="button"
+              class="leader-change"
+              (click)="clearLeaderSelection()"
+            >
+              Cambiar líder
+            </button>
+          </div>
+
+        } @else {
+
+          <input
+            id="relevo-buscar"
+            type="text"
+            class="leader-search"
+            [value]="leaderSearch()"
+            placeholder="Buscar por nombre, EVC o línea..."
+            (input)="onLeaderSearch($any($event.target).value)"
+          />
+
+          @if (hasLeaderSearch()) {
+
+            <div class="leader-list">
+
+              @for (leader of filteredLeaders(); track leader.id) {
+                <button
+                  type="button"
+                  class="leader-option"
+                  (click)="selectLeader(leader)"
+                >
+                  <span
+                    class="leader-option__avatar"
+                    [style.background]="avatarTone(leader.nombre).background"
+                    [style.color]="avatarTone(leader.nombre).color"
+                  >
+                    {{ leader.initials }}
+                  </span>
+                  <span class="leader-option__info">
+                    <strong>{{ leader.nombre }}</strong>
+                    <small>{{ leader.evc }} · {{ leader.linea }}</small>
+                  </span>
+                </button>
+              }
+
+              @if (filteredLeaders().length === 0) {
+                <p class="leader-empty">
+                  No se encontraron líderes con esa búsqueda.
+                </p>
+              }
+
+            </div>
+
+          } @else {
+            <p class="leader-hint">
+              Escribe en el buscador para ver líderes disponibles.
+            </p>
+          }
+
+        }
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label for="relevo-desde">Desde</label>
+          <input
+            id="relevo-desde"
+            type="date"
+            formControlName="fechaInicio"
+          />
+        </div>
+
+        <div class="field">
+          <label for="relevo-hasta">Hasta</label>
+          <input
+            id="relevo-hasta"
+            type="date"
+            formControlName="fechaFin"
+          />
+        </div>
+
+      </div>
+
+      @if (!motivoIsOther()) {
+
+        <div class="field">
+
+          <label for="relevo-nota">Nota (opcional)</label>
+
+          <textarea
+            id="relevo-nota"
+            formControlName="nota"
+            rows="3"
+            placeholder="Contexto para el líder que recibe el relevo."
+          ></textarea>
+
+        </div>
+
+      }
+
+      <aside class="relevo-note">
+        Solo se delega la acción de programar. Tu rol de líder no
+        cambia y puedes recuperar la programación cuando lo necesites.
+      </aside>
+
+    </form>
+
+    <footer class="relevo-modal__footer">
+
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="close()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="btn-primary"
+        [disabled]="!canSave"
+        (click)="save()"
+      >
+        Confirmar relevo
+      </button>
+
+    </footer>
+
+  </div>
+
+</div>
+
+}

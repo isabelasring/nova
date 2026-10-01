@@ -1,0 +1,111 @@
+<div
+  class="slot-adder"
+  [class.slot-adder--full]="isFull()"
+  [class.slot-adder--shake]="shakeFull()"
+  (click)="closePicker()"
+>
+
+  <div class="slot-adder__head">
+
+    <div>
+      <h4>{{ title() }}</h4>
+      <p>{{ hint() }}</p>
+    </div>
+
+    <div class="slot-adder__meter" aria-live="polite">
+      <span>{{ count() }} / {{ max() }}</span>
+      <div class="slot-adder__dots">
+        @for (slot of slots(); track slot.index) {
+          <i
+            [class.slot-adder__dot--on]="slot.filled"
+            aria-hidden="true"
+          ></i>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  <div class="slot-adder__rail">
+
+    @for (value of values(); track value; let i = $index) {
+      <article class="slot-chip">
+        <span class="slot-chip__index">{{ i + 1 }}</span>
+        <strong>{{ trackLabel(value) }}</strong>
+        <button
+          type="button"
+          class="slot-chip__remove"
+          aria-label="Quitar {{ trackLabel(value) }}"
+          (click)="remove(value, $event)"
+        >
+          ×
+        </button>
+      </article>
+    }
+
+    @if (!isFull()) {
+
+      <div class="slot-empty">
+
+        <button
+          type="button"
+          class="slot-empty__trigger"
+          (click)="openPicker($event)"
+        >
+          <span class="slot-empty__plus">+</span>
+          <span>{{ emptyLabel() }}</span>
+          <small>Cupo {{ count() + 1 }} de {{ max() }}</small>
+        </button>
+
+        @if (pickerOpen()) {
+          <div
+            class="slot-empty__menu"
+            (click)="$event.stopPropagation()"
+          >
+            @for (
+              option of availableOptions();
+              track option.value
+            ) {
+              <button
+                type="button"
+                class="slot-empty__option"
+                (click)="add(option.value, $event)"
+              >
+                <strong>{{ option.label }}</strong>
+                @if (option.hint) {
+                  <small>{{ option.hint }}</small>
+                }
+              </button>
+            }
+
+            @if (availableOptions().length === 0) {
+              <p class="slot-empty__none">
+                No hay más opciones disponibles.
+              </p>
+            }
+          </div>
+        }
+
+      </div>
+
+      @for (ghost of ghostIndexes(); track ghost) {
+        <div class="slot-ghost" aria-hidden="true">
+          <span>{{ ghost }}</span>
+        </div>
+      }
+
+    }
+
+  </div>
+
+  @if (isFull()) {
+    <button
+      type="button"
+      class="slot-locked-banner"
+      (click)="openPicker($event)"
+    >
+      {{ fullLabel() }}
+    </button>
+  }
+
+</div>

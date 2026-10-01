@@ -1,0 +1,356 @@
+@if (visible()) {
+
+<div class="modal-backdrop">
+
+  <div
+    class="modal-container"
+    [class.modal-container--person]="isPersonView()"
+  >
+
+    <div
+      class="modal-header"
+      [class.modal-header--person]="isPersonView()"
+    >
+
+      @if (isPersonView()) {
+
+        <div class="person-hero">
+
+          <span
+            class="person-hero__avatar"
+            [style.background]="personAvatarTone().background"
+            [style.color]="personAvatarTone().color"
+            [style.borderColor]="personAvatarTone().background"
+          >
+            {{ personInitials() }}
+          </span>
+
+          <div class="person-hero__info">
+            <span class="person-hero__eyebrow">
+              Standby por persona
+            </span>
+            <h2>{{ personName() }}</h2>
+            @if (personPhone()) {
+              <p>{{ personPhone() }}</p>
+            }
+          </div>
+
+        </div>
+
+      } @else {
+
+        <div class="modal-header__info">
+
+          <h2>Detalle de standby</h2>
+
+          @if (aplicacionCodigo()) {
+
+            <div class="app-under-title">
+              <span class="app-code">{{ aplicacionCodigo() }}</span>
+              @if (aplicacionNombre()) {
+                <span class="app-name">{{ aplicacionNombre() }}</span>
+              }
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+      <button
+        type="button"
+        class="close-button"
+        (click)="close()"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      @if (hasRowDetail()) {
+
+        <nav class="detail-tabs" aria-label="Detalle del standby">
+          <button
+            type="button"
+            class="detail-tabs__btn"
+            [class.detail-tabs__btn--active]="detailTab() === 'info'"
+            (click)="setDetailTab('info')"
+          >
+            Información
+          </button>
+          <button
+            type="button"
+            class="detail-tabs__btn"
+            [class.detail-tabs__btn--active]="detailTab() === 'standby'"
+            (click)="setDetailTab('standby')"
+          >
+            Standby
+          </button>
+        </nav>
+
+      }
+
+      @if (hasRowDetail() && detailTab() === 'info') {
+
+        @if (rowDetail(); as detail) {
+
+          <div class="row-info">
+
+            <div class="row-info__grid">
+
+              <div class="row-info__item">
+                <span>Fecha</span>
+                <strong>{{ detail.fechaLabel }}</strong>
+              </div>
+
+              <div class="row-info__item">
+                <span>Nombre completo</span>
+                <strong>{{ detail.nombre }}</strong>
+              </div>
+
+              @if (detail.celular) {
+                <div class="row-info__item">
+                  <span>Celular</span>
+                  <strong>{{ detail.celular }}</strong>
+                </div>
+              }
+
+              <div class="row-info__item">
+                <span>BVC</span>
+                <strong>{{ detail.bvc }}</strong>
+              </div>
+
+              <div class="row-info__item">
+                <span>LdC</span>
+                <strong>{{ detail.ldc }}</strong>
+              </div>
+
+              <div class="row-info__item">
+                <span>Célula</span>
+                <strong>{{ detail.celula }}</strong>
+              </div>
+
+              <div class="row-info__item">
+                <span>Servicio</span>
+                <strong>{{ detail.service }}</strong>
+              </div>
+
+              @if (!serviceMode()) {
+                <div class="row-info__item row-info__item--full">
+                  <span>Aplicaciones</span>
+                  <div class="row-info__apps">
+                    @for (code of detail.appCodes; track code; let i = $index) {
+                      <span class="row-info__app">
+                        {{ code }}
+                        @if (detail.appNames[i]) {
+                          · {{ detail.appNames[i] }}
+                        }
+                      </span>
+                    }
+                  </div>
+                </div>
+              }
+
+              <div class="row-info__item row-info__item--full">
+                <span>Contexto</span>
+                <strong>{{ detail.footerLabel }}</strong>
+              </div>
+
+            </div>
+
+          </div>
+
+        }
+
+      } @else if (assignments().length === 0) {
+
+        <div class="empty-detail">
+          <p>
+            @if (isPersonView()) {
+              Esta persona no tiene standby programado registrado.
+            } @else if (serviceMode()) {
+              No hay standby registrado para este servicio.
+            } @else {
+              No hay standby registrado para esta aplicación.
+            }
+          </p>
+        </div>
+
+      } @else if (isPersonView()) {
+
+        <div class="person-standby">
+
+          <aside class="person-timeline">
+
+            @if (upcomingAssignments().length > 0) {
+
+              <div class="person-timeline__group">
+
+                <h3>Próximos y actuales</h3>
+
+                @for (
+                  assignment of upcomingAssignments();
+                  track assignment.id
+                ) {
+                  <article
+                    class="turn-card"
+                    [class.turn-card--past]="
+                      standbyPeriod(assignment) === 'past'
+                    "
+                    [class.turn-card--current]="
+                      standbyPeriod(assignment) === 'current'
+                    "
+                    [class.turn-card--next]="
+                      standbyPeriod(assignment) === 'next'
+                    "
+                  >
+
+                    <div class="turn-card__top">
+
+                      <div class="turn-card__dates">
+                        <strong>
+                          {{ assignment.fechaInicio | date:'dd/MM/yyyy' }}
+                        </strong>
+                        <small>
+                          →
+                          {{ assignment.fechaFin | date:'dd/MM/yyyy' }}
+                        </small>
+                      </div>
+
+                      <span
+                        class="turn-card__pill"
+                        [class.turn-card__pill--past]="
+                          standbyPeriod(assignment) === 'past'
+                        "
+                        [class.turn-card__pill--current]="
+                          standbyPeriod(assignment) === 'current'
+                        "
+                        [class.turn-card__pill--next]="
+                          standbyPeriod(assignment) === 'next'
+                        "
+                      >
+                        {{ periodLabel(assignment) }}
+                      </span>
+
+                    </div>
+
+                    @if (assignment.aplicaciones?.length) {
+                      <div class="turn-card__apps">
+                        @for (
+                          app of assignment.aplicaciones;
+                          track app.codigoAplicacion
+                        ) {
+                          <span class="turn-card__app">
+                            @if (serviceMode()) {
+                              {{ app.nombreAplicacion }}
+                            } @else {
+                              {{ app.codigoAplicacion }}
+                            }
+                          </span>
+                        }
+                      </div>
+                    }
+
+                  </article>
+                }
+
+              </div>
+
+            }
+
+            @if (pastAssignments().length > 0) {
+
+              <div class="person-timeline__group">
+
+                <h3>Historial</h3>
+
+                @for (
+                  assignment of pastAssignments();
+                  track assignment.id
+                ) {
+                  <article class="turn-card turn-card--past">
+
+                    <div class="turn-card__top">
+
+                      <div class="turn-card__dates">
+                        <strong>
+                          {{ assignment.fechaInicio | date:'dd/MM/yyyy' }}
+                        </strong>
+                        <small>
+                          →
+                          {{ assignment.fechaFin | date:'dd/MM/yyyy' }}
+                        </small>
+                      </div>
+
+                      <span class="turn-card__pill turn-card__pill--past">
+                        Finalizado
+                      </span>
+
+                    </div>
+
+                    @if (assignment.aplicaciones?.length) {
+                      <div class="turn-card__apps">
+                        @for (
+                          app of assignment.aplicaciones;
+                          track app.codigoAplicacion
+                        ) {
+                          <span class="turn-card__app">
+                            @if (serviceMode()) {
+                              {{ app.nombreAplicacion }}
+                            } @else {
+                              {{ app.codigoAplicacion }}
+                            }
+                          </span>
+                        }
+                      </div>
+                    }
+
+                  </article>
+                }
+
+              </div>
+
+            }
+
+          </aside>
+
+          <section class="person-calendar">
+
+            <div class="person-calendar__header">
+              <h3>Calendario de turnos</h3>
+              <p>Vista mensual de la programación</p>
+            </div>
+
+            <app-standby-month-view
+              [assignments]="assignments()"
+              [showPeopleList]="false"
+              [outlineMode]="true"
+              [hideAppChips]="true"
+              [tooltipBelow]="true"
+            />
+
+          </section>
+
+        </div>
+
+      } @else {
+
+        <app-standby-month-view
+          [assignments]="assignments()"
+          [showPeopleList]="showPeopleList()"
+          [hideAppChips]="false"
+        />
+
+      }
+
+    </div>
+
+  </div>
+
+</div>
+
+}

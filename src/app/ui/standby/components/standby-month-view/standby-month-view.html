@@ -1,0 +1,244 @@
+<div
+  class="standby-layout"
+  [class.standby-layout--calendar-only]="!showPeopleList()"
+  [class.standby-layout--outline]="outlineMode()"
+  [class.standby-layout--list-bottom]="peopleListAtBottom()"
+>
+
+  @if (showPeopleList()) {
+
+  <aside class="sidebar">
+
+    <h4>PERSONAS PROGRAMADAS</h4>
+
+    <div class="sidebar-list">
+
+    @for (
+      group of monthStandbyGroups;
+      track group.start.getTime()
+    ) {
+
+      <div class="assignment-card">
+
+        <div class="standby-group-header">
+
+          @if (group.responsables.length > 1) {
+            <span class="standby-group-badge">
+              Mismo standby ·
+              {{ group.responsables.length }} personas
+            </span>
+          }
+
+          <span class="assignment-dates assignment-dates--prominent">
+            {{ group.start | date:'dd/MM/yyyy' }}
+            →
+            {{ group.end | date:'dd/MM/yyyy' }}
+          </span>
+
+        </div>
+
+        <div class="standby-group-people">
+
+          @for (
+            person of group.responsables;
+            track person.nombre
+          ) {
+
+            <div class="standby-person-row">
+
+              <span
+                class="color-dot"
+                [style.background]="group.responsables[0].color"
+              ></span>
+
+              <div class="assignment-info">
+
+                <strong>
+                  {{ person.nombre }}
+                </strong>
+
+                <span class="phone-number">
+                  {{ person.celular }}
+                </span>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+        @if (group.aplicaciones.length > 0 && !hideAppChips()) {
+
+          <div class="person-apps">
+            <span class="person-apps__label">
+              Aplicaciones asociadas
+            </span>
+            @for (
+              app of group.aplicaciones;
+              track app.codigoAplicacion
+            ) {
+              <span class="app-chip">
+                {{ app.codigoAplicacion }}
+              </span>
+            }
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+    @if (monthStandbyGroups.length === 0) {
+
+      <p class="empty-list">
+        No hay personas programadas
+        en este mes.
+      </p>
+
+    }
+
+    </div>
+
+  </aside>
+
+  }
+
+  <section class="calendar-container">
+
+    <div class="calendar-header">
+
+      <h3>
+        {{ monthLabel }}
+      </h3>
+
+      <div class="calendar-header-actions">
+
+        <span class="total-days">
+          Total días: {{ totalDays }}
+        </span>
+
+        <button
+          class="calendar-nav"
+          (click)="previousMonth()"
+        >
+          ‹
+        </button>
+
+        <button
+          class="calendar-nav"
+          (click)="nextMonth()"
+        >
+          ›
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="weekdays">
+
+      @for (
+        day of weekDays;
+        track day
+      ) {
+
+        <div>
+          {{ day }}
+        </div>
+
+      }
+
+    </div>
+
+    <div class="days-grid">
+
+      @for (
+        day of calendarDays;
+        track $index
+      ) {
+
+        @if (day.currentMonth) {
+
+          <div
+            class="calendar-day"
+            [class.has-assignment]="!!day.assignment"
+            [class.is-range-start]="day.isRangeStart"
+            [class.is-range-end]="day.isRangeEnd"
+            [style.--assignment-color]="
+              day.assignment?.color ?? null
+            "
+            [style.background]="
+              !outlineMode() && day.assignment
+                ? day.assignment.color + '22'
+                : null
+            "
+            [style.borderColor]="
+              !outlineMode() && day.assignment
+                ? day.assignment.color
+                : null
+            "
+          >
+
+            <span class="day-number">
+              {{ day.dayNumber }}
+            </span>
+
+            @if (day.assignment && !outlineMode()) {
+
+              <div
+                class="tooltip"
+                [class.tooltip--below]="tooltipBelow()"
+              >
+
+                @if (
+                  day.assignments &&
+                  day.assignments.length > 1
+                ) {
+                  <strong>
+                    {{ day.assignments.length }} personas
+                    en standby
+                  </strong>
+                }
+
+                @for (
+                  item of day.assignments ?? [day.assignment];
+                  track item.id
+                ) {
+                  <div class="tooltip-person">
+                    <strong>
+                      {{ item.responsable }}
+                    </strong>
+                    <small>
+                      {{ item.celular }}
+                    </small>
+                  </div>
+                }
+
+                <small>
+                  {{ day.assignment.fechaInicio | date:'dd/MM/yyyy' }}
+                  →
+                  {{ day.assignment.fechaFin | date:'dd/MM/yyyy' }}
+                </small>
+
+              </div>
+
+            }
+
+          </div>
+
+        } @else {
+
+          <div class="empty-day"></div>
+
+        }
+
+      }
+
+    </div>
+
+  </section>
+
+</div>
