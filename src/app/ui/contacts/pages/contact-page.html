@@ -1,0 +1,581 @@
+<div class="contactos-page">
+
+
+
+  <div class="page-header">
+
+
+
+    <div class="page-actions">
+
+
+
+      @if (selectedCount() > 0) {
+
+
+
+        <span class="selection-count">
+
+          {{ selectedCount() }} seleccionado(s)
+
+        </span>
+
+
+
+        <button
+
+          class="btn-bulk-edit"
+
+          type="button"
+
+          (click)="openBulkEdit()"
+
+        >
+
+          Editar seleccionados
+
+        </button>
+
+
+
+        <button
+
+          class="btn-clear-selection"
+
+          type="button"
+
+          (click)="clearSelection()"
+
+        >
+
+          Limpiar
+
+        </button>
+
+
+
+      }
+
+
+
+      <button
+
+        class="btn-new-contact"
+
+        type="button"
+
+        (click)="openNewContactModal()"
+
+      >
+
+        + Nuevo contacto
+
+      </button>
+
+
+
+      <app-nuevo-contacto-modal
+
+        [visible]="showNewContactModal()"
+
+        (closed)="closeNewContactModal()"
+
+      />
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <div class="filters-container">
+
+    <app-portal-filter-bar />
+
+    <form
+      class="search-container"
+      [class.search-container--expanded]="
+        !!searchForm.controls.searchApp.value?.trim()
+      "
+      [formGroup]="searchForm"
+    >
+      <input
+        type="text"
+        placeholder="Buscar..."
+        formControlName="searchApp"
+      />
+    </form>
+
+  </div>
+
+
+
+  <div class="contacts-list">
+
+
+
+    <div class="contact-row contact-row--header">
+
+      <div class="contact-row__check">
+
+        <input
+
+          type="checkbox"
+
+          class="row-check"
+
+          [checked]="allFilteredSelected()"
+
+          (change)="toggleSelectAll()"
+
+          aria-label="Seleccionar todos"
+
+        />
+
+      </div>
+
+      <div>Aplicación</div>
+
+      <div>Contacto</div>
+
+      <div>Correo</div>
+
+      <div>Horario</div>
+
+      <div>Célula / LdC</div>
+
+      <div class="contact-row__actions-header">Acciones</div>
+
+    </div>
+
+
+
+    @for (contacto of contactosService.filteredContactos(); track contacto.id) {
+
+
+
+      <div
+
+        class="contact-row"
+
+        [class.contact-row--selected]="isSelected(contacto.id)"
+
+      >
+
+
+
+        <div class="contact-row__check">
+
+          <input
+
+            type="checkbox"
+
+            class="row-check"
+
+            [checked]="isSelected(contacto.id)"
+
+            (change)="toggleContacto(contacto.id)"
+
+            [attr.aria-label]="'Seleccionar ' + contacto.nombre"
+
+          />
+
+        </div>
+
+
+
+        <div class="contact-row__app">
+
+          <a
+
+            class="application-link"
+
+            (click)="openEditModal(contacto)"
+
+          >
+
+            {{ contacto.codigoAplicacion }}
+
+          </a>
+
+          <small>{{ contacto.nombreAplicacion }}</small>
+
+        </div>
+
+
+
+        <div class="contact-row__person">
+
+          <strong>{{ contacto.nombre }}</strong>
+
+          <small>{{ contacto.celular }}</small>
+
+        </div>
+
+
+
+        <div class="contact-row__mail">
+
+          <strong>{{ contacto.correo }}</strong>
+
+          <small>Correo</small>
+
+        </div>
+
+
+
+        <div class="contact-row__schedule">
+
+          @if (contacto.horario === '24/7') {
+
+            <strong>{{ contacto.horario }}</strong>
+
+          } @else {
+
+            <span class="badge badge-personalizado">
+
+              {{ contacto.horario }}
+
+            </span>
+
+          }
+
+          <small>Horario</small>
+
+        </div>
+
+
+
+        <div class="contact-row__meta">
+
+          <strong>{{ contacto.celula }}</strong>
+
+          <small>{{ contacto.ldc }} · {{ contacto.bvc }}</small>
+
+        </div>
+
+
+
+        <div class="contact-row__actions">
+
+
+
+          <button
+
+            type="button"
+
+            class="icon-btn"
+
+            title="Editar"
+
+            (click)="openEditModal(contacto)"
+
+          >
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+              <path
+
+                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+
+              />
+
+            </svg>
+
+          </button>
+
+
+
+          <button
+
+            type="button"
+
+            class="icon-btn icon-btn--danger"
+
+            title="Eliminar"
+
+            (click)="askDeleteContacto(contacto)"
+
+          >
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+              <path
+
+                d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+
+              />
+
+            </svg>
+
+          </button>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+    }
+
+
+
+    @if (contactosService.filteredContactos().length === 0) {
+
+      <p class="empty-list">
+
+        @if (contactosService.contactos().length === 0) {
+
+          No hay contactos registrados.
+
+        } @else {
+
+          No hay aplicaciones con esa búsqueda.
+
+        }
+
+      </p>
+
+    }
+
+
+
+  </div>
+
+
+
+  <app-contacto-modal
+
+    [visible]="showModal()"
+
+    [contacto]="selectedContacto()"
+
+    [editMode]="true"
+
+    (closed)="closeEditModal()"
+
+  />
+
+
+
+  @if (showBulkEdit()) {
+
+
+
+    <div class="confirm-backdrop">
+
+
+
+      <div class="bulk-edit-dialog">
+
+
+
+        <h3>Editar seleccionados</h3>
+
+
+
+        <p class="bulk-edit-hint">
+
+          Se actualizarán
+
+          <strong>{{ selectedCount() }}</strong>
+
+          contacto(s).
+
+        </p>
+
+
+
+        <form
+
+          class="bulk-edit-form"
+
+          [formGroup]="bulkForm"
+
+        >
+
+
+
+          <div class="field">
+
+            <label>Celular</label>
+
+            <app-phone-input
+
+              formControlName="celular"
+
+            />
+
+          </div>
+
+
+
+          <div class="field">
+
+            <label>Correo</label>
+
+            <input
+
+              type="email"
+
+              placeholder="correo@bancolombia.com.co"
+
+              formControlName="correo"
+
+            />
+
+          </div>
+
+
+
+        </form>
+
+
+
+        <div class="confirm-dialog__actions">
+
+
+
+          <button
+
+            type="button"
+
+            class="btn-outline"
+
+            (click)="closeBulkEdit()"
+
+          >
+
+            Cancelar
+
+          </button>
+
+
+
+          <button
+
+            type="button"
+
+            class="btn-bulk-save"
+
+            [disabled]="!canSaveBulk()"
+
+            (click)="saveBulkEdit()"
+
+          >
+
+            Guardar cambios
+
+          </button>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+  }
+
+
+
+  @if (showDeleteConfirm() && contactoToDelete()) {
+
+
+
+    <div class="confirm-backdrop">
+
+
+
+      <div class="confirm-dialog">
+
+
+
+        <h3>Eliminar contacto</h3>
+
+
+
+        <p>
+
+          ¿Seguro que deseas eliminar a
+
+          <strong>{{ contactoToDelete()!.nombre }}</strong>
+
+          de
+
+          <strong>{{ contactoToDelete()!.codigoAplicacion }}</strong>?
+
+          Esta acción no se puede deshacer.
+
+        </p>
+
+
+
+        <div class="confirm-dialog__actions">
+
+
+
+          <button
+
+            type="button"
+
+            class="btn-outline"
+
+            (click)="cancelDelete()"
+
+          >
+
+            Cancelar
+
+          </button>
+
+
+
+          <button
+
+            type="button"
+
+            class="btn-danger"
+
+            (click)="confirmDelete()"
+
+          >
+
+            Eliminar
+
+          </button>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+  }
+
+
+
+</div>

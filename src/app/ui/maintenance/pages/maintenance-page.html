@@ -1,0 +1,981 @@
+<div class="mantenimiento-page">
+
+  <div class="mantenimiento-main">
+
+    @if (viewMode() === 'list') {
+
+      <header class="list-hero">
+        <h2 class="list-title">Ventanas activas</h2>
+      </header>
+
+      <div class="list-filters">
+
+        <div class="list-toolbar">
+
+          <div class="filters-grid">
+
+            <app-portal-filter-bar />
+
+            <input
+              type="text"
+              class="filters-grid__search"
+              [class.filters-grid__search--expanded]="
+                !!mantenimiento.listSearchApp().trim()
+              "
+              placeholder="Buscar..."
+              [value]="mantenimiento.listSearchApp()"
+              (input)="mantenimiento.listSearchApp.set($any($event.target).value)"
+            />
+
+          </div>
+
+          <button
+            type="button"
+            class="btn-save list-toolbar__add"
+            (click)="openForm()"
+          >
+            Agregar ventana
+          </button>
+
+        </div>
+
+        <div class="filter-toolbar">
+
+          <div class="filter-group">
+            <span class="filter-group__label">Tipo</span>
+
+            <div
+              class="filter-tabs"
+              role="tablist"
+              aria-label="Tipo de ventana"
+            >
+
+              <button
+                type="button"
+                role="tab"
+                class="filter-tab filter-tab--todos"
+                [class.filter-tab--active]="mantenimiento.listFilterTipo() === ''"
+                [attr.aria-selected]="mantenimiento.listFilterTipo() === ''"
+                (click)="clearTipoFilter()"
+              >
+                Todos
+              </button>
+
+              <button
+                type="button"
+                role="tab"
+                class="filter-tab filter-tab--programada"
+                [class.filter-tab--active]="mantenimiento.listFilterTipo() === 'Ventana programada'"
+                [attr.aria-selected]="mantenimiento.listFilterTipo() === 'Ventana programada'"
+                (click)="toggleTipoFilter('Ventana programada')"
+              >
+                Ventana programada
+              </button>
+
+              <button
+                type="button"
+                role="tab"
+                class="filter-tab filter-tab--promesa"
+                [class.filter-tab--active]="mantenimiento.listFilterTipo() === 'Promesa de servicio'"
+                [attr.aria-selected]="mantenimiento.listFilterTipo() === 'Promesa de servicio'"
+                (click)="toggleTipoFilter('Promesa de servicio')"
+              >
+                Promesa de servicio
+              </button>
+
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-group__label">Estado</span>
+
+            <div
+              class="filter-links"
+              role="group"
+              aria-label="Estado de la ventana"
+            >
+
+              <button
+                type="button"
+                class="filter-link"
+                [class.filter-link--active]="mantenimiento.listFilterEstado() === ''"
+                (click)="clearEstadoFilter()"
+              >
+                Todas
+              </button>
+
+              <button
+                type="button"
+                class="filter-link"
+                [class.filter-link--active]="mantenimiento.listFilterEstado() === 'Programada'"
+                (click)="toggleEstadoFilter('Programada')"
+              >
+                Programada
+              </button>
+
+              <button
+                type="button"
+                class="filter-link"
+                [class.filter-link--active]="mantenimiento.listFilterEstado() === 'En ejecución'"
+                (click)="toggleEstadoFilter('En ejecución')"
+              >
+                En ejecución
+              </button>
+
+              <button
+                type="button"
+                class="filter-link"
+                [class.filter-link--active]="mantenimiento.listFilterEstado() === 'Finalizada'"
+                (click)="toggleEstadoFilter('Finalizada')"
+              >
+                Finalizada
+              </button>
+
+            </div>
+          </div>
+
+          <p class="filters-count">
+            {{ mantenimiento.filteredWindows().length }} ventana(s)
+          </p>
+
+        </div>
+
+      </div>
+
+      @if (mantenimiento.filteredWindows().length === 0) {
+
+        <div class="empty-list">
+          <p>
+            @if (mantenimiento.windows().length === 0) {
+              No hay ventanas programadas.
+            } @else {
+              No hay ventanas con esos filtros.
+            }
+          </p>
+          @if (mantenimiento.windows().length === 0) {
+            <button
+              type="button"
+              class="btn-save"
+              (click)="openForm()"
+            >
+              Agregar ventana
+            </button>
+          }
+        </div>
+
+      } @else {
+
+        <div class="list-content">
+
+          <div class="windows-grid">
+
+            @for (
+              window of displayWindows();
+              track window.id
+            ) {
+
+              <article
+                class="window-tile"
+                [attr.id]="'window-card-' + window.id"
+                [ngClass]="statusClass(window.estado)"
+                [class.window-tile--just-saved]="
+                  highlightedWindowId() === window.id
+                "
+              >
+
+                <div class="window-tile__top">
+
+                  <div class="window-tile__meta-row">
+                    <span
+                      class="tipo-label"
+                      [class.tipo-label--promesa]="isPromesa(window)"
+                    >
+                      {{ tipoLabel(window.tipo) }}
+                    </span>
+
+                    <span class="window-tile__dot" aria-hidden="true">·</span>
+
+                    <span
+                      class="status-label"
+                      [ngClass]="statusClass(window.estado)"
+                    >
+                      {{ window.estado }}
+                    </span>
+                  </div>
+
+                  <div class="window-tile__actions">
+
+                    <span class="window-tile__freq">
+                      {{ window.frecuencia }}
+                    </span>
+
+                    <button
+                      type="button"
+                      class="icon-btn"
+                      title="Editar ventana"
+                      (click)="openEditPanel(window, $event)"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                        />
+                      </svg>
+                    </button>
+
+                  </div>
+
+                </div>
+
+                <div class="window-tile__body">
+
+                  <span class="window-tile__code">
+                    {{ window.aplicacion }}
+                  </span>
+
+                  <h3 class="window-tile__name">
+                    {{ window.nombreAplicacion }}
+                  </h3>
+
+                  <p class="window-tile__org">
+                    {{ window.celula }} · {{ window.ldc }}
+                  </p>
+
+                  @if (isPromesa(window) && window.crq) {
+                    <p class="window-tile__crq">
+                      <span>CRQ</span>
+                      {{ window.crq }}
+                    </p>
+                  }
+
+                  <p class="window-tile__impact">
+                    {{ window.impacto }}
+                  </p>
+
+                  @if (window.observacion) {
+                    <p class="window-tile__note">
+                      {{ window.observacion }}
+                    </p>
+                  }
+
+                </div>
+
+                <div class="window-tile__footer">
+
+                  <div class="window-tile__dates">
+                    <div class="date-block">
+                      <span class="date-block__label">Inicio</span>
+                      <span class="date-block__value">{{ window.fechaInicio }}</span>
+                    </div>
+                    <span class="arrow" aria-hidden="true">→</span>
+                    <div class="date-block">
+                      <span class="date-block__label">Fin</span>
+                      <span class="date-block__value">{{ window.fechaFin }}</span>
+                    </div>
+                  </div>
+
+                  <span class="window-tile__zone">
+                    {{ window.zonaHoraria }}
+                  </span>
+
+                </div>
+
+              </article>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+    }
+
+  </div>
+
+  @if (showEditPanel() && editingWindow(); as window) {
+
+    <div
+      class="edit-modal-backdrop"
+      (click)="closeEditPanel()"
+    >
+
+      <div
+        class="edit-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="edit-window-title"
+        (click)="$event.stopPropagation()"
+      >
+
+        <div class="edit-modal__header">
+
+          <div>
+            <h2 id="edit-window-title">Editar ventana</h2>
+            <p>
+              {{ window.aplicacion }} · {{ window.nombreAplicacion }}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="panel-close"
+            (click)="closeEditPanel()"
+            aria-label="Cerrar"
+          >
+            ✕
+          </button>
+
+        </div>
+
+        <div class="edit-modal__summary">
+          <span
+            class="tipo-label"
+            [class.tipo-label--promesa]="isPromesa(window)"
+          >
+            {{ tipoLabel(window.tipo) }}
+          </span>
+          <span
+            class="status-label"
+            [ngClass]="statusClass(window.estado)"
+          >
+            {{ window.estado }}
+          </span>
+          <span class="edit-modal__freq">{{ window.frecuencia }}</span>
+        </div>
+
+        <div
+          class="edit-modal__body"
+          [formGroup]="editForm"
+        >
+
+          <div class="field">
+            <label>Estado</label>
+            <select formControlName="estado">
+              <option>Programada</option>
+              <option>En ejecución</option>
+              <option>Finalizada</option>
+              <option>Cancelada</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Frecuencia</label>
+            <select formControlName="frecuencia">
+              <option>Una vez</option>
+              <option>Diaria</option>
+              <option>Semanal</option>
+              <option>Mensual</option>
+            </select>
+          </div>
+
+          <div class="edit-modal__grid">
+
+            <div class="field">
+              <label>Fecha inicio</label>
+              <input
+                type="text"
+                formControlName="fechaInicio"
+                placeholder="dd/MM/yyyy HH:mm"
+              />
+            </div>
+
+            <div class="field">
+              <label>Fecha fin</label>
+              <input
+                type="text"
+                formControlName="fechaFin"
+                placeholder="dd/MM/yyyy HH:mm"
+              />
+            </div>
+
+          </div>
+
+          <div class="field">
+            <label>Zona horaria</label>
+            <select formControlName="zonaHoraria">
+              <option>América / Bogotá</option>
+              <option>América / Lima</option>
+              <option>UTC</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Aplicación</label>
+            <input
+              type="text"
+              formControlName="aplicacion"
+              readonly
+            />
+          </div>
+
+          <div class="field">
+            <label>Impacto</label>
+            <input
+              type="text"
+              formControlName="impacto"
+            />
+          </div>
+
+          <div class="field">
+            <label>Observación</label>
+            <textarea
+              rows="3"
+              formControlName="observacion"
+              placeholder="Notas de la ventana"
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="edit-modal__footer">
+
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="closeEditPanel()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="button"
+            class="btn-save"
+            [disabled]="!canSaveEdit()"
+            (click)="saveEdit()"
+          >
+            Guardar cambios
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+  @if (showTypeModal()) {
+
+    <div
+      class="type-modal-backdrop"
+      (click)="closeTypeModal()"
+    >
+
+      <div
+        class="type-modal"
+        [class.type-modal--form]="hasTipoVentana()"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="type-modal-title"
+        (click)="$event.stopPropagation()"
+      >
+
+        @if (!hasTipoVentana()) {
+
+          <header class="type-modal__header">
+
+            <div>
+              <p class="window-chooser__eyebrow">Nuevo registro</p>
+              <h2
+                id="type-modal-title"
+                class="window-chooser__title"
+              >
+                Opciones de ventana
+              </h2>
+              <p class="window-chooser__subtitle">
+                Elige el tipo para continuar. Cada camino tiene un
+                flujo y datos propios.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="type-modal__close"
+              (click)="closeTypeModal()"
+              aria-label="Cerrar"
+            >
+              ✕
+            </button>
+
+          </header>
+
+          <div class="window-chooser__grid">
+
+            <button
+              type="button"
+              class="choice-card choice-card--programada"
+              (click)="selectTipoVentana('programada')"
+            >
+              <span class="choice-card__accent" aria-hidden="true"></span>
+
+              <div class="choice-card__visual" aria-hidden="true">
+                <span class="choice-card__mark"></span>
+                <span class="choice-card__mark"></span>
+                <span class="choice-card__mark"></span>
+              </div>
+
+              <div class="choice-card__content">
+                <h3>Ventana programada</h3>
+                <p>
+                  Mantenimiento planificado con fechas, frecuencia
+                  y seguimiento operativo.
+                </p>
+                <ul>
+                  <li>Calendario y recurrencia</li>
+                  <li>Estado del ciclo de vida</li>
+                  <li>Impacto sobre la aplicación</li>
+                </ul>
+              </div>
+
+              <span class="choice-card__cta">
+                Continuar con programada
+                <span aria-hidden="true">→</span>
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="choice-card choice-card--promesa"
+              (click)="selectTipoVentana('promesa')"
+            >
+              <span class="choice-card__accent" aria-hidden="true"></span>
+
+              <div class="choice-card__visual" aria-hidden="true">
+                <span class="choice-card__ring"></span>
+                <span class="choice-card__ring choice-card__ring--inner"></span>
+              </div>
+
+              <div class="choice-card__content">
+                <h3>Promesa de servicio</h3>
+                <p>
+                  Compromiso formal de disponibilidad o atención,
+                  ligado a un CRQ cuando aplique.
+                </p>
+                <ul>
+                  <li>Acuerdo de servicio</li>
+                  <li>Trazabilidad con CRQ</li>
+                  <li>Ventana de cumplimiento</li>
+                </ul>
+              </div>
+
+              <span class="choice-card__cta">
+                Continuar con promesa
+                <span aria-hidden="true">→</span>
+              </span>
+            </button>
+
+          </div>
+
+        } @else {
+
+          <header class="type-modal__header">
+
+            <div>
+              <p class="window-chooser__eyebrow">Nuevo registro</p>
+              <h2
+                id="type-modal-title"
+                class="window-chooser__title"
+              >
+                {{
+                  isVentanaProgramada()
+                    ? 'Ventana programada'
+                    : 'Promesa de servicio'
+                }}
+              </h2>
+              <p class="window-chooser__subtitle">
+                Completa los datos para guardar la ventana.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="type-modal__close"
+              (click)="closeTypeModal()"
+              aria-label="Cerrar"
+            >
+              ✕
+            </button>
+
+          </header>
+
+          <div class="type-modal__body maintenance-form">
+
+            <section class="form-section form-section--type-badge">
+
+              <div
+                class="selected-type"
+                [class.selected-type--promesa]="isPromesaServicio()"
+              >
+                <div>
+                  <span class="selected-type__label">Tipo seleccionado</span>
+                  <strong>
+                    {{
+                      isVentanaProgramada()
+                        ? 'Ventana programada'
+                        : 'Promesa de servicio'
+                    }}
+                  </strong>
+                </div>
+
+                <button
+                  type="button"
+                  class="selected-type__change"
+                  (click)="changeTipoVentana()"
+                >
+                  Cambiar
+                </button>
+              </div>
+
+              @if (isVentanaProgramada()) {
+
+                <div
+                  class="field field--crq"
+                  [formGroup]="createForm"
+                >
+                  <label>CRQ</label>
+                  <input
+                    type="text"
+                    formControlName="crq"
+                    placeholder="Ej: CRQ-12345"
+                    [class.field-input--invalid]="isCrqInvalid()"
+                  />
+                  @if (isCrqInvalid()) {
+                    <small class="field-error">CRQ inválido</small>
+                  } @else if (!canFillFormFields()) {
+                    <small class="field-hint">
+                      Formato: CRQ- y 5 dígitos (ej. CRQ-12345)
+                    </small>
+                  }
+                </div>
+
+              }
+
+            </section>
+
+            @if (canFillFormFields()) {
+
+              <section class="form-section form-section--apps">
+
+                <header class="form-section__header">
+                  <h3>Seleccionar aplicación</h3>
+                  <p>
+                    Usa los filtros o la búsqueda para listar aplicaciones.
+                  </p>
+                </header>
+
+                <div class="filters-grid">
+
+                  <select
+                    [value]="filterEvc()"
+                    (change)="updateAppFilter('evc', $any($event.target).value)"
+                  >
+                    <option value="">Todas las células</option>
+                    @for (celula of celulaOptions(); track celula) {
+                      <option [value]="celula">{{ celula }}</option>
+                    }
+                  </select>
+
+                  <select
+                    [value]="filterLinea()"
+                    (change)="updateAppFilter('linea', $any($event.target).value)"
+                  >
+                    <option value="">Todas las LdC</option>
+                    @for (ldc of ldcOptions(); track ldc) {
+                      <option [value]="ldc">{{ ldc }}</option>
+                    }
+                  </select>
+
+                  <input
+                    type="text"
+                    placeholder="Buscar aplicación (código o nombre)"
+                    [value]="searchApp()"
+                    (input)="updateAppFilter('searchApp', $any($event.target).value)"
+                  />
+
+                </div>
+
+                @if (hasActiveAppFilters()) {
+
+                  <div class="filters-actions">
+                    <small>
+                      {{ filteredApplications().length }} aplicación(es)
+                    </small>
+                  </div>
+
+                  <div class="apps-list">
+
+                    @for (
+                      app of filteredApplications();
+                      track app.id
+                    ) {
+
+                      <button
+                        type="button"
+                        class="app-row"
+                        [class.app-row--selected]="
+                          selectedApp()?.id === app.id
+                        "
+                        (click)="selectApp(app)"
+                      >
+
+                        <div class="app-row__main">
+                          <strong>{{ app.codigoAplicacion }}</strong>
+                          <span>{{ app.nombreAplicacion }}</span>
+                        </div>
+
+                        <div class="app-row__meta">
+                          {{ app.celula }} · {{ app.ldc }}
+                        </div>
+
+                      </button>
+
+                    }
+
+                    @if (filteredApplications().length === 0) {
+                      <p class="empty-apps">
+                        No hay aplicaciones con esos filtros.
+                      </p>
+                    }
+
+                  </div>
+
+                } @else {
+
+                  <p class="form-section__hint">
+                    Selecciona una célula, una LdC o escribe en el buscador
+                    (también aplica el filtro global del portal).
+                    para ver aplicaciones.
+                  </p>
+
+                }
+
+              </section>
+
+              <section
+                class="form-section form-section--details"
+                [formGroup]="createForm"
+              >
+
+                <header class="form-section__header">
+                  <h3>Datos de la ventana</h3>
+                  <p>
+                    Configura estado, fechas e impacto de la ventana.
+                  </p>
+                </header>
+
+                <div class="form-grid">
+
+                  <div class="field">
+                    <label>Estado</label>
+                    <select formControlName="estado">
+                      <option>Programada</option>
+                      <option>En ejecución</option>
+                      <option>Finalizada</option>
+                      <option>Cancelada</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label>Frecuencia</label>
+                    <select formControlName="frecuencia">
+                      <option>Una vez</option>
+                      <option>Diaria</option>
+                      <option>Semanal</option>
+                      <option>Mensual</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label>Fecha inicio</label>
+                    <input
+                      type="datetime-local"
+                      formControlName="fechaInicio"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <label>Fecha fin</label>
+                    <input
+                      type="datetime-local"
+                      formControlName="fechaFin"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <label>Zona horaria</label>
+                    <select formControlName="zonaHoraria">
+                      <option>América / Bogotá</option>
+                      <option>América / Lima</option>
+                      <option>UTC</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label>Aplicación</label>
+                    <input
+                      type="text"
+                      [value]="selectedApp()?.codigoAplicacion ?? ''"
+                      placeholder="Selecciona una app arriba"
+                      readonly
+                    />
+                  </div>
+
+                  <div class="field field--full">
+                    <label>Impacto</label>
+                    <input
+                      type="text"
+                      formControlName="impacto"
+                      placeholder="Describe el impacto esperado"
+                    />
+                  </div>
+
+                  <div class="field field--full">
+                    <label>Observación</label>
+                    <textarea
+                      rows="3"
+                      formControlName="observacion"
+                      placeholder="Notas adicionales de la ventana"
+                    ></textarea>
+                  </div>
+
+                </div>
+
+              </section>
+
+              <section class="form-section form-section--summary">
+
+                <h3>Resumen</h3>
+                <p class="summary-card__hint">
+                  Así quedará la ventana con lo que has diligenciado.
+                </p>
+
+                <div class="preview-grid">
+
+                  <div class="preview-item">
+                    <label>Tipo</label>
+                    <span>
+                      {{
+                        isVentanaProgramada()
+                          ? 'Ventana programada'
+                          : 'Promesa de servicio'
+                      }}
+                    </span>
+                  </div>
+
+                  @if (isVentanaProgramada()) {
+                    <div class="preview-item">
+                      <label>CRQ</label>
+                      <span>{{ createPreview().crq || '—' }}</span>
+                    </div>
+                  }
+
+                  <div class="preview-item">
+                    <label>Aplicación</label>
+                    <span>
+                      @if (selectedApp(); as app) {
+                        {{ app.codigoAplicacion }}
+                        ·
+                        {{ app.nombreAplicacion }}
+                      } @else {
+                        Sin seleccionar
+                      }
+                    </span>
+                  </div>
+
+                  <div class="preview-item">
+                    <label>Célula / LdC</label>
+                    <span>
+                      @if (selectedApp(); as app) {
+                        {{ app.celula }} · {{ app.ldc }}
+                      } @else {
+                        —
+                      }
+                    </span>
+                  </div>
+
+                  <div class="preview-item">
+                    <label>Estado</label>
+                    <span>{{ createPreview().estado || '—' }}</span>
+                  </div>
+
+                  <div class="preview-item">
+                    <label>Frecuencia</label>
+                    <span>{{ createPreview().frecuencia || '—' }}</span>
+                  </div>
+
+                  <div class="preview-item">
+                    <label>Fecha inicio</label>
+                    <span>
+                      {{
+                        createPreview().fechaInicio
+                          ? formatPreview(createPreview().fechaInicio!)
+                          : '—'
+                      }}
+                    </span>
+                  </div>
+
+                  <div class="preview-item">
+                    <label>Fecha fin</label>
+                    <span>
+                      {{
+                        createPreview().fechaFin
+                          ? formatPreview(createPreview().fechaFin!)
+                          : '—'
+                      }}
+                    </span>
+                  </div>
+
+                  <div class="preview-item">
+                    <label>Zona horaria</label>
+                    <span>{{ createPreview().zonaHoraria || '—' }}</span>
+                  </div>
+
+                  <div class="preview-item">
+                    <label>Impacto</label>
+                    <span>{{ createPreview().impacto || '—' }}</span>
+                  </div>
+
+                  <div class="preview-item preview-item--full">
+                    <label>Observación</label>
+                    <span>{{ createPreview().observacion || '—' }}</span>
+                  </div>
+
+                </div>
+
+              </section>
+
+            }
+
+          </div>
+
+          <footer class="type-modal__footer">
+
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="closeTypeModal()"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="button"
+              class="btn-save"
+              [disabled]="!canSave()"
+              (click)="saveMaintenanceWindow()"
+            >
+              Guardar ventana
+            </button>
+
+          </footer>
+
+        }
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

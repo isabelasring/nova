@@ -1,0 +1,48 @@
+<div class="inicio-page">
+
+  <header class="inicio-hero">
+
+    <h1>Bienvenido al portal</h1>
+
+    <p class="inicio-hero__lead">
+      Desde aquí administras contactos, standby y ventanas
+      de mantenimiento de las aplicaciones. Elige un módulo
+      para comenzar.
+    </p>
+
+  </header>
+
+  <section class="inicio-sections" aria-label="Qué puedes hacer">
+
+    <h2>Qué puedes hacer aquí</h2>
+
+    <div class="inicio-grid">
+
+      @for (section of sections; track section.path) {
+
+        <a
+          class="inicio-card"
+          [routerLink]="section.path"
+        >
+
+          <span class="inicio-card__code">
+            {{ section.code }}
+          </span>
+
+          <h3>{{ section.title }}</h3>
+
+          <p>{{ section.description }}</p>
+
+          <span class="inicio-card__cta">
+            Ir a {{ section.title }}
+          </span>
+
+        </a>
+
+      }
+
+    </div>
+
+  </section>
+
+</div>

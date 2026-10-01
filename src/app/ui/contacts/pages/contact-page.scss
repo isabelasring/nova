@@ -1,0 +1,443 @@
+@use '../../../../styles/abstracts/colors' as *;
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+.contactos-page {
+  padding: $space-32;
+}
+
+.page-header {
+  @include flex-between;
+  margin-bottom: $space-24;
+  justify-content: flex-end;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: $space-12;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.selection-count {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+}
+
+.btn-bulk-edit {
+  @include button-primary;
+}
+
+.btn-clear-selection {
+  @include button-base;
+
+  background: transparent;
+  color: $text-secondary;
+  border: 1px solid $border-color;
+  padding: $space-12 $space-16;
+}
+
+.btn-clear-selection:hover {
+  color: $text-primary;
+  border-color: $text-primary;
+}
+
+.btn-new-contact {
+  @include button-base;
+
+  background: $surface;
+  color: $text-primary;
+  border: 1px solid $border-color;
+}
+
+.btn-new-contact:hover {
+  background: $amarillo-macondo;
+  color: $on-yellow;
+  border-color: $amarillo-macondo;
+}
+
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-12;
+  margin-bottom: $space-24;
+}
+
+.search-container {
+  width: 160px;
+  flex: 0 1 auto;
+
+  transition:
+    width 0.28s ease,
+    min-width 0.28s ease;
+}
+
+.search-container:focus-within,
+.search-container--expanded {
+  width: min(100%, 360px);
+}
+
+.search-container input {
+  @include input-base;
+  width: 100%;
+
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.search-container:focus-within input,
+.search-container--expanded input {
+  border-color: $link-color;
+  box-shadow: 0 0 0 3px rgba(0, 153, 216, 0.12);
+}
+
+.search-container input {
+  @include input-base;
+  width: 100%;
+}
+
+.filter-select {
+  min-width: 220px;
+}
+
+.filter-select select {
+  @include input-base;
+  width: 100%;
+}
+
+.contacts-list {
+  @include flex-column;
+  gap: $space-12;
+
+  background: $surface;
+  border-radius: $radius-lg;
+  border: 1px solid $border-light;
+  box-shadow: $shadow-sm;
+  padding: $space-16 $space-20;
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns:
+    36px
+    minmax(140px, 1.1fr)
+    minmax(160px, 1.2fr)
+    minmax(180px, 1.4fr)
+    minmax(90px, 0.7fr)
+    minmax(140px, 1fr)
+    auto;
+  gap: $space-16;
+  align-items: center;
+
+  padding: $space-16 $space-12;
+
+  border-radius: $radius-md;
+  background: $surface;
+  border: 1.5px solid transparent;
+}
+
+.contact-row--selected {
+  border-color: $amarillo-macondo;
+  background: rgba(253, 218, 36, 0.08);
+}
+
+.contact-row__check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-check {
+  width: 18px;
+  height: 18px;
+  accent-color: $amarillo-macondo;
+  cursor: pointer;
+}
+
+.contact-row--header {
+  padding: $space-8 $space-12 $space-12;
+
+  border-bottom: 3px solid $amarillo-macondo;
+  border-radius: 0;
+
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.contact-row--header:hover {
+  background: transparent;
+}
+
+.contact-row__actions-header {
+  text-align: right;
+}
+
+.contact-row:hover {
+  background: $background-body;
+}
+
+.contact-row__app,
+.contact-row__person,
+.contact-row__mail,
+.contact-row__schedule,
+.contact-row__meta {
+  @include flex-column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.contact-row strong {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.application-link {
+  color: $link-color;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.application-link:hover {
+  text-decoration: underline;
+}
+
+.contact-row small {
+  font-size: $font-size-xs;
+  color: $text-secondary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-row__schedule {
+  align-items: flex-start;
+}
+
+.badge {
+  @include badge;
+  width: fit-content;
+}
+
+.badge-personalizado {
+  background: transparent;
+  color: $text-primary;
+  border: 1.5px solid $link-color;
+  border-radius: $radius-sm;
+}
+
+.contact-row__actions {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
+  justify-content: flex-end;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: $border-light;
+  color: $text-secondary;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  @include transition;
+}
+
+.icon-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.icon-btn:hover {
+  background: $border-color;
+  color: $text-primary;
+}
+
+.icon-btn--danger {
+  color: #e11d48;
+}
+
+.icon-btn--danger:hover {
+  background: rgba(225, 29, 72, 0.12);
+  color: #be123c;
+}
+
+.empty-list {
+  padding: $space-24;
+  text-align: center;
+  color: $text-secondary;
+  font-size: $font-size-sm;
+}
+
+.confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-dialog,
+.bulk-edit-dialog {
+  width: min(420px, 92vw);
+
+  padding: $space-24;
+
+  background: $surface;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+}
+
+.bulk-edit-dialog {
+  width: min(480px, 92vw);
+}
+
+.bulk-edit-dialog h3 {
+  margin: 0 0 $space-8;
+  color: $text-primary;
+  font-size: $font-size-lg;
+}
+
+.bulk-edit-hint {
+  margin: 0 0 $space-20;
+  color: $text-secondary;
+  font-size: $font-size-sm;
+  line-height: 1.5;
+}
+
+.bulk-edit-hint strong {
+  color: $text-primary;
+}
+
+.bulk-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-16;
+  margin-bottom: $space-24;
+}
+
+.bulk-edit-form .field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+}
+
+.bulk-edit-form label {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bulk-edit-form input,
+.bulk-edit-form select {
+  @include input-base;
+  width: 100%;
+}
+
+.btn-bulk-save {
+  @include button-primary;
+}
+
+.btn-bulk-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.confirm-dialog h3 {
+  margin: 0 0 $space-12;
+  color: $text-primary;
+  font-size: $font-size-lg;
+}
+
+.confirm-dialog p {
+  margin: 0 0 $space-24;
+  color: $text-secondary;
+  font-size: $font-size-sm;
+  line-height: 1.5;
+}
+
+.confirm-dialog strong {
+  color: $text-primary;
+}
+
+.confirm-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-12;
+}
+
+.btn-outline {
+  @include button-base;
+
+  background: $surface;
+  border: 1px solid $border-color;
+  color: $text-primary;
+}
+
+.btn-danger {
+  @include button-base;
+
+  background: #e11d48;
+  border: 1px solid #e11d48;
+  color: $blanco;
+}
+
+.btn-danger:hover {
+  filter: brightness(0.95);
+}
+
+@media (max-width: 1100px) {
+  .contact-row {
+    grid-template-columns: 36px 1fr 1fr;
+  }
+
+  .contact-row__actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .filters-container {
+    align-items: center;
+  }
+
+  .search-container,
+  .search-container:focus-within,
+  .search-container--expanded {
+    width: 100%;
+  }
+
+  .filter-select {
+    min-width: 0;
+    flex: 1;
+  }
+}

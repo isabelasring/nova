@@ -1,0 +1,158 @@
+@use 'abstracts/colors' as *;
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(44, 42, 41, .55);
+
+  @include flex-center;
+
+  z-index: 1100;
+}
+
+.modal-container {
+  width: 1100px;
+  max-width: 95vw;
+
+  background: $surface;
+
+  border-radius: $radius-md;
+
+  overflow: hidden;
+
+  box-shadow: $shadow-lg;
+}
+
+
+
+.modal-header {
+  background: $negro-cib;
+
+  color: $blanco;
+
+  padding: $space-24;
+
+  @include flex-between;
+}
+
+.modal-subtitle {
+  display: block;
+
+  margin-top: $space-8;
+
+  color: $amarillo-macondo;
+}
+
+.close-button {
+  width: 40px;
+  height: 40px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  background: $amarillo-macondo;
+
+  color: $on-yellow;
+
+  font-weight: $font-weight-bold;
+}
+
+.modal-body {
+  padding: $space-32;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: $space-24;
+}
+
+
+.section-badge.purple {
+  background: $violeta-orquidea;
+  color: $blanco;
+}
+
+.section-badge.pink {
+  background: $rosa-flamenco;
+  color: $text-primary;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: $space-20;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+
+  gap: $space-8;
+}
+
+.field label {
+  @include text-label;
+}
+
+.field input,
+.field select {
+  @include input-base;
+
+  width: 100%;
+}
+
+.modal-footer {
+  padding: $space-24;
+
+  display: flex;
+  justify-content: flex-end;
+
+  gap: $space-16;
+
+  border-top: 1px solid $border-light;
+}
+
+.btn-new-contact {
+  @include button-base;
+
+  background: $surface;
+
+  color: $text-primary;
+
+  border: 1px solid $border-color;
+}
+
+.btn-new-contact:hover {
+  background: $amarillo-macondo;
+
+  color: $text-primary;
+
+  border-color: $amarillo-macondo;
+}
+
+.btn-secondary {
+  @include button-secondary;
+}
+
+.btn-save {
+  @include button-base;
+
+  background: $verde-andino;
+  color: $blanco;
+
+  &:hover:not(:disabled) {
+    filter: brightness(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
