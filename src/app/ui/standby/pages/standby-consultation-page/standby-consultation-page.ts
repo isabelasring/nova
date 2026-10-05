@@ -11,25 +11,25 @@ import { StandbyViewModalComponent }
 from '../../components/standby-view-modal/standby-view-modal';
 
 import { PortalFilterBarComponent }
-from '../../../../shared/components/portal-filter-bar/portal-filter-bar';
+from '../../../shared/components/portal-filter-bar/portal-filter-bar';
 
 import { StandbyScheduleService }
-from '../../services/standby-schedule.service';
+from '../../services/standby-schedule-service';
 
 import { PortalFilterService }
-from '../../../../shared/services/portal-filter.service';
+from '../../../shared/services/portal-filter-service';
 
 import { STANDBY_APPLICATIONS }
-from '../../mocks/standby-applications.mock';
+from '../../mocks/standby-applications-mock';
 
 import { STANDBY_USER_PHONES }
-from '../../mocks/standby-user-phones.mock';
+from '../../mocks/standby-user-phones-mocks';
 
 import { StandbyAssignment }
-from '../../models/standby-assignment.model';
+from '../../models/standby-assignment-model';
 
 import { avatarToneForName }
-from '../../../../shared/utils/avatar-tone.util';
+from '../../../shared/utils/avatar-tone-utils';
 
 type StandbyPeriod = 'past' | 'current' | 'next';
 

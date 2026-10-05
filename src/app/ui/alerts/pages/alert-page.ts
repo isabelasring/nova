@@ -9,10 +9,10 @@ import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { Alerta, AlertaSeveridad, AlertaVista }
-from '../../models/alert-model';
+from '../models/alert-model';
 
 import { AlertasService }
-from '../../services/alert-service';
+from '../services/alert-service';
 
 @Component({
   selector: 'app-alertas-page',
