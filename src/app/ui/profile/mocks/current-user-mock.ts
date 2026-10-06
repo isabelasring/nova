@@ -1,5 +1,5 @@
 import { UserProfile }
-from '../models/user-profile.model';
+from '../models/user-profile-model';
 
 export const CURRENT_USER: UserProfile = {
   initials: 'AM',

@@ -1,6 +1,6 @@
-import { Contacto } from '../models/contacto.model';
+import { Contact } from '../models/contact-model';
 
-export const CONTACTOS_MOCK: Contacto[] = [
+export const CONTACTS_MOCK: Contact[] = [
   {
     id: 1,
     codigoAplicacion: 'NU0113001',

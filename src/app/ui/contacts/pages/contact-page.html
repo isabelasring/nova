@@ -74,7 +74,7 @@
 
 
 
-      <app-nuevo-contacto-modal
+      <app-new-contact-modal
 
         [visible]="showNewContactModal()"
 
@@ -154,7 +154,7 @@
 
 
 
-    @for (contacto of contactosService.filteredContactos(); track contacto.id) {
+    @for (contacto of contactsService.filteredContacts(); track contacto.id) {
 
 
 
@@ -178,7 +178,7 @@
 
             [checked]="isSelected(contacto.id)"
 
-            (change)="toggleContacto(contacto.id)"
+            (change)="toggleContact(contacto.id)"
 
             [attr.aria-label]="'Seleccionar ' + contacto.nombre"
 
@@ -294,7 +294,7 @@
 
             title="Eliminar"
 
-            (click)="askDeleteContacto(contacto)"
+            (click)="askDeleteContact(contacto)"
 
           >
 
@@ -324,11 +324,11 @@
 
 
 
-    @if (contactosService.filteredContactos().length === 0) {
+    @if (contactsService.filteredContacts().length === 0) {
 
       <p class="empty-list">
 
-        @if (contactosService.contactos().length === 0) {
+        @if (contactsService.contacts().length === 0) {
 
           No hay contactos registrados.
 
@@ -348,11 +348,11 @@
 
 
 
-  <app-contacto-modal
+  <app-contact-modal
 
     [visible]="showModal()"
 
-    [contacto]="selectedContacto()"
+    [contacto]="selectedContact()"
 
     [editMode]="true"
 

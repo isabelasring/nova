@@ -5,16 +5,16 @@ import {
   signal
 } from '@angular/core';
 
-import { Contacto }
-from '../models/contacto.model';
+import { Contact }
+from '../models/contact-model';
 
-import { CONTACTOS_MOCK }
-from '../mocks/contactos.mock';
+import { CONTACTS_MOCK }
+from '../mocks/contact-mock';
 
 import { PortalFilterService }
-from '../../../shared/services/portal-filter.service';
+from '../../shared/services/portal-filter-service';
 
-export interface BulkContactoUpdate {
+export interface BulkContactUpdate {
   celular?: string;
   correo?: string;
 }
@@ -22,24 +22,24 @@ export interface BulkContactoUpdate {
 @Injectable({
   providedIn: 'root'
 })
-export class ContactosService {
+export class ContactsService {
 
   private readonly portalFilter =
     inject(PortalFilterService);
 
-  private readonly contactosSource =
-    signal<Contacto[]>([...CONTACTOS_MOCK]);
+  private readonly contactsSource =
+    signal<Contact[]>([...CONTACTS_MOCK]);
 
-  readonly contactos = this.contactosSource.asReadonly();
+  readonly contacts = this.contactsSource.asReadonly();
 
   readonly searchApp = signal('');
 
-  readonly filteredContactos = computed(() => {
+  readonly filteredContacts = computed(() => {
 
     const term = this.searchApp().trim().toLowerCase();
     this.portalFilter.filters();
 
-    return this.contactos().filter(contacto => {
+    return this.contacts().filter(contacto => {
 
       const matchPortal = this.portalFilter.matches({
         ...contacto,
@@ -70,23 +70,23 @@ export class ContactosService {
 
   });
 
-  addContacto(
-    data: Omit<Contacto, 'id'>
-  ): Contacto {
+  addContact(
+    data: Omit<Contact, 'id'>
+  ): Contact {
 
     const nextId =
-      this.contactosSource().reduce(
+      this.contactsSource().reduce(
         (max, item) => Math.max(max, item.id),
         0
       ) + 1;
 
-    const created: Contacto = {
+    const created: Contact = {
       id: nextId,
       ...data,
       horario: '24/7'
     };
 
-    this.contactosSource.update(list => [
+    this.contactsSource.update(list => [
       created,
       ...list
     ]);
@@ -95,12 +95,12 @@ export class ContactosService {
 
   }
 
-  updateContacto(
+  updateContact(
     id: number,
-    patch: Partial<Contacto>
+    patch: Partial<Contact>
   ): void {
 
-    this.contactosSource.update(list =>
+    this.contactsSource.update(list =>
       list.map(item =>
         item.id === id
           ? { ...item, ...patch, horario: '24/7' }
@@ -112,10 +112,10 @@ export class ContactosService {
 
   bulkUpdate(
     ids: Set<number>,
-    patch: BulkContactoUpdate
+    patch: BulkContactUpdate
   ): void {
 
-    this.contactosSource.update(list =>
+    this.contactsSource.update(list =>
       list.map(contacto => {
 
         if (!ids.has(contacto.id)) {
@@ -133,9 +133,9 @@ export class ContactosService {
 
   }
 
-  deleteContacto(id: number): void {
+  deleteContact(id: number): void {
 
-    this.contactosSource.update(list =>
+    this.contactsSource.update(list =>
       list.filter(item => item.id !== id)
     );
 

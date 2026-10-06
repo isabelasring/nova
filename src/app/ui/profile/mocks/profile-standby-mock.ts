@@ -1,5 +1,5 @@
 import { StandbyAssignment }
-from '../../stanby/models/standby-assignment.model';
+from '../../standby/models/standby-assignment-model';
 
 function monthRange(
   startDay: number,

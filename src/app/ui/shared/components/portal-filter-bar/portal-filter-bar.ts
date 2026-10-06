@@ -13,10 +13,10 @@ import {
   PORTAL_FILTER_LABELS,
   PORTAL_ORG_DIMENSIONS,
   PortalFilterDimension
-} from '../../models/portal-filter.model';
+} from '../../models/portal-filter-model';
 
 import { PortalFilterService }
-from '../../services/portal-filter.service';
+from '../../services/portal-filter-service';
 
 interface FilterChip {
   key: PortalFilterDimension;

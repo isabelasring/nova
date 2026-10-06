@@ -14,28 +14,28 @@ import {
 import { Router } from '@angular/router';
 
 import { StandbyMonthViewComponent }
-from '../../../stanby/components/standby-month-view/standby-month-view';
+from '../../../standby/components/standby-month-view/standby-month-view';
 
 import { StandbyScheduleService }
-from '../../../stanby/services/standby-schedule.service';
+from '../../../standby/services/standby-schedule-service';
 
 import { PhoneInputComponent }
-from '../../../../shared/components/phone-input/phone-input';
+from '../../../shared/components/phone-input/phone-input';
 
-import { Contacto }
-from '../../models/contacto.model';
+import { Contact }
+from '../../models/contact-model';
 
-import { ContactosService }
-from '../../services/contactos.service';
+import { ContactsService }
+from '../../services/contacts-service';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success.service';
+from '../../../shared/services/save-success-service';
 
 @Component({
-  selector: 'app-contacto-modal',
+  selector: 'app-contact-modal',
   standalone: true,
-  templateUrl: './contacto-modal.html',
-  styleUrls: ['./contacto-modal.scss'],
+  templateUrl: './contact-modal.html',
+  styleUrls: ['./contact-modal.scss'],
   imports: [
     StandbyMonthViewComponent,
     ReactiveFormsModule,
@@ -43,11 +43,11 @@ from '../../../../shared/services/save-success.service';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ContactoModalComponent {
+export class ContactModalComponent {
 
   readonly visible = input(false);
 
-  readonly contacto = input<Contacto | null>(null);
+  readonly contacto = input<Contact | null>(null);
 
   readonly editMode = input(false);
 
@@ -56,8 +56,8 @@ export class ContactoModalComponent {
   private readonly scheduleService =
     inject(StandbyScheduleService);
 
-  private readonly contactosService =
-    inject(ContactosService);
+  private readonly contactsService =
+    inject(ContactsService);
 
   private readonly saveSuccess =
     inject(SaveSuccessService);
@@ -140,7 +140,7 @@ export class ContactoModalComponent {
 
     const values = this.contactoForm.getRawValue();
 
-    this.contactosService.updateContacto(current.id, {
+    this.contactsService.updateContact(current.id, {
       celular: values.celular?.trim() || current.celular
     });
 
@@ -192,7 +192,7 @@ export class ContactoModalComponent {
     this.close();
 
     this.router.navigate(
-      ['/mantenimiento'],
+      ['/maintenance'],
       {
         queryParams: {
           app: this.contacto()?.codigoAplicacion ?? 'NU0113001'

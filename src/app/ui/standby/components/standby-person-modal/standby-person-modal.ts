@@ -18,10 +18,10 @@ import { CappedSlotAdderComponent }
 from '../capped-slot-adder/capped-slot-adder';
 
 import { PhoneInputComponent }
-from '../../../../shared/components/phone-input/phone-input';
+from '../../../shared/components/phone-input/phone-input';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success.service';
+from '../../../shared/services/save-success-service';
 
 import {
   STANDBY_EMPRESA_OPTIONS,

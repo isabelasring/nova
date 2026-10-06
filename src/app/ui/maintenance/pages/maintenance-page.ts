@@ -13,42 +13,42 @@ import {
 } from '@angular/forms';
 
 import { STANDBY_APPLICATIONS }
-from '../../../stanby/mocks/standby-applications.mock';
+from '../../standby/mocks/standby-applications-mock';
 
 import { StandbyApplication }
-from '../../../stanby/models/standby-application.model';
+from '../../standby/models/standby-application-model';
 
 import {
   MaintenanceWindow,
   MaintenanceWindowType,
   TipoVentanaForm
-} from '../../models/maintenance-window.model';
+} from '../models/maintenance-windows-model';
 
-import { MantenimientoService }
-from '../../services/mantenimiento.service';
+import { MaintenanceService }
+from '../services/maintenance-service';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success.service';
+from '../../shared/services/save-success-service';
 
 import { PortalFilterService }
-from '../../../../shared/services/portal-filter.service';
+from '../../shared/services/portal-filter-service';
 
 import { PortalFilterBarComponent }
-from '../../../../shared/components/portal-filter-bar/portal-filter-bar';
+from '../../shared/components/portal-filter-bar/portal-filter-bar';
 
 @Component({
-  selector: 'app-mantenimiento-page',
+  selector: 'app-maintenance-page',
   standalone: true,
   imports: [ReactiveFormsModule, NgClass, PortalFilterBarComponent],
-  templateUrl: './mantenimiento-page.html',
-  styleUrl: './mantenimiento-page.scss',
+  templateUrl: './maintenance-page.html',
+  styleUrl: './maintenance-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MantenimientoPageComponent {
+export class MaintenancePageComponent {
 
   private readonly fb = inject(FormBuilder);
 
-  readonly mantenimiento = inject(MantenimientoService);
+  readonly maintenance = inject(MaintenanceService);
 
   private readonly saveSuccess = inject(SaveSuccessService);
 
@@ -200,7 +200,7 @@ export class MantenimientoPageComponent {
   readonly isCrqValid = computed(() => {
     this.formRevision();
     const value = this.createForm.controls.crq.value?.trim() ?? '';
-    return MantenimientoPageComponent.CRQ_PATTERN.test(value);
+    return MaintenancePageComponent.CRQ_PATTERN.test(value);
   });
 
   readonly isCrqInvalid = computed(() => {
@@ -235,7 +235,7 @@ export class MantenimientoPageComponent {
 
   readonly displayWindows = computed(() => {
 
-    const list = this.mantenimiento.filteredWindows();
+    const list = this.maintenance.filteredWindows();
     const highlightId = this.highlightedWindowId();
 
     if (!highlightId) {
@@ -258,9 +258,9 @@ export class MantenimientoPageComponent {
 
   });
 
-  readonly statusClass = MantenimientoService.statusClass;
+  readonly statusClass = MaintenanceService.statusClass;
 
-  readonly formatPreview = MantenimientoService.formatDateTime;
+  readonly formatPreview = MaintenanceService.formatDateTime;
 
   constructor() {
 
@@ -279,7 +279,7 @@ export class MantenimientoPageComponent {
     value: string
   ): void {
 
-    this.mantenimiento.listSearchApp.set(value);
+    this.maintenance.listSearchApp.set(value);
 
   }
 
@@ -359,25 +359,25 @@ export class MantenimientoPageComponent {
 
   toggleTipoFilter(tipo: MaintenanceWindowType): void {
 
-    this.mantenimiento.listFilterTipo.set(tipo);
+    this.maintenance.listFilterTipo.set(tipo);
 
   }
 
   clearTipoFilter(): void {
 
-    this.mantenimiento.listFilterTipo.set('');
+    this.maintenance.listFilterTipo.set('');
 
   }
 
   toggleEstadoFilter(estado: string): void {
 
-    this.mantenimiento.listFilterEstado.set(estado);
+    this.maintenance.listFilterEstado.set(estado);
 
   }
 
   clearEstadoFilter(): void {
 
-    this.mantenimiento.listFilterEstado.set('');
+    this.maintenance.listFilterEstado.set('');
 
   }
 
@@ -438,7 +438,7 @@ export class MantenimientoPageComponent {
     const values = this.editForm.getRawValue();
     const savedId = window.id;
 
-    this.mantenimiento.updateWindow(window.id, {
+    this.maintenance.updateWindow(window.id, {
       estado: values.estado ?? window.estado,
       frecuencia: values.frecuencia ?? window.frecuencia,
       fechaInicio: values.fechaInicio ?? window.fechaInicio,
@@ -474,7 +474,7 @@ export class MantenimientoPageComponent {
 
     const newId = Date.now();
 
-    this.mantenimiento.addWindow({
+    this.maintenance.addWindow({
       id: newId,
       aplicacion: app.codigoAplicacion,
       nombreAplicacion: app.nombreAplicacion,
@@ -485,10 +485,10 @@ export class MantenimientoPageComponent {
       evc: app.celula,
       linea: app.ldc,
       frecuencia: values.frecuencia ?? 'Semanal',
-      fechaInicio: MantenimientoService.formatDateTime(
+      fechaInicio: MaintenanceService.formatDateTime(
         values.fechaInicio ?? ''
       ),
-      fechaFin: MantenimientoService.formatDateTime(
+      fechaFin: MaintenanceService.formatDateTime(
         values.fechaFin ?? ''
       ),
       zonaHoraria: values.zonaHoraria ?? 'América / Bogotá',
@@ -501,9 +501,9 @@ export class MantenimientoPageComponent {
         : undefined
     });
 
-    this.mantenimiento.listFilterTipo.set(tipo);
-    this.mantenimiento.listFilterEstado.set(estado);
-    this.mantenimiento.listSearchApp.set('');
+    this.maintenance.listFilterTipo.set(tipo);
+    this.maintenance.listFilterEstado.set(estado);
+    this.maintenance.listSearchApp.set('');
 
     this.showTypeModal.set(false);
     this.viewMode.set('list');

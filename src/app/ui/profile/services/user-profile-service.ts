@@ -5,10 +5,10 @@ import {
 } from '@angular/core';
 
 import { CURRENT_USER }
-from '../mocks/current-user.mock';
+from '../mocks/current-user-mock';
 
 import { UserProfile }
-from '../models/user-profile.model';
+from '../models/user-profile-model';
 
 @Injectable({
   providedIn: 'root'

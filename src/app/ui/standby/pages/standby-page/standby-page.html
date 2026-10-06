@@ -22,7 +22,7 @@
         <button
           type="button"
           class="relevo-status__action"
-          (click)="revokeRelevo()"
+          (click)="revokeHandover()"
         >
           Recuperar programación
         </button>
@@ -433,7 +433,7 @@
               <button
                 type="button"
                 class="btn-add"
-                (click)="revokeRelevo()"
+                (click)="revokeHandover()"
               >
                 Recuperar programación
               </button>
@@ -450,7 +450,7 @@
               <button
                 type="button"
                 class="btn-add"
-                (click)="openRelevoModal()"
+                (click)="openHandoverModal()"
               >
                 Iniciar delegación
               </button>
@@ -574,10 +574,10 @@
     (closed)="closeViewModal()"
   />
 
-  <app-standby-relevo-modal
-    [visible]="showRelevoModal"
-    (closed)="closeRelevoModal()"
-    (delegated)="onRelevoDelegated()"
+  <app-standby-handover-modal
+    [visible]="showHandoverModal"
+    (closed)="closeHandoverModal()"
+    (delegated)="onHandoverDelegated()"
   />
 
   <app-standby-person-modal

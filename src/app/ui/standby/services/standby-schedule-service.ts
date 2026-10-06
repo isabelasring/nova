@@ -3,16 +3,16 @@ import { Injectable } from '@angular/core';
 import {
   StandbyAssignment,
   StandbyAssociatedApp
-} from '../models/standby-assignment.model';
+} from '../models/standby-assignment-model';
 
 import { STANDBY_USER_PHONES }
-from '../mocks/standby-user-phones.mock';
+from '../mocks/standby-user-phones-mock';
 
 import { STANDBY_ASSIGNMENTS_MOCK }
-from '../mocks/standby-assignments.mock';
+from '../mocks/standby-assignments-mock';
 
 import { toStandbyWeek }
-from '../utils/standby-week.util';
+from '../utils/standby-week-util';
 
 @Injectable({
   providedIn: 'root'

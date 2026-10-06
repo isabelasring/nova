@@ -1,8 +1,8 @@
 import { MaintenanceWindow }
-from '../models/maintenance-window.model';
+from '../models/maintenance-windows-model';
 
 import { STANDBY_APPLICATIONS }
-from '../../stanby/mocks/standby-applications.mock';
+from '../../standby/mocks/standby-applications-mock';
 
 function fromApp(codigo: string) {
 

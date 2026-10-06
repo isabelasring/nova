@@ -1,5 +1,5 @@
 import { PORTAL_SERVICE_OPTIONS }
-from '../../../shared/models/portal-filter-model';
+from '../../shared/models/portal-filter-model';
 
 import { STANDBY_APPLICATIONS }
 from '../mocks/standby-applications-mock';

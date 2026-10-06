@@ -11,20 +11,20 @@ import { FormsModule } from '@angular/forms';
 import { Alerta, AlertaSeveridad, AlertaVista }
 from '../models/alert-model';
 
-import { AlertasService }
+import { AlertsService }
 from '../services/alert-service';
 
 @Component({
-  selector: 'app-alertas-page',
+  selector: 'app-alerts-page',
   standalone: true,
   imports: [NgClass, FormsModule],
-  templateUrl: './alertas-page.html',
-  styleUrl: './alertas-page.scss',
+  templateUrl: './alert-page.html',
+  styleUrl: './alert-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AlertasPageComponent {
+export class AlertsPageComponent {
 
-  readonly alertasService = inject(AlertasService);
+  readonly alertsService = inject(AlertsService);
 
   private readonly selectedAlertId = signal<string | undefined>(undefined);
 
@@ -34,30 +34,30 @@ export class AlertasPageComponent {
 
   readonly selectedAlert = computed(() => {
     const id = this.selectedAlertId();
-    return id ? this.alertasService.getById(id) : undefined;
+    return id ? this.alertsService.getById(id) : undefined;
   });
 
   readonly commentsAlert = computed(() => {
     const id = this.commentsAlertId();
-    return id ? this.alertasService.getById(id) : undefined;
+    return id ? this.alertsService.getById(id) : undefined;
   });
 
   readonly sheetClosing = signal(false);
 
   private sheetTimer: ReturnType<typeof setTimeout> | null = null;
 
-  readonly severityClass = AlertasService.severityClass;
+  readonly severityClass = AlertsService.severityClass;
 
-  readonly estadoClass = AlertasService.estadoClass;
+  readonly estadoClass = AlertsService.estadoClass;
 
   setFilterEstado(value: AlertaVista): void {
-    this.alertasService.filterEstado.set(value);
+    this.alertsService.filterEstado.set(value);
     this.closeDetail();
     this.closeComments();
   }
 
   setFilterSeveridad(value: AlertaSeveridad | ''): void {
-    this.alertasService.filterSeveridad.set(value);
+    this.alertsService.filterSeveridad.set(value);
   }
 
   openDetail(alerta: Alerta, event?: Event): void {
@@ -125,7 +125,7 @@ export class AlertasPageComponent {
   }
 
   submitComment(alertaId: string): void {
-    const added = this.alertasService.addComment(
+    const added = this.alertsService.addComment(
       alertaId,
       this.draftComment()
     );

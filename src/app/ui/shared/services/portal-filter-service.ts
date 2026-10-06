@@ -13,13 +13,13 @@ import {
   PORTAL_CELULA_OPTIONS,
   PORTAL_LC_OPTIONS,
   PORTAL_SERVICE_OPTIONS
-} from '../models/portal-filter.model';
+} from '../models/portal-filter-model';
 
 import { STANDBY_APPLICATIONS }
-from '../../features/stanby/mocks/standby-applications.mock';
+from '../../standby/mocks/standby-applications-mock';
 
 import { STANDBY_USER_PHONES }
-from '../../features/stanby/mocks/standby-user-phones.mock';
+from '../../standby/mocks/standby-user-phones-mock';
 
 @Injectable({
   providedIn: 'root'

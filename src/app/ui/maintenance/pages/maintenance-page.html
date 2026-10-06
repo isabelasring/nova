@@ -20,11 +20,11 @@
               type="text"
               class="filters-grid__search"
               [class.filters-grid__search--expanded]="
-                !!mantenimiento.listSearchApp().trim()
+                !!maintenance.listSearchApp().trim()
               "
               placeholder="Buscar..."
-              [value]="mantenimiento.listSearchApp()"
-              (input)="mantenimiento.listSearchApp.set($any($event.target).value)"
+              [value]="maintenance.listSearchApp()"
+              (input)="maintenance.listSearchApp.set($any($event.target).value)"
             />
 
           </div>
@@ -54,8 +54,8 @@
                 type="button"
                 role="tab"
                 class="filter-tab filter-tab--todos"
-                [class.filter-tab--active]="mantenimiento.listFilterTipo() === ''"
-                [attr.aria-selected]="mantenimiento.listFilterTipo() === ''"
+                [class.filter-tab--active]="maintenance.listFilterTipo() === ''"
+                [attr.aria-selected]="maintenance.listFilterTipo() === ''"
                 (click)="clearTipoFilter()"
               >
                 Todos
@@ -65,8 +65,8 @@
                 type="button"
                 role="tab"
                 class="filter-tab filter-tab--programada"
-                [class.filter-tab--active]="mantenimiento.listFilterTipo() === 'Ventana programada'"
-                [attr.aria-selected]="mantenimiento.listFilterTipo() === 'Ventana programada'"
+                [class.filter-tab--active]="maintenance.listFilterTipo() === 'Ventana programada'"
+                [attr.aria-selected]="maintenance.listFilterTipo() === 'Ventana programada'"
                 (click)="toggleTipoFilter('Ventana programada')"
               >
                 Ventana programada
@@ -76,8 +76,8 @@
                 type="button"
                 role="tab"
                 class="filter-tab filter-tab--promesa"
-                [class.filter-tab--active]="mantenimiento.listFilterTipo() === 'Promesa de servicio'"
-                [attr.aria-selected]="mantenimiento.listFilterTipo() === 'Promesa de servicio'"
+                [class.filter-tab--active]="maintenance.listFilterTipo() === 'Promesa de servicio'"
+                [attr.aria-selected]="maintenance.listFilterTipo() === 'Promesa de servicio'"
                 (click)="toggleTipoFilter('Promesa de servicio')"
               >
                 Promesa de servicio
@@ -98,7 +98,7 @@
               <button
                 type="button"
                 class="filter-link"
-                [class.filter-link--active]="mantenimiento.listFilterEstado() === ''"
+                [class.filter-link--active]="maintenance.listFilterEstado() === ''"
                 (click)="clearEstadoFilter()"
               >
                 Todas
@@ -107,7 +107,7 @@
               <button
                 type="button"
                 class="filter-link"
-                [class.filter-link--active]="mantenimiento.listFilterEstado() === 'Programada'"
+                [class.filter-link--active]="maintenance.listFilterEstado() === 'Programada'"
                 (click)="toggleEstadoFilter('Programada')"
               >
                 Programada
@@ -116,7 +116,7 @@
               <button
                 type="button"
                 class="filter-link"
-                [class.filter-link--active]="mantenimiento.listFilterEstado() === 'En ejecución'"
+                [class.filter-link--active]="maintenance.listFilterEstado() === 'En ejecución'"
                 (click)="toggleEstadoFilter('En ejecución')"
               >
                 En ejecución
@@ -125,7 +125,7 @@
               <button
                 type="button"
                 class="filter-link"
-                [class.filter-link--active]="mantenimiento.listFilterEstado() === 'Finalizada'"
+                [class.filter-link--active]="maintenance.listFilterEstado() === 'Finalizada'"
                 (click)="toggleEstadoFilter('Finalizada')"
               >
                 Finalizada
@@ -135,24 +135,24 @@
           </div>
 
           <p class="filters-count">
-            {{ mantenimiento.filteredWindows().length }} ventana(s)
+            {{ maintenance.filteredWindows().length }} ventana(s)
           </p>
 
         </div>
 
       </div>
 
-      @if (mantenimiento.filteredWindows().length === 0) {
+      @if (maintenance.filteredWindows().length === 0) {
 
         <div class="empty-list">
           <p>
-            @if (mantenimiento.windows().length === 0) {
+            @if (maintenance.windows().length === 0) {
               No hay ventanas programadas.
             } @else {
               No hay ventanas con esos filtros.
             }
           </p>
-          @if (mantenimiento.windows().length === 0) {
+          @if (maintenance.windows().length === 0) {
             <button
               type="button"
               class="btn-save"

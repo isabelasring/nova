@@ -11,37 +11,37 @@ import {
   Validators
 } from '@angular/forms';
 
-import { ContactoModalComponent }
-from '../../components/modal-contact/modal-contact';
+import { ContactModalComponent }
+from '../components/contact-modal/contact-modal';
 
-import { NuevoContactoModalComponent }
-from '../../components/new-contacto-modal/new-modal-contact';
+import { NewContactModalComponent }
+from '../components/new-contact-modal/new-contact-modal';
 
 import { PhoneInputComponent }
-from '../../../../shared/components/phone-input/phone-input';
+from '../../shared/components/phone-input/phone-input';
 
 import { PortalFilterBarComponent }
-from '../../../../shared/components/portal-filter-bar/portal-filter-bar';
+from '../../shared/components/portal-filter-bar/portal-filter-bar';
 
-import { Contacto }
-from '../../models/contact-model';
+import { Contact }
+from '../models/contact-model';
 
-import { ContactosService }
-from '../../services/service-contacts';
+import { ContactsService }
+from '../services/contacts-service';
 
 import { StandbyScheduleService }
-from '../../../stanby/services/standby-schedule-service';
+from '../../standby/services/standby-schedule-service';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success-service';
+from '../../shared/services/save-success-service';
 
 @Component({
-  selector: 'app-contactos-page',
+  selector: 'app-contacts-page',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    ContactoModalComponent,
-    NuevoContactoModalComponent,
+    ContactModalComponent,
+    NewContactModalComponent,
     PhoneInputComponent,
     PortalFilterBarComponent
   ],
@@ -49,11 +49,11 @@ from '../../../../shared/services/save-success-service';
   styleUrl: './contact-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ContactosPageComponent {
+export class ContactsPageComponent {
 
   private readonly fb = inject(FormBuilder);
 
-  readonly contactosService = inject(ContactosService);
+  readonly contactsService = inject(ContactsService);
 
   private readonly standbySchedule = inject(StandbyScheduleService);
 
@@ -70,8 +70,8 @@ export class ContactosPageComponent {
 
   readonly showModal = signal(false);
   readonly showNewContactModal = signal(false);
-  readonly selectedContacto = signal<Contacto | null>(null);
-  readonly contactoToDelete = signal<Contacto | null>(null);
+  readonly selectedContact = signal<Contact | null>(null);
+  readonly contactoToDelete = signal<Contact | null>(null);
   readonly showDeleteConfirm = signal(false);
   readonly selectedIds = signal(new Set<number>());
   readonly showBulkEdit = signal(false);
@@ -88,7 +88,7 @@ export class ContactosPageComponent {
 
   readonly allFilteredSelected = computed(() => {
 
-    const list = this.contactosService.filteredContactos();
+    const list = this.contactsService.filteredContacts();
 
     return (
       list.length > 0 &&
@@ -112,7 +112,7 @@ export class ContactosPageComponent {
 
     this.searchForm.controls.searchApp.valueChanges.subscribe(
       value => {
-        this.contactosService.searchApp.set(value ?? '');
+        this.contactsService.searchApp.set(value ?? '');
       }
     );
 
@@ -158,7 +158,7 @@ export class ContactosPageComponent {
 
   }
 
-  toggleContacto(id: number): void {
+  toggleContact(id: number): void {
 
     const next = new Set(this.selectedIds());
 
@@ -174,7 +174,7 @@ export class ContactosPageComponent {
 
   toggleSelectAll(): void {
 
-    const list = this.contactosService.filteredContactos();
+    const list = this.contactsService.filteredContacts();
     const next = new Set(this.selectedIds());
 
     if (this.allFilteredSelected()) {
@@ -223,7 +223,7 @@ export class ContactosPageComponent {
 
     const values = this.bulkForm.getRawValue();
 
-    this.contactosService.bulkUpdate(
+    this.contactsService.bulkUpdate(
       this.selectedIds(),
       {
         celular: values.celular?.trim(),
@@ -240,9 +240,9 @@ export class ContactosPageComponent {
 
   }
 
-  openEditModal(contacto: Contacto): void {
+  openEditModal(contacto: Contact): void {
 
-    this.selectedContacto.set(contacto);
+    this.selectedContact.set(contacto);
     this.showModal.set(true);
 
   }
@@ -250,11 +250,11 @@ export class ContactosPageComponent {
   closeEditModal(): void {
 
     this.showModal.set(false);
-    this.selectedContacto.set(null);
+    this.selectedContact.set(null);
 
   }
 
-  askDeleteContacto(contacto: Contacto): void {
+  askDeleteContact(contacto: Contact): void {
 
     this.contactoToDelete.set(contacto);
     this.showDeleteConfirm.set(true);
@@ -276,7 +276,7 @@ export class ContactosPageComponent {
       return;
     }
 
-    this.contactosService.deleteContacto(contacto.id);
+    this.contactsService.deleteContact(contacto.id);
 
     const next = new Set(this.selectedIds());
     next.delete(contacto.id);

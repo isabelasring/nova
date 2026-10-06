@@ -15,34 +15,34 @@ import {
 } from '@angular/forms';
 
 import { PhoneInputComponent }
-from '../../../../shared/components/phone-input/phone-input';
+from '../../../shared/components/phone-input/phone-input';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success-service';
+from '../../../shared/services/save-success-service';
 
 import { STANDBY_APPLICATIONS }
-from '../../../stanby/mocks/standby-applications-mock';
+from '../../../standby/mocks/standby-applications-mock';
 
-import { ContactosService }
-from '../../services/service-contacts';
+import { ContactsService }
+from '../../services/contacts-service';
 
 @Component({
-  selector: 'app-nuevo-contacto-modal',
+  selector: 'app-new-contact-modal',
   standalone: true,
-  templateUrl: './new-modal-contact.html',
-  styleUrl: './new-modal-contact.scss',
+  templateUrl: './new-contact-modal.html',
+  styleUrl: './new-contact-modal.scss',
   imports: [
     ReactiveFormsModule,
     PhoneInputComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NuevoContactoModalComponent {
+export class NewContactModalComponent {
 
   private readonly fb = inject(FormBuilder);
 
-  private readonly contactosService =
-    inject(ContactosService);
+  private readonly contactsService =
+    inject(ContactsService);
 
   private readonly saveSuccess =
     inject(SaveSuccessService);
@@ -194,7 +194,7 @@ export class NuevoContactoModalComponent {
       return;
     }
 
-    this.contactosService.addContacto({
+    this.contactsService.addContact({
       codigoAplicacion: app.codigoAplicacion,
       nombreAplicacion: app.nombreAplicacion,
       celular: values.celular.trim(),

@@ -23,7 +23,7 @@
     @if (!collapsed()) {
       <a
         class="sidebar__logo"
-        routerLink="/inicio"
+        routerLink="/home"
         title="Inicio de Nova"
       >
         Nova
@@ -35,17 +35,17 @@
       class="theme-toggle"
       (click)="onToggleTheme()"
       [attr.aria-label]="
-        isDark
+        isDark()
           ? 'Activar modo claro'
           : 'Activar modo oscuro'
       "
       [title]="
-        isDark
+        isDark()
           ? 'Modo claro'
           : 'Modo oscuro'
       "
     >
-      @if (isDark) {
+      @if (isDark()) {
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="4" fill="currentColor" />
           <path
@@ -70,7 +70,7 @@
 
   <a
     class="sidebar__user"
-    routerLink="/perfil"
+    routerLink="/profile"
     routerLinkActive="active"
     title="Mi perfil"
   >
@@ -92,7 +92,7 @@
 
     <a
       class="menu-item"
-      routerLink="/contactos"
+      routerLink="/contacts"
       routerLinkActive="active"
       title="Contactos"
     >
@@ -143,7 +143,7 @@
           </a>
           <a
             class="menu-sub__item"
-            routerLink="/standby/otras-areas"
+            routerLink="/standby/other-areas"
             routerLinkActive="active"
           >
             Otras áreas
@@ -155,7 +155,7 @@
 
     <a
       class="menu-item"
-      routerLink="/alertas"
+      routerLink="/alerts"
       routerLinkActive="active"
       title="Alertas"
     >
@@ -174,7 +174,7 @@
 
     <a
       class="menu-item"
-      routerLink="/mantenimiento"
+      routerLink="/maintenance"
       routerLinkActive="active"
       title="Ventana de mantenimiento"
     >

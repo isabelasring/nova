@@ -13,22 +13,22 @@ import {
 } from '@angular/forms';
 
 import { PERFIL_STANDBY_MOCK }
-from '../../mocks/perfil-standby.mock';
+from '../mocks/profile-standby-mock';
 
 import { StandbyAssignment }
-from '../../../stanby/models/standby-assignment.model';
+from '../../standby/models/standby-assignment-model';
 
 import { StandbyScheduleService }
-from '../../../stanby/services/standby-schedule.service';
+from '../../standby/services/standby-schedule-service';
 
 import { StandbyMonthViewComponent }
-from '../../../stanby/components/standby-month-view/standby-month-view';
+from '../../standby/components/standby-month-view/standby-month-view';
 
 import { UserProfileService }
-from '../../services/user-profile.service';
+from '../services/user-profile-service';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success.service';
+from '../../shared/services/save-success-service';
 
 type PerfilTab =
   | 'proximos'
@@ -46,18 +46,18 @@ const STANDBY_PERIOD_COLORS: Record<StandbyPeriod, string> = {
 };
 
 @Component({
-  selector: 'app-perfil-page',
+  selector: 'app-profile-page',
   standalone: true,
   imports: [
     DatePipe,
     ReactiveFormsModule,
     StandbyMonthViewComponent
   ],
-  templateUrl: './perfil-page.html',
-  styleUrl: './perfil-page.scss',
+  templateUrl: './profile-page.html',
+  styleUrl: './profile-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PerfilPageComponent {
+export class ProfilePageComponent {
 
   private readonly fb = inject(FormBuilder);
 

@@ -5,12 +5,12 @@ import {
 } from '@angular/core';
 
 import { CURRENT_USER }
-from '../../perfil/mocks/current-user.mock';
+from '../../profile/mocks/current-user-mock';
 
 import {
   StandbyDelegation,
   StandbyDelegationReason
-} from '../models/standby-delegation.model';
+} from '../models/standby-delegation-model';
 
 const STORAGE_KEY = 'portal-standby-delegations';
 

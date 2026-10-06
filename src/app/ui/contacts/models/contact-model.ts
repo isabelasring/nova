@@ -1,4 +1,4 @@
-export interface Contacto {
+export interface Contact {
   id: number;
   codigoAplicacion: string;
   nombreAplicacion: string;

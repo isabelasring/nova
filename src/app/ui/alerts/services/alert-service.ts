@@ -20,12 +20,12 @@ import { ALERTAS_MOCK } from '../mocks/alert-mock';
 @Injectable({
   providedIn: 'root'
 })
-export class AlertasService {
+export class AlertsService {
 
   private readonly alertsSource =
     signal<Alerta[]>(
       ALERTAS_MOCK.map((alerta, index) =>
-        AlertasService.asignarAutomaticamente(alerta, index)
+        AlertsService.asignarAutomaticamente(alerta, index)
       )
     );
 
@@ -126,7 +126,7 @@ export class AlertasService {
       return;
     }
 
-    const fechaHora = AlertasService.ahora();
+    const fechaHora = AlertsService.ahora();
     const traza: AlertaTraza = {
       id: `t-${Date.now()}`,
       fechaHora,
@@ -152,7 +152,7 @@ export class AlertasService {
     index: number
   ): Alerta {
     const comentariosCgm = [...(alerta.comentariosCgm ?? [])];
-    const aplicacionesAfectadas = AlertasService.aplicacionesDe(alerta);
+    const aplicacionesAfectadas = AlertsService.aplicacionesDe(alerta);
     const base: Alerta = {
       ...alerta,
       comentariosCgm,

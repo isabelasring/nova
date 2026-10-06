@@ -13,8 +13,8 @@
         type="search"
         class="search-input"
         placeholder="Buscar por problema, plataforma o código app…"
-        [value]="alertasService.search()"
-        (input)="alertasService.search.set($any($event.target).value)"
+        [value]="alertsService.search()"
+        (input)="alertsService.search.set($any($event.target).value)"
       />
     </div>
 
@@ -26,7 +26,7 @@
           <button
             type="button"
             class="filter-link"
-            [class.filter-link--active]="alertasService.filterSeveridad() === ''"
+            [class.filter-link--active]="alertsService.filterSeveridad() === ''"
             (click)="setFilterSeveridad('')"
           >
             Todas
@@ -34,7 +34,7 @@
           <button
             type="button"
             class="filter-link filter-link--high"
-            [class.filter-link--active]="alertasService.filterSeveridad() === 'High'"
+            [class.filter-link--active]="alertsService.filterSeveridad() === 'High'"
             (click)="setFilterSeveridad('High')"
           >
             High
@@ -42,7 +42,7 @@
           <button
             type="button"
             class="filter-link filter-link--medium"
-            [class.filter-link--active]="alertasService.filterSeveridad() === 'Medium'"
+            [class.filter-link--active]="alertsService.filterSeveridad() === 'Medium'"
             (click)="setFilterSeveridad('Medium')"
           >
             Medium
@@ -50,7 +50,7 @@
           <button
             type="button"
             class="filter-link filter-link--low"
-            [class.filter-link--active]="alertasService.filterSeveridad() === 'Low'"
+            [class.filter-link--active]="alertsService.filterSeveridad() === 'Low'"
             (click)="setFilterSeveridad('Low')"
           >
             Low
@@ -58,7 +58,7 @@
           <button
             type="button"
             class="filter-link filter-link--info"
-            [class.filter-link--active]="alertasService.filterSeveridad() === 'Information'"
+            [class.filter-link--active]="alertsService.filterSeveridad() === 'Information'"
             (click)="setFilterSeveridad('Information')"
           >
             Information
@@ -75,8 +75,8 @@
       type="button"
       role="tab"
       class="alertas-tabs__tab"
-      [class.alertas-tabs__tab--active]="alertasService.filterEstado() === 'PROBLEM'"
-      [attr.aria-selected]="alertasService.filterEstado() === 'PROBLEM'"
+      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'PROBLEM'"
+      [attr.aria-selected]="alertsService.filterEstado() === 'PROBLEM'"
       (click)="setFilterEstado('PROBLEM')"
     >
       Activas
@@ -85,8 +85,8 @@
       type="button"
       role="tab"
       class="alertas-tabs__tab alertas-tabs__tab--resolved"
-      [class.alertas-tabs__tab--active]="alertasService.filterEstado() === 'RESOLVED'"
-      [attr.aria-selected]="alertasService.filterEstado() === 'RESOLVED'"
+      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'RESOLVED'"
+      [attr.aria-selected]="alertsService.filterEstado() === 'RESOLVED'"
       (click)="setFilterEstado('RESOLVED')"
     >
       Resueltas
@@ -95,8 +95,8 @@
       type="button"
       role="tab"
       class="alertas-tabs__tab alertas-tabs__tab--assigned"
-      [class.alertas-tabs__tab--active]="alertasService.filterEstado() === 'ASIGNADAS'"
-      [attr.aria-selected]="alertasService.filterEstado() === 'ASIGNADAS'"
+      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'ASIGNADAS'"
+      [attr.aria-selected]="alertsService.filterEstado() === 'ASIGNADAS'"
       (click)="setFilterEstado('ASIGNADAS')"
     >
       Asignadas
@@ -105,23 +105,23 @@
       type="button"
       role="tab"
       class="alertas-tabs__tab alertas-tabs__tab--mine"
-      [class.alertas-tabs__tab--active]="alertasService.filterEstado() === 'MIAS'"
-      [attr.aria-selected]="alertasService.filterEstado() === 'MIAS'"
+      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'MIAS'"
+      [attr.aria-selected]="alertsService.filterEstado() === 'MIAS'"
       (click)="setFilterEstado('MIAS')"
     >
       Asignadas a mí
     </button>
   </div>
 
-  @if (alertasService.filteredAlerts().length === 0) {
+  @if (alertsService.filteredAlerts().length === 0) {
 
     <div class="empty-list">
       <p>
-        @if (alertasService.filterEstado() === 'RESOLVED') {
+        @if (alertsService.filterEstado() === 'RESOLVED') {
           No hay alertas resueltas con los filtros actuales.
-        } @else if (alertasService.filterEstado() === 'ASIGNADAS') {
+        } @else if (alertsService.filterEstado() === 'ASIGNADAS') {
           No hay problemas asignados a un CGM con los filtros actuales.
-        } @else if (alertasService.filterEstado() === 'MIAS') {
+        } @else if (alertsService.filterEstado() === 'MIAS') {
           No tienes problemas asignados con los filtros actuales.
         } @else {
           No hay alertas activas con los filtros actuales.
@@ -142,8 +142,8 @@
             <th scope="col">Problema</th>
             <th scope="col">Aplicaciones</th>
             @if (
-              alertasService.filterEstado() === 'ASIGNADAS' ||
-              alertasService.filterEstado() === 'MIAS'
+              alertsService.filterEstado() === 'ASIGNADAS' ||
+              alertsService.filterEstado() === 'MIAS'
             ) {
               <th scope="col">Asignada a</th>
             }
@@ -152,7 +152,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (alerta of alertasService.filteredAlerts(); track alerta.id) {
+          @for (alerta of alertsService.filteredAlerts(); track alerta.id) {
             <tr
               class="alertas-table__row"
               [class.alertas-table__row--open]="selectedAlert()?.id === alerta.id"
@@ -183,8 +183,8 @@
                 }
               </td>
               @if (
-                alertasService.filterEstado() === 'ASIGNADAS' ||
-                alertasService.filterEstado() === 'MIAS'
+                alertsService.filterEstado() === 'ASIGNADAS' ||
+                alertsService.filterEstado() === 'MIAS'
               ) {
                 <td class="col-assignee">{{ alerta.asignacion?.cgm }}</td>
               }

@@ -14,7 +14,7 @@ import {
 } from '@angular/forms';
 
 import { CURRENT_USER }
-from '../../../perfil/mocks/current-user-mock';
+from '../../../profile/mocks/current-user-mock';
 
 import {
   STANDBY_DELEGATION_REASONS,
@@ -30,19 +30,19 @@ import { StandbyDelegationService }
 from '../../services/standby-delegation-service';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success.service';
+from '../../../shared/services/save-success-service';
 
 import { avatarToneForName }
-from '../../../../shared/utils/avatar-tone.util';
+from '../../../shared/utils/avatar-tone-utils';
 
 @Component({
-  selector: 'app-standby-relevo-modal',
+  selector: 'app-standby-handover-modal',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './standby-relevo-modal.html',
-  styleUrl: './standby-relevo-modal.scss'
+  templateUrl: './standby-handover-modal.html',
+  styleUrl: './standby-handover-modal.scss'
 })
-export class StandbyRelevoModalComponent {
+export class StandbyHandoverModalComponent {
 
   private readonly fb = inject(FormBuilder);
 

@@ -8,18 +8,18 @@ import {
 import {
   MaintenanceWindow,
   MaintenanceWindowType
-} from '../models/maintenance-window.model';
+} from '../models/maintenance-windows-model';
 
 import { MAINTENANCE_WINDOWS_MOCK }
-from '../mocks/maintenance-windows.mock';
+from '../mocks/maintenance-windows-mock';
 
 import { PortalFilterService }
-from '../../../shared/services/portal-filter.service';
+from '../../shared/services/portal-filter-service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MantenimientoService {
+export class MaintenanceService {
 
   private readonly portalFilter =
     inject(PortalFilterService);

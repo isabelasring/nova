@@ -16,7 +16,7 @@ import { StandbyMonthViewComponent }
 from '../standby-month-view/standby-month-view';
 
 import { avatarToneForName }
-from '../../../../shared/utils/avatar-tone.util';
+from '../../../shared/utils/avatar-tone-utils';
 
 type StandbyPeriod = 'past' | 'current' | 'next';
 

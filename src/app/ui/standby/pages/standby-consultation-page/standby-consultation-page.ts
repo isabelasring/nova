@@ -23,7 +23,7 @@ import { STANDBY_APPLICATIONS }
 from '../../mocks/standby-applications-mock';
 
 import { STANDBY_USER_PHONES }
-from '../../mocks/standby-user-phones-mocks';
+from '../../mocks/standby-user-phones-mock';
 
 import { StandbyAssignment }
 from '../../models/standby-assignment-model';
@@ -48,18 +48,18 @@ const PERIOD_COLORS: Record<StandbyPeriod, string> = {
 };
 
 @Component({
-  selector: 'app-standby-consulta-page',
+  selector: 'app-standby-consultation-page',
   standalone: true,
   imports: [
     FormsModule,
     StandbyViewModalComponent,
     PortalFilterBarComponent
   ],
-  templateUrl: './standby-consulta-page.html',
-  styleUrl: './standby-consulta-page.scss',
+  templateUrl: './standby-consultation-page.html',
+  styleUrl: './standby-consultation-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StandbyConsultaPageComponent {
+export class StandbyConsultationPageComponent {
 
   private readonly scheduleService =
     inject(StandbyScheduleService);

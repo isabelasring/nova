@@ -10,16 +10,16 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { STANDBY_APPLICATIONS }
-from '../../mocks/standby-applications.mock';
+from '../../mocks/standby-applications-mock';
 
 import { STANDBY_AREA_SERVICES }
-from '../../mocks/standby-area-services.mock';
+from '../../mocks/standby-area-services-mock';
 
 import { StandbyApplication }
-from '../../models/standby-application.model';
+from '../../models/standby-application-model';
 
 import { StandbyAssignment }
-from '../../models/standby-assignment.model';
+from '../../models/standby-assignment-model';
 
 import { StandbyCardComponent }
 from '../../components/standby-card/standby-card';
@@ -32,38 +32,38 @@ import {
   StandbyViewModalComponent
 } from '../../components/standby-view-modal/standby-view-modal';
 
-import { StandbyRelevoModalComponent }
-from '../../components/standby-relevo-modal/standby-relevo-modal';
+import { StandbyHandoverModalComponent }
+from '../../components/standby-handover-modal/standby-handover-modal';
 
 import { StandbyPersonModalComponent }
 from '../../components/standby-person-modal/standby-person-modal';
 
 import { StandbyScheduleService }
-from '../../services/standby-schedule.service';
+from '../../services/standby-schedule-service';
 
 import { StandbyDelegationService }
-from '../../services/standby-delegation.service';
+from '../../services/standby-delegation-service';
 
 import { SaveSuccessService }
-from '../../../../shared/services/save-success.service';
+from '../../../shared/services/save-success-service';
 
 import { PortalFilterService }
-from '../../../../shared/services/portal-filter.service';
+from '../../../shared/services/portal-filter-service';
 
 import { PortalFilterBarComponent }
-from '../../../../shared/components/portal-filter-bar/portal-filter-bar';
+from '../../../shared/components/portal-filter-bar/portal-filter-bar';
 
 import {
   STANDBY_POLICY_META,
   STANDBY_POLICY_PRINCIPLES,
   STANDBY_POLICY_SECTIONS
-} from '../../data/standby-policies.data';
+} from '../../data/standby-policies-data';
 
 import { StandbyPersonRecord }
-from '../../mocks/standby-person-catalog.mock';
+from '../../mocks/standby-person-catalog-mock';
 
 import { avatarToneForName }
-from '../../../../shared/utils/avatar-tone.util';
+from '../../../shared/utils/avatar-tone-utils';
 
 type StandbyPanelView = 'apps' | 'program' | 'policies' | 'delegate';
 
@@ -77,7 +77,7 @@ type StandbyScope = 'tech' | 'areas';
     StandbyCardComponent,
     StandbyModalComponent,
     StandbyViewModalComponent,
-    StandbyRelevoModalComponent,
+    StandbyHandoverModalComponent,
     StandbyPersonModalComponent,
     PortalFilterBarComponent
   ],
@@ -133,7 +133,7 @@ export class StandbyPageComponent implements OnInit {
   /** Modal abierto en modo edición de una fila existente. */
   editingStandby = false;
 
-  showRelevoModal = false;
+  showHandoverModal = false;
 
   showPersonModal = false;
 
@@ -976,16 +976,16 @@ export class StandbyPageComponent implements OnInit {
 
   }
 
-  openRelevoModal(): void {
+  openHandoverModal(): void {
 
-    this.showRelevoModal = true;
+    this.showHandoverModal = true;
     this.cdr.markForCheck();
 
   }
 
-  closeRelevoModal(): void {
+  closeHandoverModal(): void {
 
-    this.showRelevoModal = false;
+    this.showHandoverModal = false;
     this.cdr.markForCheck();
 
   }
@@ -1011,13 +1011,13 @@ export class StandbyPageComponent implements OnInit {
 
   }
 
-  onRelevoDelegated(): void {
+  onHandoverDelegated(): void {
 
     this.cdr.markForCheck();
 
   }
 
-  revokeRelevo(): void {
+  revokeHandover(): void {
 
     this.delegationService.revokeOutgoing();
     this.cdr.markForCheck();

@@ -8,7 +8,7 @@ import {
   STANDBY_POLICY_META,
   STANDBY_POLICY_PRINCIPLES,
   STANDBY_POLICY_SECTIONS
-} from '../../data/standby-policies.data';
+} from '../../data/standby-policies-data';
 
 @Component({
   selector: 'app-standby-policies-page',

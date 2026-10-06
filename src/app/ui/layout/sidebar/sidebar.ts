@@ -1,17 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  inject,
   input,
-  output
+  output,
+  signal
 } from '@angular/core';
 import {
   RouterLink,
   RouterLinkActive
 } from '@angular/router';
-
-import { ThemeService }
-from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -26,16 +23,15 @@ from '../../core/services/theme.service';
 })
 export class SidebarComponent {
 
-  private readonly themeService =
-    inject(ThemeService);
-
   readonly collapsed = input(false);
 
   readonly toggle = output<void>();
 
-  get isDark(): boolean {
+  readonly isDark = signal(this.readDark());
 
-    return this.themeService.theme() === 'dark';
+  constructor() {
+
+    this.applyTheme(this.isDark());
 
   }
 
@@ -47,7 +43,32 @@ export class SidebarComponent {
 
   onToggleTheme(): void {
 
-    this.themeService.toggle();
+    const next = !this.isDark();
+    this.isDark.set(next);
+    this.applyTheme(next);
+
+  }
+
+  private readDark(): boolean {
+
+    if (typeof document === 'undefined') {
+      return false;
+    }
+
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+
+  }
+
+  private applyTheme(dark: boolean): void {
+
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    document.documentElement.setAttribute(
+      'data-theme',
+      dark ? 'dark' : 'light'
+    );
 
   }
 
