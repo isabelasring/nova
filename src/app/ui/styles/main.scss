@@ -1,11 +1,8 @@
-@use './abstracts/colors';
-@use './abstracts/variables';
-@use './abstracts/mixins';
+@use './abstracts' as *;
 
 @use './base/reset';
 @use './base/typography';
-
-@use './layout/sidebar';
+@use './components/buttons';
 
 // ======================================================
 // TEMAS
@@ -15,24 +12,24 @@
 [data-theme='light'] {
   --bg-body: #f7f8fa;
   --surface: #ffffff;
-  --text-primary: #2c2a29;
+  --text-primary: #{$negro-cib};
   --text-secondary: #6b7280;
   --text-disabled: #a4acb9;
   --border-color: #e5e7eb;
   --border-light: #f0f2f5;
-  --on-yellow: #2c2a29;
+  --on-yellow: #{$negro-cib};
   color-scheme: light;
 }
 
 [data-theme='dark'] {
   --bg-body: #1a1918;
-  --surface: #2c2a29;
+  --surface: #{$negro-cib};
   --text-primary: #f3f2f1;
   --text-secondary: #c4bfb9;
   --text-disabled: #8a8580;
   --border-color: #4a4745;
   --border-light: #3a3836;
-  --on-yellow: #2c2a29;
+  --on-yellow: #{$negro-cib};
   color-scheme: dark;
 }
 
@@ -88,7 +85,7 @@
 }
 
 [data-theme='dark'] .sidebar .menu-item:hover {
-  color: #fdda24;
+  color: #{$amarillo-macondo};
 }
 
 [data-theme='dark'] .sidebar .menu-item.active {
@@ -104,7 +101,7 @@
 }
 
 [data-theme='dark'] .sidebar .theme-toggle {
-  color: #fdda24;
+  color: #{$amarillo-macondo};
 }
 
 /*

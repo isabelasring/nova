@@ -1,6 +1,4 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../styles/abstracts' as *;
 
 $estado-problema: $naranja-alba;
 
@@ -468,9 +466,7 @@ $estado-problema: $naranja-alba;
   inset: 0;
   z-index: 2200;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
 
   padding: $space-24;
   background: rgba(44, 42, 41, 0.45);
@@ -1080,11 +1076,6 @@ $estado-problema: $naranja-alba;
   cursor: pointer;
   font-size: $font-size-md;
   font-weight: $font-weight-bold;
-}
-
-.btn-secondary {
-  @include button-secondary;
-  border: 1px solid $border-color;
 }
 
 .btn-primary {

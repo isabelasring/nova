@@ -1,6 +1,4 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../styles/abstracts' as *;
 
 .inicio-page {
   padding: $space-32;

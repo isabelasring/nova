@@ -1,6 +1,4 @@
-@use '../../../../styles/abstracts/colors' as *;
-@use '../../../../styles/abstracts/variables' as *;
-@use '../../../../styles/abstracts/mixins' as *;
+@use '../../styles/abstracts' as *;
 
 .contactos-page {
   padding: $space-32;
@@ -45,11 +43,7 @@
 }
 
 .btn-new-contact {
-  @include button-base;
-
-  background: $surface;
-  color: $text-primary;
-  border: 1px solid $border-color;
+  @include button-outline;
 }
 
 .btn-new-contact:hover {
@@ -410,14 +404,6 @@
   display: flex;
   justify-content: flex-end;
   gap: $space-12;
-}
-
-.btn-outline {
-  @include button-base;
-
-  background: $surface;
-  border: 1px solid $border-color;
-  color: $text-primary;
 }
 
 .btn-danger {

@@ -10,7 +10,6 @@ import {
   selector: 'app-standby-selection-bar',
   standalone: true,
   templateUrl: './standby-selection-bar.html',
-  styleUrl: './standby-selection-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StandbySelectionBarComponent {

@@ -1,6 +1,4 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../../styles/abstracts' as *;
 
 .policies-page {
   min-height: calc(100vh - 32px);
@@ -391,11 +389,7 @@
 }
 
 .policies-footer__btn {
-  @include button-base;
-
-  background: $amarillo-macondo;
-  border: 1px solid $amarillo-macondo;
-  color: $on-yellow;
+  @include button-add;
   text-decoration: none;
   white-space: nowrap;
 }

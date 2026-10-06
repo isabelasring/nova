@@ -1,0 +1,21 @@
+@use '../abstracts' as *;
+
+.btn-primary {
+  @include button-primary;
+}
+
+.btn-secondary {
+  @include button-secondary;
+}
+
+.btn-outline {
+  @include button-outline;
+}
+
+.btn-save {
+  @include button-save;
+}
+
+.btn-add {
+  @include button-add;
+}

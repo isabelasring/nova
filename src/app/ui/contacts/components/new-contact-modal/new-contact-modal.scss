@@ -1,6 +1,4 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../../styles/abstracts' as *;
 
 .modal-backdrop {
   position: fixed;
@@ -120,13 +118,7 @@
 }
 
 .btn-new-contact {
-  @include button-base;
-
-  background: $surface;
-
-  color: $text-primary;
-
-  border: 1px solid $border-color;
+  @include button-outline;
 }
 
 .btn-new-contact:hover {
@@ -135,24 +127,4 @@
   color: $text-primary;
 
   border-color: $amarillo-macondo;
-}
-
-.btn-secondary {
-  @include button-secondary;
-}
-
-.btn-save {
-  @include button-base;
-
-  background: $verde-andino;
-  color: $blanco;
-
-  &:hover:not(:disabled) {
-    filter: brightness(0.95);
-  }
-
-  &:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
 }

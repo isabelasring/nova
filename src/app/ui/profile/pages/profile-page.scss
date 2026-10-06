@@ -1,6 +1,4 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../styles/abstracts' as *;
 
 .perfil-page {
   padding: $space-24 $space-32 $space-40;
@@ -15,30 +13,6 @@
 .page-toolbar__actions {
   display: flex;
   gap: $space-12;
-}
-
-.btn-outline {
-  @include button-base;
-
-  background: $surface;
-  border: 1px solid $border-color;
-  color: $text-primary;
-}
-
-.btn-primary {
-  @include button-primary;
-}
-
-.btn-save {
-  @include button-base;
-
-  background: $verde-andino;
-  border: 1px solid $verde-andino;
-  color: $blanco;
-}
-
-.btn-save:hover {
-  filter: brightness(0.95);
 }
 
 .top-grid {

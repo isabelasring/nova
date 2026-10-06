@@ -1,6 +1,4 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../../styles/abstracts' as *;
 
 .modal-backdrop {
   position: fixed;
@@ -8,9 +6,7 @@
 
   background: rgba(0, 0, 0, .5);
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center;
 
   z-index: 1000;
 }
@@ -772,17 +768,4 @@
 
   display: flex;
   justify-content: flex-end;
-}
-
-.btn-primary {
-  @include button-primary;
-}
-
-.btn-secondary {
-  @include button-secondary;
-}
-
-.btn-primary:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }

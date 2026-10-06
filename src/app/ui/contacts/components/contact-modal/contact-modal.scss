@@ -1,6 +1,4 @@
-@use '../../../../styles/abstracts/colors' as *;
-@use '../../../../styles/abstracts/variables' as *;
-@use '../../../../styles/abstracts/mixins' as *;
+@use '../../../styles/abstracts' as *;
 
 .modal-backdrop {
   position: fixed;
@@ -8,9 +6,7 @@
 
   background: rgba(0, 0, 0, 0.45);
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center;
 
   z-index: 1000;
 }
@@ -235,20 +231,6 @@
   margin-top: $space-16;
 }
 
-.btn-primary {
-  @include button-primary;
-}
-
-.btn-save {
-  background: $verde-andino;
-  border-color: $verde-andino;
-  color: $blanco;
-}
-
-.btn-save:hover {
-  filter: brightness(0.95);
-}
-
 .field-locked,
 input.field-locked,
 select:disabled {
@@ -305,10 +287,6 @@ select:disabled {
 
 .standby-panel--locked app-standby-calendar {
   pointer-events: auto;
-}
-
-.btn-secondary {
-  @include button-secondary;
 }
 
 .distribution-content {

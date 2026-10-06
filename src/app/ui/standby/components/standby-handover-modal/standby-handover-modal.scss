@@ -1,15 +1,11 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../../styles/abstracts' as *;
 
 .relevo-backdrop {
   position: fixed;
   inset: 0;
   z-index: 1200;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
 
   padding: $space-24;
   background: rgba(44, 42, 41, 0.55);
@@ -179,9 +175,7 @@
   height: 36px;
   flex-shrink: 0;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
 
   border-radius: 50%;
   background: $amarillo-macondo;
@@ -293,19 +287,6 @@
 
   padding: $space-16 $space-24;
   border-top: 1px solid $border-light;
-}
-
-.btn-secondary {
-  @include button-secondary;
-}
-
-.btn-primary {
-  @include button-primary;
-}
-
-.btn-primary:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
 }
 
 @media (max-width: 640px) {

@@ -1,6 +1,4 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../styles/abstracts' as *;
 
 .mantenimiento-page {
   padding: $space-32;
@@ -637,9 +635,7 @@
   inset: 0;
   z-index: 1200;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
 
   padding: $space-24;
   background: rgba(44, 42, 41, 0.48);
@@ -1241,36 +1237,12 @@
   font-weight: $font-weight-medium;
 }
 
-.btn-secondary {
-  @include button-secondary;
-  border: 1px solid $border-color;
-}
-
-.btn-save {
-  @include button-base;
-
-  background: $verde-andino;
-  color: $blanco;
-  border: 1px solid $verde-andino;
-}
-
-.btn-save:hover:not(:disabled) {
-  filter: brightness(0.95);
-}
-
-.btn-save:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
 .edit-modal-backdrop {
   position: fixed;
   inset: 0;
   z-index: 2200;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
 
   padding: $space-24;
   background: rgba(44, 42, 41, 0.45);

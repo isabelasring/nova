@@ -115,9 +115,14 @@
   background: $amarillo-macondo;
   color: $on-yellow;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: $negro-cib;
     color: $amarillo-macondo;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 }
 
@@ -126,10 +131,45 @@
 
   background: $surface;
   color: $text-primary;
+  border: 1px solid $border-color;
 
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: $violeta-orquidea;
     color: $violeta-orquidea;
+  }
+}
+
+@mixin button-outline {
+  @include button-base;
+
+  background: $surface;
+  border: 1px solid $border-color;
+  color: $text-primary;
+}
+
+@mixin button-save {
+  @include button-base;
+
+  background: $verde-andino;
+  border: 1px solid $verde-andino;
+  color: $blanco;
+
+  &:hover:not(:disabled) {
+    filter: brightness(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-add {
+  @include button-primary;
+  border: 1px solid $amarillo-macondo;
+
+  &:hover:not(:disabled) {
+    border-color: $negro-cib;
   }
 }
 

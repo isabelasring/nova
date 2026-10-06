@@ -1,6 +1,4 @@
-@use '../../styles/abstracts/colors' as *;
-@use '../../styles/abstracts/variables' as *;
-@use '../../styles/abstracts/mixins' as *;
+@use '../../styles/abstracts' as *;
 
 .sidebar {
   width: $sidebar-width;

@@ -1,6 +1,4 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../../styles/abstracts' as *;
 
 .alert-backdrop {
   position: fixed;
@@ -8,9 +6,7 @@
 
   background: rgba(44, 42, 41, 0.45);
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center;
 
   z-index: 2000;
 }
@@ -86,19 +82,8 @@
 }
 
 .btn-corporate {
-  @include button-base;
-
-  background: $amarillo-macondo;
-  color: $on-yellow;
-  border: 1px solid $amarillo-macondo;
-
+  @include button-add;
   min-width: 160px;
-}
-
-.btn-corporate:hover {
-  background: $negro-cib;
-  border-color: $negro-cib;
-  color: $amarillo-macondo;
 }
 
 .alert-actions {
@@ -110,12 +95,7 @@
 }
 
 .btn-secondary {
-  @include button-base;
-
-  background: $surface;
-  color: $text-primary;
-  border: 1px solid $border-color;
-
+  @include button-secondary;
   min-width: 160px;
 }
 

@@ -1,6 +1,4 @@
-@use 'abstracts/colors' as *;
-@use 'abstracts/variables' as *;
-@use 'abstracts/mixins' as *;
+@use '../../../styles/abstracts' as *;
 
 .standby-page {
   display: flex;
@@ -1153,33 +1151,6 @@
   }
 }
 
-.btn-outline {
-  @include button-base;
-
-  background: $surface;
-  border: 1px solid $border-color;
-  color: $text-primary;
-}
-
-.btn-add {
-  @include button-base;
-
-  background: $amarillo-macondo;
-  border: 1px solid $amarillo-macondo;
-  color: $on-yellow;
-}
-
-.btn-add:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-add:hover:not(:disabled) {
-  background: $negro-cib;
-  border-color: $negro-cib;
-  color: $amarillo-macondo;
-}
-
 .standby-panel {
   width: min(360px, 100%);
   flex-shrink: 0;
@@ -1196,18 +1167,6 @@
   max-height: calc(100vh - 64px);
   position: sticky;
   top: $space-16;
-}
-
-.standby-panel .btn-add {
-  background: $amarillo-macondo;
-  border-color: $amarillo-macondo;
-  color: $on-yellow;
-}
-
-.standby-panel .btn-add:hover:not(:disabled) {
-  background: $negro-cib;
-  border-color: $negro-cib;
-  color: $amarillo-macondo;
 }
 
 .standby-panel__header {
