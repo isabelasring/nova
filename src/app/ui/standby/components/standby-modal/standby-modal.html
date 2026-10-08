@@ -251,10 +251,7 @@
                 selectedUser === user ||
                 coResponsables.includes(user)
               "
-              [class.user-card--disabled]="
-                addingCoResponsable &&
-                responsablesForSummary.includes(user)
-              "
+              [class.user-card--disabled]="isPersonBlocked(user)"
               (click)="selectUser(user)"
             >
               {{ user }}
@@ -311,7 +308,7 @@
             }
             Responsable seleccionado:
             {{ selectedUser }}
-            · Selecciona un viernes (standby de viernes a jueves)
+            · Selecciona un viernes (de las 12:00 a las 12:00 del viernes siguiente)
             <button
               type="button"
               class="link-clear"
@@ -352,17 +349,76 @@
           </label>
 
           <small>
-            Cada standby dura 7 días: de viernes a jueves
+            Viernes 12:00 hasta el viernes siguiente 12:00.
           </small>
 
-          @if (responsablesForSummaryDisplay.length > 0) {
-            <div class="summary-people">
+          @if (askingPriority) {
+            <div class="cgm-question">
+              <p>¿Quieres dar prioridad de llamada en este standby?</p>
+              <small>
+                Si la primera persona no contesta, se llama a la siguiente.
+              </small>
+              <div class="cgm-question__actions">
+                <button
+                  type="button"
+                  class="btn-primary"
+                  (click)="confirmPriority(true)"
+                >
+                  Sí, con prioridad
+                </button>
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  (click)="confirmPriority(false)"
+                >
+                  No, sin prioridad
+                </button>
+              </div>
+            </div>
+          } @else if (responsablesForSummaryDisplay.length > 0) {
+            @if (usesPriority) {
+              <p class="summary-hint">
+                Orden de llamada: si la 1 no contesta, sigue la 2.
+              </p>
+            }
+            <ol class="priority-list">
               @for (
                 name of responsablesForSummaryDisplay;
-                track name
+                track name;
+                let i = $index
               ) {
-                <span class="person-chip person-chip--removable">
-                  {{ name }}
+                <li class="priority-item">
+                  @if (usesPriority) {
+                    <span class="priority-rank">{{ i + 1 }}</span>
+                  }
+                  <div class="priority-copy">
+                    <strong>{{ name }}</strong>
+                    @if (usesPriority) {
+                      <small>{{ priorityHint(i) }}</small>
+                    }
+                  </div>
+                  @if (usesPriority && draftIndex(name) >= 0) {
+                    <button
+                      type="button"
+                      class="priority-move"
+                      title="Subir prioridad"
+                      [disabled]="draftIndex(name) === 0"
+                      (click)="movePriority(draftIndex(name), -1)"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      class="priority-move"
+                      title="Bajar prioridad"
+                      [disabled]="
+                        draftIndex(name) === responsablesForSummary.length - 1
+                      "
+                      (click)="movePriority(draftIndex(name), 1)"
+                    >
+                      ↓
+                    </button>
+                  }
                   <button
                     type="button"
                     class="person-chip__remove"
@@ -376,10 +432,22 @@
                   >
                     ×
                   </button>
-                </span>
+                </li>
               }
-            </div>
+            </ol>
           }
+
+          <label class="observation-label" for="standby-observation">
+            Observación
+          </label>
+          <textarea
+            id="standby-observation"
+            class="observation-field"
+            rows="3"
+            name="observacion"
+            [(ngModel)]="observacion"
+            placeholder="Qué debe saber quien cubre este standby"
+          ></textarea>
 
           <ul class="week-list">
 
@@ -390,10 +458,13 @@
 
               <li class="week-row">
                 <span>
-                  De
+                  Viernes
                   {{ week.start | date:'dd/MM/yyyy' }}
-                  a
+                  12:00
+                  →
+                  viernes
                   {{ week.end | date:'dd/MM/yyyy' }}
+                  12:00
                 </span>
 
                 @if (showAddPersonOnCalendar) {
@@ -414,9 +485,13 @@
 
           @if (hasPendingStandbyDraft && !addingCoResponsable) {
             <p class="standby-flow-hint">
-              Puedes seguir agregando personas a este standby con +.
-              Para pasar a otro standby o cambiar fechas, selecciona
-              «Aceptar selección».
+              @if (usesPriority) {
+                Puedes seguir agregando personas con +.
+                Quedan en orden de llamada: si la 1 no contesta, sigue la 2.
+              } @else {
+                Puedes agregar otra persona con + si este standby la cubre.
+              }
+              Escribe la observación y luego «Aceptar selección».
             </p>
           }
 
@@ -495,19 +570,34 @@
                 }
 
                 <div class="trace-item__main">
-                  De
+                  Viernes
                   {{ group.start | date:'dd/MM/yyyy' }}
-                  a
+                  12:00
+                  →
+                  viernes
                   {{ group.end | date:'dd/MM/yyyy' }}
+                  12:00
                 </div>
+
+                @if (group.observacion) {
+                  <p class="trace-observation">
+                    Observación: {{ group.observacion }}
+                  </p>
+                }
 
                 <div class="trace-responsables">
                   @for (
                     name of group.responsables;
-                    track name
+                    track name;
+                    let i = $index
                   ) {
                     <span class="person-chip person-chip--removable">
-                      {{ name }}
+                      @if (group.quierePrioridad) {
+                        {{ i + 1 }}. {{ name }}
+                        <small>{{ priorityHint(i) }}</small>
+                      } @else {
+                        {{ name }}
+                      }
                       <button
                         type="button"
                         class="person-chip__remove"

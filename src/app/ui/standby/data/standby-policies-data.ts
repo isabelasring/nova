@@ -46,8 +46,8 @@ export const STANDBY_POLICY_SECTIONS: StandbyPolicySection[] = [
     summary:
       'Cada turno de standby cubre un periodo continuo de siete días calendario.',
     bullets: [
-      'El inicio del turno es siempre un viernes.',
-      'El cierre del turno es el jueves siguiente (viernes → jueves).',
+      'El inicio del turno es siempre un viernes a las 12:00.',
+      'El cierre es el viernes siguiente a las 12:00.',
       'Un mismo responsable puede programar varios turnos, siempre que no se crucen con otros ya aceptados.',
       'Los días ocupados por otro responsable no están disponibles para selección.'
     ],
@@ -75,7 +75,7 @@ export const STANDBY_POLICY_SECTIONS: StandbyPolicySection[] = [
     bullets: [
       'Selecciona una o más aplicaciones disponibles y agrégalas al panel de programación.',
       'Elige el responsable y los viernes de inicio deseados en el calendario.',
-      'Revisa el resumen (de viernes a jueves) y confirma con «Aceptar selección».',
+      'Revisa el resumen (viernes 12:00 a viernes 12:00), la prioridad de llamada y la observación. Confirma con «Aceptar selección».',
       'Finaliza con «Guardar» para publicar el standby programado.'
     ]
   },

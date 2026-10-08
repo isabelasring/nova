@@ -130,7 +130,12 @@ export class StandbyScheduleService {
   acceptWeeks(
     responsable: string,
     weeks: { start: Date; end: Date }[],
-    aplicaciones: StandbyAssociatedApp[] = []
+    aplicaciones: StandbyAssociatedApp[] = [],
+    extra: {
+      prioridad?: number;
+      observacion?: string;
+      quierePrioridad?: boolean;
+    } = {}
   ): void {
 
     const celular =
@@ -156,7 +161,10 @@ export class StandbyScheduleService {
           fechaInicio: start,
           fechaFin: end,
           color: weekColor,
-          aplicaciones: [...aplicaciones]
+          aplicaciones: [...aplicaciones],
+          prioridad: extra.quierePrioridad ? extra.prioridad : undefined,
+          quierePrioridad: extra.quierePrioridad,
+          observacion: extra.observacion
         }
       ];
 

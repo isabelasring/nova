@@ -360,7 +360,7 @@ export class StandbyMonthViewComponent {
             )
           : false,
         isRangeEnd: assignment
-          ? this.isSameDate(
+          ? this.isDayBefore(
               date,
               assignment.fechaFin
             )
@@ -389,7 +389,7 @@ export class StandbyMonthViewComponent {
 
           this.startOfDay(assignment.fechaInicio) &&
 
-        dayTime <=
+        dayTime <
 
           this.startOfDay(assignment.fechaFin)
 
@@ -426,6 +426,12 @@ export class StandbyMonthViewComponent {
       a.getFullYear() === b.getFullYear()
     );
 
+  }
+
+  private isDayBefore(day: Date, end: Date): boolean {
+    const marker = new Date(end);
+    marker.setDate(marker.getDate() - 1);
+    return this.isSameDate(day, marker);
   }
 
 }

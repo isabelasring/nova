@@ -513,6 +513,115 @@
   gap: $space-12;
 }
 
+.cgm-question {
+  margin-top: $space-16;
+  padding: $space-16;
+  border: 1px solid $border-light;
+  border-radius: $radius-md;
+  background: $background-body;
+
+  p {
+    margin: 0 0 $space-8;
+    color: $text-primary;
+    font-weight: $font-weight-semibold;
+  }
+
+  small {
+    color: $text-secondary;
+  }
+}
+
+.cgm-question__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-8;
+  margin-top: $space-12;
+}
+
+.priority-list {
+  list-style: none;
+  margin: $space-12 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+}
+
+.priority-item {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
+  padding: $space-8 $space-12;
+  border: 1px solid $border-light;
+  border-radius: $radius-md;
+  background: $surface;
+}
+
+.priority-rank {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  @include flex-center;
+  border-radius: 50%;
+  background: $amarillo-macondo;
+  color: $on-yellow;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-sm;
+}
+
+.priority-copy {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+
+  strong {
+    color: $text-primary;
+    font-size: $font-size-sm;
+  }
+
+  small {
+    color: $text-secondary;
+    font-size: $font-size-xs;
+  }
+}
+
+.priority-move {
+  @include button-base;
+  padding: 0 $space-8;
+  min-width: 32px;
+  background: $surface;
+  border: 1px solid $border-color;
+  color: $text-primary;
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.observation-label {
+  display: block;
+  margin-top: $space-16;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+
+.observation-field {
+  @include input-base;
+  width: 100%;
+  margin-top: $space-8;
+  resize: vertical;
+  min-height: 72px;
+}
+
+.trace-observation {
+  margin: $space-8 0 0;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+}
+
 .summary-people,
 .trace-responsables {
   display: flex;

@@ -82,6 +82,10 @@ interface GroupedAcceptance {
 
   responsables: string[];
 
+  observacion?: string;
+
+  quierePrioridad?: boolean;
+
 }
 
 interface ProductSelectionState {
@@ -199,6 +203,17 @@ export class StandbyModalComponent {
 
   /** Personas adicionales para el mismo periodo de standby. */
   coResponsables: string[] = [];
+
+  /** Nota del resumen. Viaja con la selección aceptada. */
+  observacion = '';
+
+  /**
+   * null = todavía no se pregunta.
+   * La pregunta sale solo al agregar otra persona al mismo standby.
+   */
+  quierePrioridad: boolean | null = null;
+
+  askingPriority = false;
 
 
 
@@ -470,6 +485,8 @@ export class StandbyModalComponent {
 
     this.selectedUser = undefined;
     this.coResponsables = [];
+    this.quierePrioridad = null;
+    this.askingPriority = false;
     this.addingCoResponsable = false;
     this.addingToExistingWeek = null;
     this.selectedWeekStarts = [];
@@ -661,7 +678,9 @@ export class StandbyModalComponent {
             appsKey,
             start: assignment.fechaInicio,
             end: assignment.fechaFin,
-            responsables: []
+            responsables: [],
+            observacion: assignment.observacion,
+            quierePrioridad: assignment.quierePrioridad
           };
 
           map.set(key, group);
@@ -672,9 +691,23 @@ export class StandbyModalComponent {
             assignment.responsable
           )
         ) {
-          group.responsables.push(
+          const slot = Math.max(
+            0,
+            (assignment.prioridad ?? group.responsables.length + 1) - 1
+          );
+          group.responsables.splice(
+            slot,
+            0,
             assignment.responsable
           );
+        }
+
+        if (assignment.observacion) {
+          group.observacion = assignment.observacion;
+        }
+
+        if (assignment.quierePrioridad !== undefined) {
+          group.quierePrioridad = assignment.quierePrioridad;
         }
 
       }
@@ -949,11 +982,23 @@ export class StandbyModalComponent {
 
       if (
 
-        this.responsablesForSummary.includes(user)
+        this.responsablesForSummary.includes(user) ||
+
+        this.addingToExistingWeek?.responsables.includes(user)
 
       ) {
 
         this.addingCoResponsable = false;
+
+        return;
+
+      }
+
+
+
+      if (this.isOnAnotherStandby(user)) {
+
+        this.rejectOtherStandby(user);
 
         return;
 
@@ -988,7 +1033,19 @@ export class StandbyModalComponent {
 
 
 
+    if (this.isOnAnotherStandby(user)) {
+
+      this.rejectOtherStandby(user);
+
+      return;
+
+    }
+
+
+
     this.selectedUser = user;
+
+    this.quierePrioridad = null;
 
     this.coResponsables = [];
 
@@ -1021,6 +1078,20 @@ export class StandbyModalComponent {
     }
 
 
+
+    if (this.quierePrioridad === null) {
+
+      this.askingPriority = true;
+
+      this.addingCoResponsable = false;
+
+      return;
+
+    }
+
+
+
+    this.askingPriority = false;
 
     this.addingCoResponsable = true;
 
@@ -1066,9 +1137,13 @@ export class StandbyModalComponent {
 
     this.coResponsables = [];
 
-    this.addingCoResponsable = true;
-
     this.addingToExistingWeek = group;
+
+    this.quierePrioridad = group.quierePrioridad ?? null;
+
+    this.askingPriority = group.quierePrioridad === undefined;
+
+    this.addingCoResponsable = group.quierePrioridad !== undefined;
 
     this.selectedWeekStarts = [
 
@@ -1084,7 +1159,11 @@ export class StandbyModalComponent {
 
     );
 
-    this.focusUsersForCoResponsable();
+    if (!this.askingPriority) {
+
+      this.focusUsersForCoResponsable();
+
+    }
 
 
 
@@ -1093,6 +1172,27 @@ export class StandbyModalComponent {
 
 
   onSelectionChange(dates: Date[]): void {
+
+
+
+    if (dates.length > 1) {
+
+      const keep = this.selectedWeekStarts[0] ?? dates[0];
+
+      this.selectedWeekStarts = [keep];
+
+      this.calendar?.setSelection(this.selectedWeekStarts);
+
+      this.conflictMessage =
+        'Esta persona ya tiene un standby. No se puede programar en otro.';
+
+      this.showConflictAlert = true;
+
+      this.persistActiveProductState();
+
+      return;
+
+    }
 
 
 
@@ -1169,6 +1269,129 @@ export class StandbyModalComponent {
     return this.selectedWeekStarts.map(start =>
       toStandbyWeek(start)
     );
+
+  }
+
+
+
+  get usesPriority(): boolean {
+
+    if (this.quierePrioridad !== null) {
+      return this.quierePrioridad;
+    }
+
+    return this.addingToExistingWeek?.quierePrioridad === true;
+
+  }
+
+
+
+  confirmPriority(value: boolean): void {
+
+    this.quierePrioridad = value;
+    this.askingPriority = false;
+    this.addingCoResponsable = true;
+    this.focusUsersForCoResponsable();
+
+  }
+
+
+
+  isPersonBlocked(name: string): boolean {
+
+    if (
+      this.addingCoResponsable &&
+      (this.responsablesForSummary.includes(name) ||
+        this.addingToExistingWeek?.responsables.includes(name))
+    ) {
+      return true;
+    }
+
+    return this.isOnAnotherStandby(name);
+
+  }
+
+
+
+  private rejectOtherStandby(name: string): void {
+
+    this.conflictMessage =
+      `${name} ya está en un standby. No se puede programar en otro.`;
+
+    this.showConflictAlert = true;
+
+    this.addingCoResponsable = false;
+
+  }
+
+
+
+  private isOnAnotherStandby(name: string): boolean {
+
+    const allowed = new Set(
+      (this.addingCoResponsable ? this.selectedWeekStarts : [])
+        .map(date => this.dayKey(date))
+    );
+
+    return [
+      ...this.scheduleService.draftAssignments,
+      ...this.scheduleService.savedAssignments
+    ].some(assignment =>
+      assignment.responsable === name &&
+      !allowed.has(this.dayKey(assignment.fechaInicio))
+    );
+
+  }
+
+
+
+  private dayKey(date: Date): number {
+
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    ).getTime();
+
+  }
+
+
+
+  draftIndex(name: string): number {
+
+    return this.responsablesForSummary.indexOf(name);
+
+  }
+
+
+
+  priorityHint(index: number): string {
+
+    if (index === 0) {
+      return 'Llamar primero';
+    }
+
+    return 'Si no contesta la anterior';
+
+  }
+
+
+
+  movePriority(index: number, direction: -1 | 1): void {
+
+    const list = [...this.responsablesForSummary];
+    const next = index + direction;
+
+    if (next < 0 || next >= list.length) {
+      return;
+    }
+
+    const current = list[index];
+    list[index] = list[next];
+    list[next] = current;
+
+    this.selectedUser = list[0];
+    this.coResponsables = list.slice(1);
 
   }
 
@@ -1313,7 +1536,10 @@ export class StandbyModalComponent {
 
 
 
-    for (const responsable of responsables) {
+    const already =
+      this.addingToExistingWeek?.responsables.length ?? 0;
+
+    responsables.forEach((responsable, index) => {
 
       this.scheduleService.acceptWeeks(
 
@@ -1321,11 +1547,17 @@ export class StandbyModalComponent {
 
         this.standbyWeeks,
 
-        apps
+        apps,
+
+        {
+          prioridad: this.usesPriority ? already + index + 1 : undefined,
+          observacion: this.observacion.trim(),
+          quierePrioridad: this.usesPriority
+        }
 
       );
 
-    }
+    });
 
 
 
@@ -1334,6 +1566,12 @@ export class StandbyModalComponent {
     this.selectedWeekStarts = [];
 
     this.coResponsables = [];
+
+    this.observacion = '';
+
+    this.quierePrioridad = null;
+
+    this.askingPriority = false;
 
     this.addingCoResponsable = false;
 

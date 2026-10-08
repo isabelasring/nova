@@ -1,5 +1,5 @@
 /**
- * Utilidades de periodo standby: siempre viernes → jueves (7 días).
+ * Periodo de standby: viernes 12:00 → viernes siguiente 12:00.
  */
 
 export function startOfDay(date: Date): Date {
@@ -14,11 +14,13 @@ export function isFriday(date: Date): boolean {
   return date.getDay() === 5;
 }
 
-export function isThursday(date: Date): boolean {
-  return date.getDay() === 4;
+export function atNoon(date: Date): Date {
+  const result = startOfDay(date);
+  result.setHours(12, 0, 0, 0);
+  return result;
 }
 
-/** Viernes que inicia la semana vie–jue que contiene la fecha. */
+/** Viernes que inicia el turno que contiene la fecha. */
 export function fridayOfStandbyWeek(date: Date): Date {
   const friday = startOfDay(date);
 
@@ -29,10 +31,10 @@ export function fridayOfStandbyWeek(date: Date): Date {
   return friday;
 }
 
-/** Jueves de cierre (6 días después del viernes de inicio). */
-export function thursdayOfStandbyWeek(fridayStart: Date): Date {
-  const end = startOfDay(fridayStart);
-  end.setDate(end.getDate() + 6);
+/** Viernes siguiente a las 12:00, cierre del turno. */
+export function nextFridayOfStandby(fridayStart: Date): Date {
+  const end = atNoon(fridayStart);
+  end.setDate(end.getDate() + 7);
   return end;
 }
 
@@ -40,10 +42,10 @@ export function toStandbyWeek(date: Date): {
   start: Date;
   end: Date;
 } {
-  const start = fridayOfStandbyWeek(date);
+  const start = atNoon(fridayOfStandbyWeek(date));
   return {
     start,
-    end: thursdayOfStandbyWeek(start)
+    end: nextFridayOfStandby(start)
   };
 }
 
@@ -55,15 +57,14 @@ export function isValidStandbyWeek(
 
   return (
     isFriday(start) &&
-    isThursday(end) &&
-    startOfDay(start).getTime() ===
-      normalized.start.getTime() &&
-    startOfDay(end).getTime() === normalized.end.getTime()
+    isFriday(end) &&
+    atNoon(start).getTime() === normalized.start.getTime() &&
+    atNoon(end).getTime() === normalized.end.getTime()
   );
 }
 
 /**
- * Semana vie–jue del mes (year/month) cuyo viernes es el más cercano
+ * Turno viernes–viernes del mes cuyo viernes de inicio es el más cercano
  * a `preferredDay` (día del mes, 1–31).
  */
 export function standbyWeekNearDay(

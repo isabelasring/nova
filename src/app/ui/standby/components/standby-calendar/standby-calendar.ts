@@ -297,7 +297,7 @@ export class StandbyCalendarComponent {
     }
 
     return this.occupiedRanges().some(range =>
-      this.isDateInRange(
+      this.coversShiftDay(
         day.date,
         range.start,
         range.end
@@ -322,7 +322,7 @@ export class StandbyCalendarComponent {
 
   }
 
-  /** Viernes que inicia la semana vie–jue que contiene la fecha. */
+  /** Viernes 12:00 que inicia el turno que contiene la fecha. */
   private getWeekStart(date: Date): Date {
 
     const friday = new Date(date);
@@ -380,7 +380,7 @@ export class StandbyCalendarComponent {
     const b0 = this.startOfDay(bStart);
     const b1 = this.startOfDay(bEnd);
 
-    return a0 <= b1 && b0 <= a1;
+    return a0 < b1 && b0 < a1;
 
   }
 
@@ -395,6 +395,21 @@ export class StandbyCalendarComponent {
     const to = this.startOfDay(end);
 
     return day >= from && day <= to;
+
+  }
+
+  /** El viernes de cierre a las 12:00 ya es el inicio del turno siguiente. */
+  private coversShiftDay(
+    date: Date,
+    start: Date,
+    end: Date
+  ): boolean {
+
+    const day = this.startOfDay(date);
+    const from = this.startOfDay(start);
+    const to = this.startOfDay(end);
+
+    return day >= from && day < to;
 
   }
 
