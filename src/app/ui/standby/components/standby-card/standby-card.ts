@@ -8,13 +8,9 @@ import {
 import { StandbyApplication }
 from '../../models/standby-application-model';
 
-import { CbButtonComponent }
-from '../../../shared/components/cb-button/cb-button';
-
 @Component({
   selector: 'app-standby-card',
   standalone: true,
-  imports: [CbButtonComponent],
   templateUrl: './standby-card.html',
   styleUrl: './standby-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

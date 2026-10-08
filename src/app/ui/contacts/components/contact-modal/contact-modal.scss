@@ -379,15 +379,7 @@ select:disabled {
 }
 
 .btn-standby {
-  @include button-base;
-
-  background: $verde-andino;
-
-  color: $blanco;
-}
-
-.btn-standby:hover {
-  filter: brightness(.95);
+  @include button-save;
 }
 
 .maintenance-actions {
@@ -398,12 +390,5 @@ select:disabled {
 }
 
 .btn-maintenance {
-  @include button-base;
-
-  background: $verde-andino;
-  color: $blanco;
-}
-
-.btn-maintenance:hover {
-  filter: brightness(.95);
+  @include button-save;
 }

@@ -1,5 +1,7 @@
 <div class="alertas-page">
 
+  <app-breadcrumb [items]="[{ label: 'Alertas' }]" />
+
   <div class="alertas-main">
 
   <header class="list-hero">
@@ -355,15 +357,14 @@
                 [ngModel]="draftComment()"
                 (ngModelChange)="draftComment.set($event)"
               ></textarea>
-              <cb-button
-                typeButton="primary"
-                sizeButton="default"
-                width="hug"
+              <button
+                type="button"
+                class="btn-primary"
                 [disabled]="!draftComment().trim()"
                 (click)="submitComment(alerta.id)"
               >
                 Publicar
-              </cb-button>
+              </button>
             </div>
           </section>
 
@@ -434,28 +435,26 @@
               [ngModel]="draftComment()"
               (ngModelChange)="draftComment.set($event)"
             ></textarea>
-            <cb-button
-              typeButton="primary"
-              sizeButton="default"
-              width="hug"
+            <button
+              type="button"
+              class="btn-primary"
               [disabled]="!draftComment().trim()"
               (click)="submitComment(alerta.id)"
             >
               Agregar comentario
-            </cb-button>
+            </button>
           </div>
 
         </div>
 
         <footer class="detail-modal__footer">
-          <cb-button
-            typeButton="secondary"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="btn-secondary"
             (click)="closeComments()"
           >
             Cerrar
-          </cb-button>
+          </button>
         </footer>
 
       </div>

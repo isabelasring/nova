@@ -6,9 +6,6 @@ import {
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import { CbButtonComponent }
-from '../../../shared/components/cb-button/cb-button';
-
 import { CalendarDay }
 from '../../models/calendar-day-model';
 
@@ -18,7 +15,7 @@ from '../../models/standby-assignment-model';
 @Component({
   selector: 'app-standby-month-view',
   standalone: true,
-  imports: [DatePipe, CbButtonComponent],
+  imports: [DatePipe],
   templateUrl: './standby-month-view.html',
   styleUrl: './standby-month-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

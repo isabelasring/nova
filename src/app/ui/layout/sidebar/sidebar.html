@@ -68,16 +68,11 @@
 
   </div>
 
-  <a
+  <div
     class="sidebar__user"
-    routerLink="/profile"
-    routerLinkActive="active"
-    title="Mi perfil"
   >
 
-    <div class="avatar">
-      AM
-    </div>
+    <app-user-avatar [size]="40" />
 
     @if (!collapsed()) {
       <div class="user-info">
@@ -86,7 +81,7 @@
       </div>
     }
 
-  </a>
+  </div>
 
   <nav class="sidebar__menu">
 

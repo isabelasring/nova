@@ -111,7 +111,16 @@
 [data-theme='dark'] .btn-primary,
 [data-theme='dark'] .btn-add,
 [data-theme='dark'] .btn-corporate,
-[data-theme='dark'] .btn-new-contact:hover,
+[data-theme='dark'] .btn-new-contact,
+[data-theme='dark'] .btn-bulk-edit,
+[data-theme='dark'] .btn-bulk-save,
+[data-theme='dark'] .btn-person-sm,
+[data-theme='dark'] .relevo-status__action,
+[data-theme='dark'] .policies-footer__btn,
+[data-theme='dark'] .standby-dock__add {
+  color: #2c2a29 !important;
+}
+
 [data-theme='dark'] .close-button,
 [data-theme='dark'] .type-modal__close,
 [data-theme='dark'] .avatar,
@@ -131,9 +140,3 @@ h1.page-title-tab {
   color: var(--text-primary) !important;
 }
 
-/* Modal de éxito: tarjeta blanca → texto oscuro a propósito */
-[data-theme='dark'] #pu-save-ok-title,
-[data-theme='dark'] .pu-save-ok h2,
-[data-theme='dark'] .pu-save-ok p {
-  color: #111827 !important;
-}

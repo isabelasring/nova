@@ -8,14 +8,13 @@
 
       <h2>{{ title() }}</h2>
 
-      <cb-button
-        typeButton="secondary"
-        sizeButton="small"
-        width="hug"
+      <button
+        type="button"
+        class="close-button"
         (click)="close()"
       >
         ✕
-      </cb-button>
+      </button>
 
     </div>
 
@@ -27,36 +26,33 @@
 
         <div class="alert-actions">
 
-          <cb-button
-            typeButton="secondary"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="btn-secondary"
             (click)="cancel()"
           >
             {{ cancelLabel() }}
-          </cb-button>
+          </button>
 
-          <cb-button
-            typeButton="primary"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="btn-corporate"
             (click)="confirm()"
           >
             {{ confirmLabel() }}
-          </cb-button>
+          </button>
 
         </div>
 
       } @else {
 
-        <cb-button
-          typeButton="primary"
-          sizeButton="default"
-          width="hug"
+        <button
+          type="button"
+          class="btn-corporate"
           (click)="close()"
         >
           Aceptar
-        </cb-button>
+        </button>
 
       }
 

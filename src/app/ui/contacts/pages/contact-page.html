@@ -1,6 +1,6 @@
 <div class="contactos-page">
 
-
+  <app-breadcrumb [items]="[{ label: 'Contactos' }]" />
 
   <div class="page-header">
 
@@ -22,13 +22,11 @@
 
 
 
-        <cb-button
+        <button
 
-          typeButton="secondary"
+          class="btn-bulk-edit"
 
-          sizeButton="default"
-
-          width="hug"
+          type="button"
 
           (click)="openBulkEdit()"
 
@@ -36,17 +34,15 @@
 
           Editar seleccionados
 
-        </cb-button>
+        </button>
 
 
 
-        <cb-button
+        <button
 
-          typeButton="secondary"
+          class="btn-clear-selection"
 
-          sizeButton="default"
-
-          width="hug"
+          type="button"
 
           (click)="clearSelection()"
 
@@ -54,7 +50,7 @@
 
           Limpiar
 
-        </cb-button>
+        </button>
 
 
 
@@ -62,13 +58,11 @@
 
 
 
-      <cb-button
+      <button
 
-        typeButton="primary"
+        class="btn-new-contact"
 
-        sizeButton="default"
-
-        width="hug"
+        type="button"
 
         (click)="openNewContactModal()"
 
@@ -76,7 +70,7 @@
 
         + Nuevo contacto
 
-      </cb-button>
+      </button>
 
 
 
@@ -85,6 +79,7 @@
         [visible]="showNewContactModal()"
 
         (closed)="closeNewContactModal()"
+        (saved)="onContactSaved()"
 
       />
 
@@ -446,13 +441,11 @@
 
 
 
-          <cb-button
+          <button
 
-            typeButton="secondary"
+            type="button"
 
-            sizeButton="default"
-
-            width="hug"
+            class="btn-outline"
 
             (click)="closeBulkEdit()"
 
@@ -460,17 +453,15 @@
 
             Cancelar
 
-          </cb-button>
+          </button>
 
 
 
-          <cb-button
+          <button
 
-            typeButton="primary"
+            type="button"
 
-            sizeButton="default"
-
-            width="hug"
+            class="btn-bulk-save"
 
             [disabled]="!canSaveBulk()"
 
@@ -480,7 +471,7 @@
 
             Guardar cambios
 
-          </cb-button>
+          </button>
 
 
 
@@ -536,13 +527,11 @@
 
 
 
-          <cb-button
+          <button
 
-            typeButton="secondary"
+            type="button"
 
-            sizeButton="default"
-
-            width="hug"
+            class="btn-outline"
 
             (click)="cancelDelete()"
 
@@ -550,17 +539,15 @@
 
             Cancelar
 
-          </cb-button>
+          </button>
 
 
 
-          <cb-button
+          <button
 
-            typeButton="danger"
+            type="button"
 
-            sizeButton="default"
-
-            width="hug"
+            class="btn-danger"
 
             (click)="confirmDelete()"
 
@@ -568,7 +555,7 @@
 
             Eliminar
 
-          </cb-button>
+          </button>
 
 
 

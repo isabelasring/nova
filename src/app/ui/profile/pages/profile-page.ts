@@ -6,9 +6,6 @@ import {
   signal
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
-
-import { CbButtonComponent }
-from '../../shared/components/cb-button/cb-button';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -33,6 +30,12 @@ from '../services/user-profile-service';
 import { SaveSuccessService }
 from '../../shared/services/save-success-service';
 
+import { UserAvatarComponent }
+from '../../shared/components/user-avatar/user-avatar';
+
+import { BreadcrumbComponent }
+from '../../shared/components/breadcrumb/breadcrumb';
+
 type PerfilTab =
   | 'proximos'
   | 'historial';
@@ -55,7 +58,8 @@ const STANDBY_PERIOD_COLORS: Record<StandbyPeriod, string> = {
     DatePipe,
     ReactiveFormsModule,
     StandbyMonthViewComponent,
-    CbButtonComponent
+    UserAvatarComponent,
+    BreadcrumbComponent
   ],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.scss',
@@ -212,6 +216,11 @@ export class ProfilePageComponent {
     this.profileService.cancelEdit();
     this.profileForm.patchValue({
       celular: this.profileService.profile().celular
+    });
+    this.saveSuccess.show({
+      title: 'Cancelado',
+      message: 'No se guardaron los cambios del perfil.',
+      tone: 'cancelled'
     });
 
   }

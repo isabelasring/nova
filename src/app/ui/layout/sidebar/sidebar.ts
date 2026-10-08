@@ -10,12 +10,16 @@ import {
   RouterLinkActive
 } from '@angular/router';
 
+import { UserAvatarComponent }
+from '../../shared/components/user-avatar/user-avatar';
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   imports: [
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    UserAvatarComponent
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',

@@ -5,6 +5,10 @@
   background: $background-body;
 }
 
+.policies-page app-breadcrumb {
+  padding: $space-24 $space-32 0;
+}
+
 .policies-hero {
   position: relative;
   overflow: hidden;
@@ -394,11 +398,6 @@
   white-space: nowrap;
 }
 
-.policies-footer__btn:hover {
-  background: $negro-cib;
-  border-color: $negro-cib;
-  color: $amarillo-macondo;
-}
 
 @media (max-width: 960px) {
   .policies-layout {

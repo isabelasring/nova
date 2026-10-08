@@ -398,18 +398,13 @@ $estado-problema: $naranja-alba;
 }
 
 .comments-btn {
-  @include button-base;
+  @include button-secondary;
 
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: $space-4 $space-8;
   min-height: 32px;
-
-  border: 1px solid $border-light;
-  border-radius: $radius-sm;
-  background: $surface;
-  color: $text-secondary;
+  padding: 6px 12px;
   font-size: $font-size-xs;
 }
 
@@ -1079,20 +1074,8 @@ $estado-problema: $naranja-alba;
 }
 
 .btn-primary {
-  @include button-base;
+  @include button-primary;
   align-self: flex-end;
-  background: $negro-cib;
-  color: $blanco;
-
-  &:hover:not(:disabled) {
-    background: $text-primary;
-    color: $blanco;
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
 }
 
 .comments-modal {

@@ -19,14 +19,14 @@
         </p>
       </div>
 
-      <cb-button
-        typeButton="secondary"
-        sizeButton="small"
-        width="hug"
+      <button
+        type="button"
+        class="close-button"
         (click)="close()"
+        aria-label="Cerrar"
       >
         ✕
-      </cb-button>
+      </button>
 
     </header>
 
@@ -144,24 +144,22 @@
 
     <footer class="modal-footer">
 
-      <cb-button
-        typeButton="secondary"
-        sizeButton="default"
-        width="hug"
+      <button
+        type="button"
+        class="btn-cancel"
         (click)="close()"
       >
         Cancelar
-      </cb-button>
+      </button>
 
-      <cb-button
-        typeButton="primary"
-        sizeButton="default"
-        width="hug"
+      <button
+        type="button"
+        class="btn-save"
         [disabled]="!canSave()"
         (click)="save()"
       >
         Guardar
-      </cb-button>
+      </button>
 
     </footer>
 

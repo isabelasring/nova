@@ -6,9 +6,6 @@ import {
   signal
 } from '@angular/core';
 import { NgClass } from '@angular/common';
-
-import { CbButtonComponent }
-from '../../shared/components/cb-button/cb-button';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -39,10 +36,18 @@ from '../../shared/services/portal-filter-service';
 import { PortalFilterBarComponent }
 from '../../shared/components/portal-filter-bar/portal-filter-bar';
 
+import { BreadcrumbComponent, BreadcrumbItem }
+from '../../shared/components/breadcrumb/breadcrumb';
+
 @Component({
   selector: 'app-maintenance-page',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, PortalFilterBarComponent, CbButtonComponent],
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    PortalFilterBarComponent,
+    BreadcrumbComponent
+  ],
   templateUrl: './maintenance-page.html',
   styleUrl: './maintenance-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -61,6 +66,17 @@ export class MaintenancePageComponent {
     STANDBY_APPLICATIONS.map(app => ({ ...app }));
 
   readonly viewMode = signal<'list' | 'form'>('list');
+
+  readonly breadcrumbItems = computed<BreadcrumbItem[]>(() => {
+    if (this.viewMode() === 'form') {
+      return [
+        { label: 'Ventana de mantenimiento', link: '/maintenance' },
+        { label: 'Nueva ventana' }
+      ];
+    }
+
+    return [{ label: 'Ventana de mantenimiento' }];
+  });
 
   readonly selectedApp = signal<StandbyApplication | undefined>(
     undefined

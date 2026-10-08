@@ -2,11 +2,17 @@
 
 .standby-page {
   display: flex;
+  flex-wrap: wrap;
   gap: $space-20;
   align-items: stretch;
 
   padding: $space-32;
   min-height: calc(100vh - 32px);
+}
+
+.standby-page app-breadcrumb {
+  flex: 1 0 100%;
+  margin-bottom: -4px;
 }
 
 .standby-main {
@@ -139,7 +145,7 @@
 }
 
 .standby-tool-card__action {
-  @include button-base;
+  @include button-secondary;
 
   align-self: flex-start;
 
@@ -147,20 +153,9 @@
   align-items: center;
   gap: $space-8;
 
-  min-height: 40px;
-  padding: $space-8 $space-16;
-
-  border-radius: $radius-sm;
-  background: transparent;
-  border: 1px solid $border-color;
-
   font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
-  color: $text-primary;
   text-decoration: none;
   white-space: nowrap;
-
-  cursor: pointer;
 }
 
 .standby-tool-card__action-arrow {
@@ -168,11 +163,6 @@
   transition: transform 0.2s ease;
 }
 
-.standby-tool-card--policies .standby-tool-card__action:hover {
-  border-color: $link-color;
-  color: $link-color;
-  background: rgba(0, 153, 216, 0.06);
-}
 
 .standby-tool-card--policies
   .standby-tool-card__action:hover
@@ -180,11 +170,6 @@
   transform: translateX(3px);
 }
 
-.standby-tool-card--relevo .standby-tool-card__action:hover {
-  border-color: $verde-andino;
-  color: $verde-andino;
-  background: rgba(0, 195, 137, 0.06);
-}
 
 .relevo-status {
   display: flex;
@@ -228,24 +213,13 @@
 }
 
 .relevo-status__action {
-  @include button-base;
+  @include button-primary;
 
   flex-shrink: 0;
-
-  padding: $space-8 $space-16;
-  min-height: 38px;
-
-  background: $surface;
-  border: 1px solid $border-color;
-  color: $text-primary;
-
   font-size: $font-size-sm;
   white-space: nowrap;
 }
 
-.relevo-status__action:hover {
-  border-color: $text-primary;
-}
 
 .standby-section {
   margin-bottom: $space-24;
@@ -271,53 +245,46 @@
 .section-tabs {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
   flex-shrink: 0;
 
   padding: 4px;
 
-  border: 1px solid $border-light;
-  border-radius: $radius-sm;
-  background: $background-body;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(44, 42, 41, 0.08);
 }
 
 .section-tabs__btn {
-  @include button-base;
-
-  min-height: 34px;
-  padding: $space-8 $space-12;
+  min-height: 36px;
+  padding: 8px 18px;
 
   border: 0;
-  border-radius: $radius-sm;
+  border-radius: 999px;
   background: transparent;
 
+  font-family: $font-family-base;
   font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  color: $text-secondary;
+  font-weight: $font-weight-semibold;
+  color: #2c2a29;
+  cursor: pointer;
 }
 
 .section-tabs__btn:hover {
-  color: $text-primary;
-  background: $surface;
+  background: transparent;
+  color: #2c2a29;
 }
 
 .section-tabs__btn--active {
-  background: $surface;
-  color: $text-primary;
-  font-weight: $font-weight-semibold;
-  box-shadow: $shadow-sm;
+  background: #2c2a29;
+  color: #ffffff !important;
+  font-weight: $font-weight-bold;
+  box-shadow: none;
 }
 
-.section-tabs__btn--action {
-  margin-left: 4px;
-  border: 1px solid $border-color;
-  background: $surface;
-  color: $text-primary;
-}
-
-.section-tabs__btn--action:hover {
-  border-color: $amarillo-macondo;
-  background: rgba(253, 218, 36, 0.2);
+.section-tabs__btn--active:hover {
+  background: #2c2a29;
+  color: #ffffff !important;
 }
 
 .inline-panel {
@@ -676,16 +643,7 @@
 }
 
 .btn-ghost {
-  @include button-base;
-
-  background: transparent;
-  border: 1px solid $border-color;
-  color: $text-secondary;
-}
-
-.btn-ghost:hover {
-  color: $text-primary;
-  border-color: $text-primary;
+  @include button-secondary;
 }
 
 .list-toolbar {
@@ -695,25 +653,13 @@
 }
 
 .btn-person-sm {
-  @include button-base;
+  @include button-primary;
 
   min-height: 32px;
-  padding: 6px 12px;
-
-  background: $surface;
-  border: 1px solid $border-color;
-  border-radius: $radius-sm;
-
+  padding: 6px 14px;
   font-size: 12px;
-  font-weight: $font-weight-medium;
-  color: $text-secondary;
 }
 
-.btn-person-sm:hover {
-  color: $text-primary;
-  border-color: $amarillo-macondo;
-  background: rgba(253, 218, 36, 0.14);
-}
 
 .standby-board {
   position: relative;
@@ -1026,9 +972,18 @@
 }
 
 .standby-dock__person,
-.standby-dock__cancel,
+.standby-dock__cancel {
+  @include button-secondary;
+
+  min-height: 46px;
+  padding: $space-12 $space-20;
+
+  font-size: $font-size-sm;
+  white-space: nowrap;
+}
+
 .standby-dock__add {
-  @include button-base;
+  @include button-primary;
 
   min-height: 46px;
   padding: $space-12 $space-20;
@@ -1040,34 +995,14 @@
 
 .standby-dock__person {
   margin-right: auto;
-
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #fff;
-}
-
-.standby-dock__person:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.32);
-}
-
-.standby-dock__cancel {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.standby-dock__cancel:hover {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .standby-dock__add {
   min-width: 190px;
 
   background: $amarillo-macondo;
-  border: 1px solid $amarillo-macondo;
-  color: $on-yellow;
+  border: 0;
+  color: #2c2a29;
 
   box-shadow:
     0 0 0 0 rgba(253, 218, 36, 0.45),
@@ -1076,9 +1011,8 @@
 }
 
 .standby-dock__add:hover:not(:disabled) {
-  background: #fff;
-  border-color: #fff;
-  color: $negro-cib;
+  background: #e6c61b;
+  color: #2c2a29;
   animation: none;
 }
 
@@ -1346,18 +1280,6 @@
 }
 
 :host-context([data-theme='dark']) {
-  .btn-person-sm {
-    background: $surface;
-    border-color: $border-color;
-    color: $text-secondary;
-  }
-
-  .btn-person-sm:hover {
-    color: $text-primary;
-    border-color: $amarillo-macondo;
-    background: rgba(253, 218, 36, 0.12);
-  }
-
   .selection-banner {
     border-color: $border-color;
     background: $surface;
@@ -1406,5 +1328,25 @@
     background: $amarillo-macondo;
     border-color: $amarillo-macondo;
     color: $on-yellow;
+  }
+
+  .section-tabs {
+    background: #3a3836;
+    box-shadow: none;
+  }
+
+  .section-tabs__btn {
+    color: #f4f5f7 !important;
+  }
+
+  .section-tabs__btn:hover {
+    color: #ffffff !important;
+    background: transparent;
+  }
+
+  .section-tabs__btn--active,
+  .section-tabs__btn--active:hover {
+    background: #f4f5f7;
+    color: #2c2a29 !important;
   }
 }

@@ -1037,21 +1037,11 @@
 }
 
 .selected-type__change {
-  @include button-base;
-
-  padding: $space-8 $space-16;
-  min-height: 36px;
-
-  background: $surface;
-  border: 1px solid $border-color;
-  color: $text-primary;
+  @include button-secondary;
 
   font-size: $font-size-sm;
 }
 
-.selected-type__change:hover {
-  border-color: $negro-cib;
-}
 
 .form-section--type-badge {
   display: flex;

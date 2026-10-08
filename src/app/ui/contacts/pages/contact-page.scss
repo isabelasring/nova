@@ -29,28 +29,13 @@
 }
 
 .btn-clear-selection {
-  @include button-base;
-
-  background: transparent;
-  color: $text-secondary;
-  border: 1px solid $border-color;
-  padding: $space-12 $space-16;
-}
-
-.btn-clear-selection:hover {
-  color: $text-primary;
-  border-color: $text-primary;
+  @include button-secondary;
 }
 
 .btn-new-contact {
-  @include button-outline;
+  @include button-primary;
 }
 
-.btn-new-contact:hover {
-  background: $amarillo-macondo;
-  color: $on-yellow;
-  border-color: $amarillo-macondo;
-}
 
 .filters-container {
   display: flex;
@@ -407,15 +392,7 @@
 }
 
 .btn-danger {
-  @include button-base;
-
-  background: #e11d48;
-  border: 1px solid #e11d48;
-  color: $blanco;
-}
-
-.btn-danger:hover {
-  filter: brightness(0.95);
+  @include button-danger;
 }
 
 @media (max-width: 1100px) {

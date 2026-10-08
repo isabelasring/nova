@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { CbButtonComponent }
-from '../../../shared/components/cb-button/cb-button';
+import { BreadcrumbComponent }
+from '../../../shared/components/breadcrumb/breadcrumb';
 
 import {
   STANDBY_POLICY_META,
@@ -16,7 +16,7 @@ import {
 @Component({
   selector: 'app-standby-policies-page',
   standalone: true,
-  imports: [RouterLink, CbButtonComponent],
+  imports: [RouterLink, BreadcrumbComponent],
   templateUrl: './standby-policies-page.html',
   styleUrl: './standby-policies-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

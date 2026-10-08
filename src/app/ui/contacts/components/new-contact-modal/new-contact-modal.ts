@@ -14,9 +14,6 @@ import {
   Validators
 } from '@angular/forms';
 
-import { CbButtonComponent }
-from '../../../shared/components/cb-button/cb-button';
-
 import { PhoneInputComponent }
 from '../../../shared/components/phone-input/phone-input';
 
@@ -36,8 +33,7 @@ from '../../services/contacts-service';
   styleUrl: './new-contact-modal.scss',
   imports: [
     ReactiveFormsModule,
-    PhoneInputComponent,
-    CbButtonComponent
+    PhoneInputComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -78,21 +74,9 @@ export class NewContactModalComponent {
     this.form.getRawValue()
   );
 
-  readonly canSave = computed(() => {
-    const values = this.formSnapshot();
-    const celular = values.celular?.trim() ?? '';
+  readonly formError = signal('');
 
-    return Boolean(
-      values.evc &&
-      values.linea &&
-      values.codigoAplicacion &&
-      values.nombre?.trim() &&
-      celular.length > 4 &&
-      values.correo?.trim() &&
-      values.horario &&
-      this.form.controls.correo.valid
-    );
-  });
+  private wasOpen = false;
 
   readonly evcOptions = [
     ...new Set(this.applications.map(app => app.evc))
@@ -123,15 +107,22 @@ export class NewContactModalComponent {
 
     this.form.valueChanges.subscribe(() => {
       this.formSnapshot.set(this.form.getRawValue());
+      this.formError.set('');
     });
+
+    this.form.controls.codigoAplicacion.valueChanges.subscribe(
+      codigo => this.syncApplication(codigo)
+    );
 
     effect(() => {
 
-      if (!this.visible()) {
-        return;
+      const open = this.visible();
+
+      if (open && !this.wasOpen) {
+        this.resetForm();
       }
 
-      this.resetForm();
+      this.wasOpen = open;
 
     });
 
@@ -160,51 +151,48 @@ export class NewContactModalComponent {
 
   }
 
-  onAppChange(): void {
+  onAppChange(event: Event): void {
 
-    const codigo =
-      this.form.controls.codigoAplicacion.value;
+    const codigo = (event.target as HTMLSelectElement).value;
 
-    const app = this.applications.find(
-      item => item.codigoAplicacion === codigo
-    );
-
-    if (!app) {
-      return;
-    }
-
-    this.form.patchValue({
-      evc: app.evc,
-      linea: app.linea
-    });
+    this.form.controls.codigoAplicacion.setValue(codigo);
+    this.syncApplication(codigo);
 
   }
 
   save(): void {
 
-    if (!this.canSave()) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
     const values = this.form.getRawValue();
-
     const app = this.applications.find(
       item =>
         item.codigoAplicacion === values.codigoAplicacion
     );
 
-    if (!app) {
+    if (app) {
+      this.form.patchValue({
+        evc: app.evc,
+        linea: app.linea
+      }, { emitEvent: false });
+    }
+
+    const ready = this.form.getRawValue();
+
+    if (!app || !this.isReady(ready)) {
+      this.form.markAllAsTouched();
+      this.formSnapshot.set(ready);
+      this.formError.set(
+        'Completa célula, LC, aplicación, nombre, un celular y un correo válido.'
+      );
       return;
     }
 
     this.contactsService.addContact({
       codigoAplicacion: app.codigoAplicacion,
       nombreAplicacion: app.nombreAplicacion,
-      celular: values.celular.trim(),
-      nombre: values.nombre.trim(),
-      correo: values.correo.trim(),
-      horario: values.horario,
+      celular: ready.celular.trim(),
+      nombre: ready.nombre.trim(),
+      correo: ready.correo.trim(),
+      horario: ready.horario,
       bvc: app.bvc,
       ldc: app.ldc,
       celula: app.celula,
@@ -222,6 +210,57 @@ export class NewContactModalComponent {
 
   }
 
+  private syncApplication(codigo: string): void {
+
+    const app = this.applications.find(
+      item => item.codigoAplicacion === codigo
+    );
+
+    if (!app) {
+      return;
+    }
+
+    if (
+      this.form.controls.evc.value === app.evc &&
+      this.form.controls.linea.value === app.linea
+    ) {
+      return;
+    }
+
+    this.form.patchValue({
+      evc: app.evc,
+      linea: app.linea
+    }, { emitEvent: false });
+
+    this.formSnapshot.set(this.form.getRawValue());
+
+  }
+
+  private isReady(values: {
+    evc: string;
+    linea: string;
+    codigoAplicacion: string;
+    nombre: string;
+    celular: string;
+    correo: string;
+    horario: string;
+  }): boolean {
+
+    const digits = (values.celular ?? '').replace(/\D/g, '');
+    const correo = values.correo?.trim() ?? '';
+
+    return Boolean(
+      values.evc &&
+      values.linea &&
+      values.codigoAplicacion &&
+      values.nombre?.trim() &&
+      digits.length >= 7 &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo) &&
+      values.horario
+    );
+
+  }
+
   private resetForm(): void {
 
     this.form.reset({
@@ -235,6 +274,7 @@ export class NewContactModalComponent {
     });
 
     this.formSnapshot.set(this.form.getRawValue());
+    this.formError.set('');
 
   }
 

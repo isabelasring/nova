@@ -13,6 +13,9 @@ from '../../components/standby-view-modal/standby-view-modal';
 import { PortalFilterBarComponent }
 from '../../../shared/components/portal-filter-bar/portal-filter-bar';
 
+import { BreadcrumbComponent }
+from '../../../shared/components/breadcrumb/breadcrumb';
+
 import { StandbyScheduleService }
 from '../../services/standby-schedule-service';
 
@@ -53,7 +56,8 @@ const PERIOD_COLORS: Record<StandbyPeriod, string> = {
   imports: [
     FormsModule,
     StandbyViewModalComponent,
-    PortalFilterBarComponent
+    PortalFilterBarComponent,
+    BreadcrumbComponent
   ],
   templateUrl: './standby-consultation-page.html',
   styleUrl: './standby-consultation-page.scss',

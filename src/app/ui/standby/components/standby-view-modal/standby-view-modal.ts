@@ -9,9 +9,6 @@ import {
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import { CbButtonComponent }
-from '../../../shared/components/cb-button/cb-button';
-
 import { StandbyAssignment }
 from '../../models/standby-assignment-model';
 
@@ -41,7 +38,7 @@ type DetailTab = 'info' | 'standby';
 @Component({
   selector: 'app-standby-view-modal',
   standalone: true,
-  imports: [DatePipe, StandbyMonthViewComponent, CbButtonComponent],
+  imports: [DatePipe, StandbyMonthViewComponent],
   templateUrl: './standby-view-modal.html',
   styleUrl: './standby-view-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

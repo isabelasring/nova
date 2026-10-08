@@ -5,13 +5,9 @@ import {
   output
 } from '@angular/core';
 
-import { CbButtonComponent }
-from '../../../shared/components/cb-button/cb-button';
-
 @Component({
   selector: 'app-standby-alert',
   standalone: true,
-  imports: [CbButtonComponent],
   templateUrl: './standby-alert.html',
   styleUrl: './standby-alert.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

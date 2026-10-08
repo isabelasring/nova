@@ -4,6 +4,8 @@
   [class.standby-page--areas]="isAreasMode"
 >
 
+  <app-breadcrumb [items]="breadcrumbItems()" />
+
   <div class="standby-main">
 
     @if (delegationService.activeOutgoing(); as outgoing) {
@@ -19,14 +21,13 @@
           </p>
         </div>
 
-        <cb-button
-          typeButton="primary"
-          sizeButton="default"
-          width="hug"
+        <button
+          type="button"
+          class="relevo-status__action"
           (click)="revokeHandover()"
         >
           Recuperar programación
-        </cb-button>
+        </button>
 
       </div>
 
@@ -61,22 +62,20 @@
           {{ itemLabel }}(s) listo(s) para programar
         </p>
         <div class="selection-banner__actions">
-          <cb-button
-            typeButton="secondary"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="btn-ghost"
             (click)="cancelSelectionMode()"
           >
             Limpiar selección
-          </cb-button>
-          <cb-button
-            typeButton="primary"
-            sizeButton="default"
-            width="hug"
+          </button>
+          <button
+            type="button"
+            class="btn-add"
             (click)="continueSelection()"
           >
             Continuar programación
-          </cb-button>
+          </button>
         </div>
       </div>
 
@@ -200,14 +199,13 @@
         </div>
 
         <div class="list-toolbar">
-          <cb-button
-            typeButton="secondary"
-            sizeButton="small"
-            width="hug"
+          <button
+            type="button"
+            class="btn-person-sm"
             (click)="openPersonModal()"
           >
             + Agregar persona
-          </cb-button>
+          </button>
         </div>
 
         <div class="standby-board">
@@ -320,14 +318,13 @@
         </div>
 
         <div class="list-toolbar">
-          <cb-button
-            typeButton="secondary"
-            sizeButton="small"
-            width="hug"
+          <button
+            type="button"
+            class="btn-person-sm"
             (click)="openPersonModal()"
           >
             + Agregar persona
-          </cb-button>
+          </button>
         </div>
 
         <div class="select-all-row">
@@ -435,14 +432,13 @@
                 {{ outgoing.toLeader }} programa por ti hasta el
                 {{ formatDelegationDate(outgoing.fechaFin) }}.
               </p>
-              <cb-button
-                typeButton="primary"
-                sizeButton="default"
-                width="hug"
+              <button
+                type="button"
+                class="btn-add"
                 (click)="revokeHandover()"
               >
                 Recuperar programación
-              </cb-button>
+              </button>
             </div>
 
           } @else {
@@ -453,14 +449,13 @@
                 Elige un líder, el motivo y las fechas para transferir
                 temporalmente la programación.
               </p>
-              <cb-button
-                typeButton="primary"
-                sizeButton="default"
-                width="hug"
+              <button
+                type="button"
+                class="btn-add"
                 (click)="openHandoverModal()"
               >
                 Iniciar delegación
-              </cb-button>
+              </button>
             </div>
 
           }
@@ -543,15 +538,14 @@
 
       <div class="standby-panel__footer">
 
-        <cb-button
-          typeButton="primary"
-          sizeButton="default"
-          width="fill"
+        <button
+          type="button"
+          class="btn-add"
           [disabled]="panelApplications.length === 0"
           (click)="openStandbyModal()"
         >
           Continuar programación
-        </cb-button>
+        </button>
 
       </div>
 

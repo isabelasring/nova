@@ -17,8 +17,8 @@ from '../components/contact-modal/contact-modal';
 import { NewContactModalComponent }
 from '../components/new-contact-modal/new-contact-modal';
 
-import { CbButtonComponent }
-from '../../shared/components/cb-button/cb-button';
+import { BreadcrumbComponent }
+from '../../shared/components/breadcrumb/breadcrumb';
 
 import { PhoneInputComponent }
 from '../../shared/components/phone-input/phone-input';
@@ -47,7 +47,7 @@ from '../../shared/services/save-success-service';
     NewContactModalComponent,
     PhoneInputComponent,
     PortalFilterBarComponent,
-    CbButtonComponent
+    BreadcrumbComponent
   ],
   templateUrl: './contact-page.html',
   styleUrl: './contact-page.scss',
@@ -293,6 +293,13 @@ export class ContactsPageComponent {
   openNewContactModal(): void {
 
     this.showNewContactModal.set(true);
+
+  }
+
+  onContactSaved(): void {
+
+    this.searchForm.controls.searchApp.setValue('');
+    this.contactsService.searchApp.set('');
 
   }
 

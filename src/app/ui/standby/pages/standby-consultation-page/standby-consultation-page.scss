@@ -61,21 +61,10 @@
 }
 
 .consulta-search__clear {
-  @include button-base;
-
-  min-height: 40px;
-  padding: $space-8 $space-16;
-
-  background: transparent;
-  border: 1px solid $border-color;
-  color: $text-secondary;
+  @include button-secondary;
   font-size: $font-size-sm;
 }
 
-.consulta-search__clear:hover {
-  border-color: $link-color;
-  color: $link-color;
-}
 
 .consulta-search__meta {
   margin: 0 0 $space-16;

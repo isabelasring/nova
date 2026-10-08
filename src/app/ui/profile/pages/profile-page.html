@@ -1,39 +1,38 @@
 <div class="perfil-page">
 
+  <app-breadcrumb [items]="[{ label: 'Perfil' }]" />
+
   <div class="page-toolbar">
 
     <div class="page-toolbar__actions">
 
       @if (!profileService.editing()) {
 
-        <cb-button
-          typeButton="primary"
-          sizeButton="default"
-          width="hug"
+        <button
+          class="btn-primary"
+          type="button"
           (click)="startEdit()"
         >
           Editar
-        </cb-button>
+        </button>
 
       } @else {
 
-        <cb-button
-          typeButton="secondary"
-          sizeButton="default"
-          width="hug"
+        <button
+          class="btn-outline"
+          type="button"
           (click)="cancelEdit()"
         >
           Cancelar
-        </cb-button>
+        </button>
 
-        <cb-button
-          typeButton="primary"
-          sizeButton="default"
-          width="hug"
+        <button
+          class="btn-save"
+          type="button"
           (click)="saveEdit()"
         >
           Guardar
-        </cb-button>
+        </button>
 
       }
 
@@ -45,9 +44,10 @@
 
     <article class="card identity-card">
 
-      <div class="identity-card__avatar">
-        {{ profileService.profile().initials }}
-      </div>
+      <app-user-avatar
+        class="identity-card__avatar"
+        [size]="112"
+      />
 
       <h2>{{ profileService.profile().nombre }}</h2>
 
@@ -257,29 +257,27 @@
 
             <div class="pager">
 
-              <cb-button
-                typeButton="secondary"
-                sizeButton="small"
-                width="hug"
+              <button
+                type="button"
+                class="pager__btn"
                 [disabled]="proximosPage() <= 1"
                 (click)="previousProximosPage()"
               >
                 ‹
-              </cb-button>
+              </button>
 
               <span class="pager__label">
                 {{ proximosPage() }} / {{ upcomingTotalPages() }}
               </span>
 
-              <cb-button
-                typeButton="secondary"
-                sizeButton="small"
-                width="hug"
+              <button
+                type="button"
+                class="pager__btn"
                 [disabled]="proximosPage() >= upcomingTotalPages()"
                 (click)="nextProximosPage()"
               >
                 ›
-              </cb-button>
+              </button>
 
             </div>
 
@@ -358,29 +356,27 @@
 
             <div class="pager">
 
-              <cb-button
-                typeButton="secondary"
-                sizeButton="small"
-                width="hug"
+              <button
+                type="button"
+                class="pager__btn"
                 [disabled]="historialPage() <= 1"
                 (click)="previousHistorialPage()"
               >
                 ‹
-              </cb-button>
+              </button>
 
               <span class="pager__label">
                 {{ historialPage() }} / {{ historialTotalPages() }}
               </span>
 
-              <cb-button
-                typeButton="secondary"
-                sizeButton="small"
-                width="hug"
+              <button
+                type="button"
+                class="pager__btn"
                 [disabled]="historialPage() >= historialTotalPages()"
                 (click)="nextHistorialPage()"
               >
                 ›
-              </cb-button>
+              </button>
 
             </div>
 

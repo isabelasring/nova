@@ -1,5 +1,7 @@
 <div class="mantenimiento-page">
 
+  <app-breadcrumb [items]="breadcrumbItems()" />
+
   <div class="mantenimiento-main">
 
     @if (viewMode() === 'list') {
@@ -29,15 +31,13 @@
 
           </div>
 
-          <cb-button
-            class="list-toolbar__add"
-            typeButton="primary"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="btn-save list-toolbar__add"
             (click)="openForm()"
           >
             Agregar ventana
-          </cb-button>
+          </button>
 
         </div>
 
@@ -155,14 +155,13 @@
             }
           </p>
           @if (maintenance.windows().length === 0) {
-            <cb-button
-              typeButton="primary"
-              sizeButton="default"
-              width="hug"
+            <button
+              type="button"
+              class="btn-save"
               (click)="openForm()"
             >
               Agregar ventana
-            </cb-button>
+            </button>
           }
         </div>
 
@@ -433,24 +432,22 @@
 
         <div class="edit-modal__footer">
 
-          <cb-button
-            typeButton="secondary"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="btn-secondary"
             (click)="closeEditPanel()"
           >
             Cancelar
-          </cb-button>
+          </button>
 
-          <cb-button
-            typeButton="primary"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="btn-save"
             [disabled]="!canSaveEdit()"
             (click)="saveEdit()"
           >
             Guardar cambios
-          </cb-button>
+          </button>
 
         </div>
 
@@ -623,14 +620,13 @@
                   </strong>
                 </div>
 
-                <cb-button
-                  typeButton="secondary"
-                  sizeButton="small"
-                  width="hug"
+                <button
+                  type="button"
+                  class="selected-type__change"
                   (click)="changeTipoVentana()"
                 >
                   Cambiar
-                </cb-button>
+                </button>
               </div>
 
               @if (isVentanaProgramada()) {
@@ -957,24 +953,22 @@
 
           <footer class="type-modal__footer">
 
-            <cb-button
-              typeButton="secondary"
-              sizeButton="default"
-              width="hug"
+            <button
+              type="button"
+              class="btn-secondary"
               (click)="closeTypeModal()"
             >
               Cancelar
-            </cb-button>
+            </button>
 
-            <cb-button
-              typeButton="primary"
-              sizeButton="default"
-              width="hug"
+            <button
+              type="button"
+              class="btn-save"
               [disabled]="!canSave()"
               (click)="saveMaintenanceWindow()"
             >
               Guardar ventana
-            </cb-button>
+            </button>
 
           </footer>
 

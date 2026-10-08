@@ -4,10 +4,13 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { BreadcrumbComponent }
+from '../../shared/components/breadcrumb/breadcrumb';
+
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, BreadcrumbComponent],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -42,13 +45,6 @@ export class HomePageComponent {
       title: 'Ventanas',
       description:
         'Crea y edita ventanas de mantenimiento, filtra por EVC o línea y da seguimiento a las programadas.'
-    },
-    {
-      path: '/profile',
-      code: 'P',
-      title: 'Mi perfil',
-      description:
-        'Revisa tu información personal, próximos turnos de stand by e historial de asignaciones.'
     }
   ];
 

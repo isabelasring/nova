@@ -5,27 +5,25 @@
 
   <div class="calendar-header">
 
-    <cb-button
-      typeButton="secondary"
-      sizeButton="small"
-      width="hug"
+    <button
+      type="button"
+      class="calendar-nav"
       (click)="previousMonth()"
     >
       ‹
-    </cb-button>
+    </button>
 
     <h3>
       {{ monthLabel }}
     </h3>
 
-    <cb-button
-      typeButton="secondary"
-      sizeButton="small"
-      width="hug"
+    <button
+      type="button"
+      class="calendar-nav"
       (click)="nextMonth()"
     >
       ›
-    </cb-button>
+    </button>
 
   </div>
 

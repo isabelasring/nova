@@ -16,14 +16,13 @@
 
       </div>
 
-      <cb-button
-        typeButton="secondary"
-        sizeButton="small"
-        width="hug"
+      <button
+        class="close-button"
+        type="button"
         (click)="close()"
       >
         ✕
-      </cb-button>
+      </button>
 
     </div>
 
@@ -255,14 +254,13 @@
 
             <div class="footer-actions">
 
-              <cb-button
-                typeButton="primary"
-                sizeButton="default"
-                width="hug"
+              <button
+                type="button"
+                class="btn-primary btn-save"
                 (click)="saveContacto()"
               >
                 Guardar
-              </cb-button>
+              </button>
 
             </div>
 
@@ -292,14 +290,13 @@
 
             <div class="standby-actions">
 
-              <cb-button
-                typeButton="primary"
-                sizeButton="default"
-                width="hug"
+              <button
+                type="button"
+                class="btn-standby"
                 (click)="goToStandby()"
               >
                 Programar Standby
-              </cb-button>
+              </button>
 
             </div>
 
@@ -397,14 +394,13 @@
 
             <div class="maintenance-actions">
 
-              <cb-button
-                typeButton="primary"
-                sizeButton="default"
-                width="hug"
+              <button
+                type="button"
+                class="btn-maintenance"
                 (click)="goToMaintenance()"
               >
                 Programar ventana
-              </cb-button>
+              </button>
 
             </div>
 

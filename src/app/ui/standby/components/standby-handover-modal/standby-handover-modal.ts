@@ -13,9 +13,6 @@ import {
   Validators
 } from '@angular/forms';
 
-import { CbButtonComponent }
-from '../../../shared/components/cb-button/cb-button';
-
 import { CURRENT_USER }
 from '../../../profile/mocks/current-user-mock';
 
@@ -41,7 +38,7 @@ from '../../../shared/utils/avatar-tone-utils';
 @Component({
   selector: 'app-standby-handover-modal',
   standalone: true,
-  imports: [ReactiveFormsModule, CbButtonComponent],
+  imports: [ReactiveFormsModule],
   templateUrl: './standby-handover-modal.html',
   styleUrl: './standby-handover-modal.scss'
 })

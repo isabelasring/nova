@@ -144,19 +144,6 @@
 }
 
 .identity-card__avatar {
-  width: 112px;
-  height: 112px;
-
-  border-radius: 50%;
-
-  background: $amarillo-macondo;
-  color: $text-primary;
-
-  font-size: $font-size-h2;
-  font-weight: $font-weight-bold;
-
-  @include flex-center;
-
   margin-bottom: $space-8;
 }
 
@@ -344,22 +331,25 @@
 }
 
 .pager__btn {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
 
   border: 1px solid $border-color;
-  border-radius: $radius-sm;
+  border-radius: 999px;
   background: $surface;
 
   color: $text-primary;
   font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
 
   cursor: pointer;
   @include flex-center;
 }
 
 .pager__btn:hover:not(:disabled) {
-  border-color: $text-primary;
+  border-color: $violeta-orquidea;
+  color: $violeta-orquidea;
 }
 
 .pager__btn:disabled {

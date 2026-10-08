@@ -153,19 +153,7 @@
 }
 
 .portal-filter__clear {
-  @include button-base;
-
-  min-height: 40px;
-  padding: $space-8 $space-12;
-
-  border: 1px solid $border-color;
-  background: transparent;
-  color: $text-secondary;
+  @include button-secondary;
   font-size: $font-size-sm;
   white-space: nowrap;
-}
-
-.portal-filter__clear:hover {
-  color: $text-primary;
-  border-color: $text-secondary;
 }

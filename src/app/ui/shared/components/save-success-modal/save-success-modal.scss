@@ -1,10 +1,27 @@
-@use '../../../styles/abstracts' as *;
-
-.pu-save-ok {
+:host {
   position: fixed;
   inset: 0;
-  z-index: 5000;
-  @include flex-center;
-  padding: $space-16;
-  box-sizing: border-box;
+  z-index: 80;
+  pointer-events: none;
+}
+
+.notice-scrim {
+  position: absolute;
+  inset: 0;
+
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  background: rgba(17, 24, 39, 0.55);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+:host app-inline-alert {
+  position: absolute;
+  top: 24px;
+  left: calc(var(--content-offset, 260px) + 24px);
+  right: 24px;
+  pointer-events: auto;
 }

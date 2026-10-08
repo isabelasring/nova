@@ -109,25 +109,42 @@
   @include transition;
 }
 
-@mixin button-primary {
-  @include button-base;
+@mixin button-pill {
+  border: 0;
+  border-radius: 999px;
 
-  background: $amarillo-macondo;
-  color: $on-yellow;
+  cursor: pointer;
 
-  &:hover:not(:disabled) {
-    background: $negro-cib;
-    color: $amarillo-macondo;
-  }
+  font-family: $font-family-base;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+
+  min-height: 40px;
+  padding: 10px 22px;
+
+  @include transition;
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.45;
     cursor: not-allowed;
   }
 }
 
+@mixin button-primary {
+  @include button-pill;
+
+  background: $amarillo-macondo;
+  color: #2c2a29;
+
+  &:hover:not(:disabled) {
+    background: #e6c61b;
+    color: #2c2a29;
+  }
+}
+
 @mixin button-secondary {
-  @include button-base;
+  @include button-pill;
 
   background: $surface;
   color: $text-primary;
@@ -140,36 +157,32 @@
 }
 
 @mixin button-outline {
-  @include button-base;
-
-  background: $surface;
-  border: 1px solid $border-color;
-  color: $text-primary;
+  @include button-secondary;
 }
 
 @mixin button-save {
-  @include button-base;
+  @include button-pill;
 
   background: $verde-andino;
-  border: 1px solid $verde-andino;
   color: $blanco;
 
   &:hover:not(:disabled) {
     filter: brightness(0.95);
   }
-
-  &:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
 }
 
 @mixin button-add {
   @include button-primary;
-  border: 1px solid $amarillo-macondo;
+}
+
+@mixin button-danger {
+  @include button-pill;
+
+  background: #e11d48;
+  color: $blanco;
 
   &:hover:not(:disabled) {
-    border-color: $negro-cib;
+    filter: brightness(0.95);
   }
 }
 

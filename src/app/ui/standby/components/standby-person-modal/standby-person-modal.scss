@@ -152,19 +152,7 @@
 }
 
 .btn-cancel {
-  @include button-base;
-
-  min-height: 40px;
-  padding: $space-8 $space-16;
-
-  border: 1px solid $border-color;
-  background: transparent;
-  color: $text-secondary;
-}
-
-.btn-cancel:hover {
-  color: $text-primary;
-  border-color: $text-primary;
+  @include button-secondary;
 }
 
 .btn-save {

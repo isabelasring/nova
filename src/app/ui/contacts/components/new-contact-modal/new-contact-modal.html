@@ -16,14 +16,13 @@
 
       </div>
 
-      <cb-button
-        typeButton="secondary"
-        sizeButton="small"
-        width="hug"
+      <button
+        type="button"
+        class="close-button"
         (click)="close()"
       >
         ✕
-      </cb-button>
+      </button>
 
     </div>
 
@@ -74,7 +73,7 @@
 
         <select
           formControlName="codigoAplicacion"
-          (change)="onAppChange()"
+          (change)="onAppChange($event)"
         >
           <option value="">Seleccione una aplicación</option>
           @for (app of appOptions(); track app.codigoAplicacion) {
@@ -141,24 +140,25 @@
 
     <div class="modal-footer">
 
-      <cb-button
-        typeButton="secondary"
-        sizeButton="default"
-        width="hug"
+      <button
+        type="button"
+        class="btn-secondary"
         (click)="close()"
       >
         Cancelar
-      </cb-button>
+      </button>
 
-      <cb-button
-        typeButton="primary"
-        sizeButton="default"
-        width="hug"
-        [disabled]="!canSave()"
+      <button
+        type="button"
+        class="btn-save"
         (click)="save()"
       >
         Guardar contacto
-      </cb-button>
+      </button>
+
+      @if (formError()) {
+        <p class="form-error">{{ formError() }}</p>
+      }
 
     </div>
 

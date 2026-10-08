@@ -1,9 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 
+export type SaveNoticeTone = 'success' | 'cancelled';
+
 export interface SaveSuccessOptions {
   title?: string;
   message?: string;
   buttonLabel?: string;
+  tone?: SaveNoticeTone;
   onConfirm?: () => void;
 }
 
@@ -20,6 +23,8 @@ export class SaveSuccessService {
 
   readonly buttonLabel = signal('Continuar');
 
+  readonly tone = signal<SaveNoticeTone>('success');
+
   private onConfirm: (() => void) | null = null;
 
   show(
@@ -34,6 +39,7 @@ export class SaveSuccessService {
       this.title.set(title);
       this.message.set(messageOrOptions);
       this.buttonLabel.set('Continuar');
+      this.tone.set('success');
       this.onConfirm = null;
     } else {
       this.title.set(messageOrOptions.title ?? '¡Listo!');
@@ -43,6 +49,7 @@ export class SaveSuccessService {
       this.buttonLabel.set(
         messageOrOptions.buttonLabel ?? 'Continuar'
       );
+      this.tone.set(messageOrOptions.tone ?? 'success');
       this.onConfirm = messageOrOptions.onConfirm ?? null;
     }
 

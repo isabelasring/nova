@@ -107,14 +107,13 @@
               </span>
             </div>
 
-            <cb-button
-              typeButton="secondary"
-              sizeButton="small"
-              width="hug"
+            <button
+              type="button"
+              class="leader-change"
               (click)="clearLeaderSelection()"
             >
               Cambiar líder
-            </cb-button>
+            </button>
           </div>
 
         } @else {
@@ -217,24 +216,22 @@
 
     <footer class="relevo-modal__footer">
 
-      <cb-button
-        typeButton="secondary"
-        sizeButton="default"
-        width="hug"
+      <button
+        type="button"
+        class="btn-secondary"
         (click)="close()"
       >
         Cancelar
-      </cb-button>
+      </button>
 
-      <cb-button
-        typeButton="primary"
-        sizeButton="default"
-        width="hug"
+      <button
+        type="button"
+        class="btn-primary"
         [disabled]="!canSave"
         (click)="save()"
       >
         Confirmar relevo
-      </cb-button>
+      </button>
 
     </footer>
 

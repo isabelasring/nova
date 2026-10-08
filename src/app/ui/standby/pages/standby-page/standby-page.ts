@@ -2,15 +2,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   inject,
   OnInit,
   signal
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
-import { CbButtonComponent }
-from '../../../shared/components/cb-button/cb-button';
 
 import { STANDBY_APPLICATIONS }
 from '../../mocks/standby-applications-mock';
@@ -53,6 +51,9 @@ from '../../../shared/services/save-success-service';
 import { PortalFilterService }
 from '../../../shared/services/portal-filter-service';
 
+import { BreadcrumbComponent, BreadcrumbItem }
+from '../../../shared/components/breadcrumb/breadcrumb';
+
 import { PortalFilterBarComponent }
 from '../../../shared/components/portal-filter-bar/portal-filter-bar';
 
@@ -83,7 +84,7 @@ type StandbyScope = 'tech' | 'areas';
     StandbyHandoverModalComponent,
     StandbyPersonModalComponent,
     PortalFilterBarComponent,
-    CbButtonComponent
+    BreadcrumbComponent
   ],
   templateUrl: './standby-page.html',
   styleUrl: './standby-page.scss',
@@ -101,6 +102,40 @@ export class StandbyPageComponent implements OnInit {
   readonly appSearch = signal('');
 
   readonly panelView = signal<StandbyPanelView>('apps');
+
+  readonly breadcrumbItems = computed<BreadcrumbItem[]>(() => {
+    const areas = this.scope() === 'areas';
+    const scopeLabel = areas ? 'Otras áreas' : 'Tecnología';
+    const scopeLink = areas ? '/standby/other-areas' : '/standby';
+    const view = this.panelView();
+
+    if (view === 'program') {
+      return [
+        { label: 'Stand by', link: scopeLink },
+        { label: scopeLabel, link: scopeLink },
+        { label: 'Programar' }
+      ];
+    }
+
+    if (view === 'policies') {
+      return [
+        { label: 'Stand by', link: scopeLink },
+        { label: 'Políticas' }
+      ];
+    }
+
+    if (view === 'delegate') {
+      return [
+        { label: 'Stand by', link: scopeLink },
+        { label: 'Delegar' }
+      ];
+    }
+
+    return [
+      { label: 'Stand by', link: '/standby' },
+      { label: scopeLabel }
+    ];
+  });
 
   /** tech = TI con apps; areas = otras áreas solo servicios */
   readonly scope = signal<StandbyScope>('tech');

@@ -177,14 +177,13 @@
 
       </div>
 
-      <cb-button
-        typeButton="secondary"
-        sizeButton="small"
-        width="hug"
+      <button
+        type="button"
+        class="close-button"
         (click)="close()"
       >
         ✕
-      </cb-button>
+      </button>
 
     </div>
 
@@ -310,14 +309,13 @@
             Responsable seleccionado:
             {{ selectedUser }}
             · Selecciona un viernes (de las 12:00 a las 12:00 del viernes siguiente)
-            <cb-button
-              typeButton="secondary"
-              sizeButton="small"
-              width="hug"
+            <button
+              type="button"
+              class="link-clear"
               (click)="clearSelectedUser()"
             >
               Quitar responsable
-            </cb-button>
+            </button>
 
           </div>
 
@@ -361,22 +359,20 @@
                 Si la primera persona no contesta, se llama a la siguiente.
               </small>
               <div class="cgm-question__actions">
-                <cb-button
-                  typeButton="primary"
-                  sizeButton="default"
-                  width="hug"
+                <button
+                  type="button"
+                  class="btn-primary"
                   (click)="confirmPriority(true)"
                 >
                   Sí, con prioridad
-                </cb-button>
-                <cb-button
-                  typeButton="secondary"
-                  sizeButton="default"
-                  width="hug"
+                </button>
+                <button
+                  type="button"
+                  class="btn-secondary"
                   (click)="confirmPriority(false)"
                 >
                   No, sin prioridad
-                </cb-button>
+                </button>
               </div>
             </div>
           } @else if (responsablesForSummaryDisplay.length > 0) {
@@ -472,14 +468,14 @@
                 </span>
 
                 @if (showAddPersonOnCalendar) {
-                  <cb-button
-                    typeButton="secondary"
-                    sizeButton="small"
-                    width="hug"
+                  <button
+                    type="button"
+                    class="add-person-btn"
+                    title="Añadir otra persona"
                     (click)="startAddCoResponsable()"
                   >
                     +
-                  </cb-button>
+                  </button>
                 }
               </li>
 
@@ -506,25 +502,23 @@
           }
 
           <div class="summary-actions">
-            <cb-button
-              typeButton="secondary"
-              sizeButton="default"
-              width="hug"
+            <button
+              type="button"
+              class="btn-secondary add-person-link"
               [disabled]="!showAddPersonOnCalendar"
               (click)="startAddCoResponsable()"
             >
               + Añadir otra persona
-            </cb-button>
+            </button>
 
-            <cb-button
-              typeButton="primary"
-              sizeButton="default"
-              width="hug"
+            <button
+              type="button"
+              class="btn-primary accept-button"
               [disabled]="!canAccept"
               (click)="acceptSelection()"
             >
               Aceptar selección
-            </cb-button>
+            </button>
           </div>
 
         </div>
@@ -640,15 +634,14 @@
 
     <div class="modal-footer">
 
-      <cb-button
-        typeButton="primary"
-        sizeButton="default"
-        width="hug"
+      <button
+        type="button"
+        class="btn-primary"
         [disabled]="!canSave"
         (click)="save()"
       >
         Guardar
-      </cb-button>
+      </button>
 
     </div>
 

@@ -1,0 +1,35 @@
+<nav class="breadcrumb" aria-label="Ruta">
+
+  <a
+    class="breadcrumb__home"
+    routerLink="/home"
+    aria-label="Inicio"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1v-8.5z"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </a>
+
+  @for (item of items(); track item.label; let last = $last) {
+
+    <span class="breadcrumb__sep" aria-hidden="true">></span>
+
+    @if (!last && item.link) {
+      <a class="breadcrumb__link" [routerLink]="item.link">
+        {{ item.label }}
+      </a>
+    } @else {
+      <span [class.breadcrumb__current]="last">
+        {{ item.label }}
+      </span>
+    }
+
+  }
+
+</nav>

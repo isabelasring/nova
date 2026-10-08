@@ -24,9 +24,6 @@ from './ui/alerts/pages/alert-page';
 import { MaintenancePageComponent }
 from './ui/maintenance/pages/maintenance-page';
 
-import { ProfilePageComponent }
-from './ui/profile/pages/profile-page';
-
 export const routes: Routes = [
   {
     path: '',
@@ -73,7 +70,7 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        component: ProfilePageComponent
+        redirectTo: 'home'
       }
     ]
   }
