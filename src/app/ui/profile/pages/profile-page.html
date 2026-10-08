@@ -150,23 +150,23 @@
 
       <div class="tabs">
 
-        <cb-button
-          [typeButton]="activeTab() === 'proximos' ? 'primary' : 'secondary'"
-          sizeButton="default"
-          width="hug"
+        <button
+          type="button"
+          class="tab"
+          [class.active]="activeTab() === 'proximos'"
           (click)="selectTab('proximos')"
         >
           Próximos standby ({{ upcomingStandby().length }})
-        </cb-button>
+        </button>
 
-        <cb-button
-          [typeButton]="activeTab() === 'historial' ? 'primary' : 'secondary'"
-          sizeButton="default"
-          width="hug"
+        <button
+          type="button"
+          class="tab"
+          [class.active]="activeTab() === 'historial'"
           (click)="selectTab('historial')"
         >
           Historial ({{ pastStandby().length }})
-        </cb-button>
+        </button>
 
       </div>
 

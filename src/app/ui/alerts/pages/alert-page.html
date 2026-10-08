@@ -71,38 +71,46 @@
   </div>
 
   <div class="alertas-tabs" role="tablist" aria-label="Vista de alertas">
-    <cb-button
-      [typeButton]="alertsService.filterEstado() === 'PROBLEM' ? 'primary' : 'secondary'"
-      sizeButton="default"
-      width="hug"
+    <button
+      type="button"
+      role="tab"
+      class="alertas-tabs__tab"
+      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'PROBLEM'"
+      [attr.aria-selected]="alertsService.filterEstado() === 'PROBLEM'"
       (click)="setFilterEstado('PROBLEM')"
     >
       Activas
-    </cb-button>
-    <cb-button
-      [typeButton]="alertsService.filterEstado() === 'RESOLVED' ? 'primary' : 'secondary'"
-      sizeButton="default"
-      width="hug"
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="alertas-tabs__tab alertas-tabs__tab--resolved"
+      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'RESOLVED'"
+      [attr.aria-selected]="alertsService.filterEstado() === 'RESOLVED'"
       (click)="setFilterEstado('RESOLVED')"
     >
       Resueltas
-    </cb-button>
-    <cb-button
-      [typeButton]="alertsService.filterEstado() === 'ASIGNADAS' ? 'primary' : 'secondary'"
-      sizeButton="default"
-      width="hug"
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="alertas-tabs__tab alertas-tabs__tab--assigned"
+      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'ASIGNADAS'"
+      [attr.aria-selected]="alertsService.filterEstado() === 'ASIGNADAS'"
       (click)="setFilterEstado('ASIGNADAS')"
     >
       Asignadas
-    </cb-button>
-    <cb-button
-      [typeButton]="alertsService.filterEstado() === 'MIAS' ? 'primary' : 'secondary'"
-      sizeButton="default"
-      width="hug"
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="alertas-tabs__tab alertas-tabs__tab--mine"
+      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'MIAS'"
+      [attr.aria-selected]="alertsService.filterEstado() === 'MIAS'"
       (click)="setFilterEstado('MIAS')"
     >
       Asignadas a mí
-    </cb-button>
+    </button>
   </div>
 
   @if (alertsService.filteredAlerts().length === 0) {

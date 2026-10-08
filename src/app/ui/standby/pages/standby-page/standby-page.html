@@ -137,41 +137,41 @@
 
         <nav class="section-tabs" aria-label="Secciones de standby">
 
-          <cb-button
-            [typeButton]="panelView() === 'apps' ? 'primary' : 'secondary'"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="section-tabs__btn"
+            [class.section-tabs__btn--active]="panelView() === 'apps'"
             (click)="setPanelView('apps')"
           >
             Standby
-          </cb-button>
+          </button>
 
-          <cb-button
-            [typeButton]="panelView() === 'program' ? 'primary' : 'secondary'"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="section-tabs__btn"
+            [class.section-tabs__btn--active]="panelView() === 'program'"
             (click)="setPanelView('program')"
           >
             Programar
-          </cb-button>
+          </button>
 
-          <cb-button
-            [typeButton]="panelView() === 'policies' ? 'primary' : 'secondary'"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="section-tabs__btn"
+            [class.section-tabs__btn--active]="panelView() === 'policies'"
             (click)="setPanelView('policies')"
           >
             Políticas
-          </cb-button>
+          </button>
 
-          <cb-button
-            [typeButton]="panelView() === 'delegate' ? 'primary' : 'secondary'"
-            sizeButton="default"
-            width="hug"
+          <button
+            type="button"
+            class="section-tabs__btn"
+            [class.section-tabs__btn--active]="panelView() === 'delegate'"
             (click)="setPanelView('delegate')"
           >
             Delegar
-          </cb-button>
+          </button>
 
         </nav>
 

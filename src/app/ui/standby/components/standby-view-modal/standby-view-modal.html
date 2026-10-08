@@ -74,22 +74,22 @@
       @if (hasRowDetail()) {
 
         <nav class="detail-tabs" aria-label="Detalle del standby">
-          <cb-button
-            [typeButton]="detailTab() === 'info' ? 'primary' : 'secondary'"
-            sizeButton="small"
-            width="hug"
+          <button
+            type="button"
+            class="detail-tabs__btn"
+            [class.detail-tabs__btn--active]="detailTab() === 'info'"
             (click)="setDetailTab('info')"
           >
             Información
-          </cb-button>
-          <cb-button
-            [typeButton]="detailTab() === 'standby' ? 'primary' : 'secondary'"
-            sizeButton="small"
-            width="hug"
+          </button>
+          <button
+            type="button"
+            class="detail-tabs__btn"
+            [class.detail-tabs__btn--active]="detailTab() === 'standby'"
             (click)="setDetailTab('standby')"
           >
             Standby
-          </cb-button>
+          </button>
         </nav>
 
       }

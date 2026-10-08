@@ -29,41 +29,41 @@
 
     <div class="tabs">
 
-      <cb-button
-        [typeButton]="activeTab === 'detalle' ? 'primary' : 'secondary'"
-        sizeButton="small"
-        width="hug"
+      <button
+        type="button"
+        class="tab"
+        [class.active]="activeTab === 'detalle'"
         (click)="selectTab('detalle')"
       >
         Detalle
-      </cb-button>
+      </button>
 
-      <cb-button
-        [typeButton]="activeTab === 'contacto' ? 'primary' : 'secondary'"
-        sizeButton="small"
-        width="hug"
+      <button
+        type="button"
+        class="tab"
+        [class.active]="activeTab === 'contacto'"
         (click)="selectTab('contacto')"
       >
         Contacto
-      </cb-button>
+      </button>
 
-      <cb-button
-        [typeButton]="activeTab === 'standby' ? 'primary' : 'secondary'"
-        sizeButton="small"
-        width="hug"
+      <button
+        type="button"
+        class="tab"
+        [class.active]="activeTab === 'standby'"
         (click)="selectTab('standby')"
       >
         Programación Standby
-      </cb-button>
+      </button>
 
-      <cb-button
-        [typeButton]="activeTab === 'mantenimiento' ? 'primary' : 'secondary'"
-        sizeButton="small"
-        width="hug"
+      <button
+        type="button"
+        class="tab"
+        [class.active]="activeTab === 'mantenimiento'"
         (click)="selectTab('mantenimiento')"
       >
         Ventana de mantenimiento
-      </cb-button>
+      </button>
 
     </div>
 

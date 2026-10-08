@@ -17,22 +17,22 @@
           @if (hasMultipleProducts) {
 
             <div class="program-scope" role="group" aria-label="Alcance de programación">
-              <cb-button
-                [typeButton]="programMode === 'all' ? 'primary' : 'secondary'"
-                sizeButton="small"
-                width="hug"
+              <button
+                type="button"
+                class="program-scope__btn"
+                [class.program-scope__btn--active]="programMode === 'all'"
                 (click)="setProgramMode('all')"
               >
                 Todas juntas
-              </cb-button>
-              <cb-button
-                [typeButton]="programMode === 'single' ? 'primary' : 'secondary'"
-                sizeButton="small"
-                width="hug"
+              </button>
+              <button
+                type="button"
+                class="program-scope__btn"
+                [class.program-scope__btn--active]="programMode === 'single'"
                 (click)="setProgramMode('single')"
               >
                 Una a una
-              </cb-button>
+              </button>
             </div>
 
           }
