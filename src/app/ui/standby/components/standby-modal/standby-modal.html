@@ -17,22 +17,22 @@
           @if (hasMultipleProducts) {
 
             <div class="program-scope" role="group" aria-label="Alcance de programación">
-              <button
-                type="button"
-                class="program-scope__btn"
-                [class.program-scope__btn--active]="programMode === 'all'"
+              <cb-button
+                [typeButton]="programMode === 'all' ? 'primary' : 'secondary'"
+                sizeButton="small"
+                width="hug"
                 (click)="setProgramMode('all')"
               >
                 Todas juntas
-              </button>
-              <button
-                type="button"
-                class="program-scope__btn"
-                [class.program-scope__btn--active]="programMode === 'single'"
+              </cb-button>
+              <cb-button
+                [typeButton]="programMode === 'single' ? 'primary' : 'secondary'"
+                sizeButton="small"
+                width="hug"
                 (click)="setProgramMode('single')"
               >
                 Una a una
-              </button>
+              </cb-button>
             </div>
 
           }
@@ -177,13 +177,14 @@
 
       </div>
 
-      <button
-        type="button"
-        class="close-button"
+      <cb-button
+        typeButton="secondary"
+        sizeButton="small"
+        width="hug"
         (click)="close()"
       >
         ✕
-      </button>
+      </cb-button>
 
     </div>
 
@@ -309,13 +310,14 @@
             Responsable seleccionado:
             {{ selectedUser }}
             · Selecciona un viernes (de las 12:00 a las 12:00 del viernes siguiente)
-            <button
-              type="button"
-              class="link-clear"
+            <cb-button
+              typeButton="secondary"
+              sizeButton="small"
+              width="hug"
               (click)="clearSelectedUser()"
             >
               Quitar responsable
-            </button>
+            </cb-button>
 
           </div>
 
@@ -470,14 +472,14 @@
                 </span>
 
                 @if (showAddPersonOnCalendar) {
-                  <button
-                    type="button"
-                    class="add-person-btn"
-                    title="Añadir otra persona"
+                  <cb-button
+                    typeButton="secondary"
+                    sizeButton="small"
+                    width="hug"
                     (click)="startAddCoResponsable()"
                   >
                     +
-                  </button>
+                  </cb-button>
                 }
               </li>
 

@@ -150,23 +150,23 @@
 
       <div class="tabs">
 
-        <button
-          type="button"
-          class="tab"
-          [class.active]="activeTab() === 'proximos'"
+        <cb-button
+          [typeButton]="activeTab() === 'proximos' ? 'primary' : 'secondary'"
+          sizeButton="default"
+          width="hug"
           (click)="selectTab('proximos')"
         >
           Próximos standby ({{ upcomingStandby().length }})
-        </button>
+        </cb-button>
 
-        <button
-          type="button"
-          class="tab"
-          [class.active]="activeTab() === 'historial'"
+        <cb-button
+          [typeButton]="activeTab() === 'historial' ? 'primary' : 'secondary'"
+          sizeButton="default"
+          width="hug"
           (click)="selectTab('historial')"
         >
           Historial ({{ pastStandby().length }})
-        </button>
+        </cb-button>
 
       </div>
 
@@ -257,27 +257,29 @@
 
             <div class="pager">
 
-              <button
-                type="button"
-                class="pager__btn"
+              <cb-button
+                typeButton="secondary"
+                sizeButton="small"
+                width="hug"
                 [disabled]="proximosPage() <= 1"
                 (click)="previousProximosPage()"
               >
                 ‹
-              </button>
+              </cb-button>
 
               <span class="pager__label">
                 {{ proximosPage() }} / {{ upcomingTotalPages() }}
               </span>
 
-              <button
-                type="button"
-                class="pager__btn"
+              <cb-button
+                typeButton="secondary"
+                sizeButton="small"
+                width="hug"
                 [disabled]="proximosPage() >= upcomingTotalPages()"
                 (click)="nextProximosPage()"
               >
                 ›
-              </button>
+              </cb-button>
 
             </div>
 
@@ -356,27 +358,29 @@
 
             <div class="pager">
 
-              <button
-                type="button"
-                class="pager__btn"
+              <cb-button
+                typeButton="secondary"
+                sizeButton="small"
+                width="hug"
                 [disabled]="historialPage() <= 1"
                 (click)="previousHistorialPage()"
               >
                 ‹
-              </button>
+              </cb-button>
 
               <span class="pager__label">
                 {{ historialPage() }} / {{ historialTotalPages() }}
               </span>
 
-              <button
-                type="button"
-                class="pager__btn"
+              <cb-button
+                typeButton="secondary"
+                sizeButton="small"
+                width="hug"
                 [disabled]="historialPage() >= historialTotalPages()"
                 (click)="nextHistorialPage()"
               >
                 ›
-              </button>
+              </cb-button>
 
             </div>
 

@@ -49,13 +49,14 @@
       <ul>
         @for (section of sections; track section.id) {
           <li>
-            <button
-              type="button"
+            <cb-button
+              typeButton="secondary"
+              sizeButton="small"
+              width="hug"
               (click)="scrollToSection(section.id)"
             >
-              <span>{{ section.number }}</span>
-              {{ section.title }}
-            </button>
+              {{ section.number }} {{ section.title }}
+            </cb-button>
           </li>
         }
       </ul>

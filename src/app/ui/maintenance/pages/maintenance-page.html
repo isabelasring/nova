@@ -622,13 +622,14 @@
                   </strong>
                 </div>
 
-                <button
-                  type="button"
-                  class="selected-type__change"
+                <cb-button
+                  typeButton="secondary"
+                  sizeButton="small"
+                  width="hug"
                   (click)="changeTipoVentana()"
                 >
                   Cambiar
-                </button>
+                </cb-button>
               </div>
 
               @if (isVentanaProgramada()) {

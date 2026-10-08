@@ -19,13 +19,14 @@
           </p>
         </div>
 
-        <button
-          type="button"
-          class="relevo-status__action"
+        <cb-button
+          typeButton="primary"
+          sizeButton="default"
+          width="hug"
           (click)="revokeHandover()"
         >
           Recuperar programación
-        </button>
+        </cb-button>
 
       </div>
 
@@ -136,41 +137,41 @@
 
         <nav class="section-tabs" aria-label="Secciones de standby">
 
-          <button
-            type="button"
-            class="section-tabs__btn"
-            [class.section-tabs__btn--active]="panelView() === 'apps'"
+          <cb-button
+            [typeButton]="panelView() === 'apps' ? 'primary' : 'secondary'"
+            sizeButton="default"
+            width="hug"
             (click)="setPanelView('apps')"
           >
             Standby
-          </button>
+          </cb-button>
 
-          <button
-            type="button"
-            class="section-tabs__btn"
-            [class.section-tabs__btn--active]="panelView() === 'program'"
+          <cb-button
+            [typeButton]="panelView() === 'program' ? 'primary' : 'secondary'"
+            sizeButton="default"
+            width="hug"
             (click)="setPanelView('program')"
           >
             Programar
-          </button>
+          </cb-button>
 
-          <button
-            type="button"
-            class="section-tabs__btn"
-            [class.section-tabs__btn--active]="panelView() === 'policies'"
+          <cb-button
+            [typeButton]="panelView() === 'policies' ? 'primary' : 'secondary'"
+            sizeButton="default"
+            width="hug"
             (click)="setPanelView('policies')"
           >
             Políticas
-          </button>
+          </cb-button>
 
-          <button
-            type="button"
-            class="section-tabs__btn"
-            [class.section-tabs__btn--active]="panelView() === 'delegate'"
+          <cb-button
+            [typeButton]="panelView() === 'delegate' ? 'primary' : 'secondary'"
+            sizeButton="default"
+            width="hug"
             (click)="setPanelView('delegate')"
           >
             Delegar
-          </button>
+          </cb-button>
 
         </nav>
 

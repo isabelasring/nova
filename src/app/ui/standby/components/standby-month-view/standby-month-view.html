@@ -120,19 +120,23 @@
           Total días: {{ totalDays }}
         </span>
 
-        <button
-          class="calendar-nav"
+        <cb-button
+          typeButton="secondary"
+          sizeButton="small"
+          width="hug"
           (click)="previousMonth()"
         >
           ‹
-        </button>
+        </cb-button>
 
-        <button
-          class="calendar-nav"
+        <cb-button
+          typeButton="secondary"
+          sizeButton="small"
+          width="hug"
           (click)="nextMonth()"
         >
           ›
-        </button>
+        </cb-button>
 
       </div>
 

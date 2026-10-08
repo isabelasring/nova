@@ -71,46 +71,38 @@
   </div>
 
   <div class="alertas-tabs" role="tablist" aria-label="Vista de alertas">
-    <button
-      type="button"
-      role="tab"
-      class="alertas-tabs__tab"
-      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'PROBLEM'"
-      [attr.aria-selected]="alertsService.filterEstado() === 'PROBLEM'"
+    <cb-button
+      [typeButton]="alertsService.filterEstado() === 'PROBLEM' ? 'primary' : 'secondary'"
+      sizeButton="default"
+      width="hug"
       (click)="setFilterEstado('PROBLEM')"
     >
       Activas
-    </button>
-    <button
-      type="button"
-      role="tab"
-      class="alertas-tabs__tab alertas-tabs__tab--resolved"
-      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'RESOLVED'"
-      [attr.aria-selected]="alertsService.filterEstado() === 'RESOLVED'"
+    </cb-button>
+    <cb-button
+      [typeButton]="alertsService.filterEstado() === 'RESOLVED' ? 'primary' : 'secondary'"
+      sizeButton="default"
+      width="hug"
       (click)="setFilterEstado('RESOLVED')"
     >
       Resueltas
-    </button>
-    <button
-      type="button"
-      role="tab"
-      class="alertas-tabs__tab alertas-tabs__tab--assigned"
-      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'ASIGNADAS'"
-      [attr.aria-selected]="alertsService.filterEstado() === 'ASIGNADAS'"
+    </cb-button>
+    <cb-button
+      [typeButton]="alertsService.filterEstado() === 'ASIGNADAS' ? 'primary' : 'secondary'"
+      sizeButton="default"
+      width="hug"
       (click)="setFilterEstado('ASIGNADAS')"
     >
       Asignadas
-    </button>
-    <button
-      type="button"
-      role="tab"
-      class="alertas-tabs__tab alertas-tabs__tab--mine"
-      [class.alertas-tabs__tab--active]="alertsService.filterEstado() === 'MIAS'"
-      [attr.aria-selected]="alertsService.filterEstado() === 'MIAS'"
+    </cb-button>
+    <cb-button
+      [typeButton]="alertsService.filterEstado() === 'MIAS' ? 'primary' : 'secondary'"
+      sizeButton="default"
+      width="hug"
       (click)="setFilterEstado('MIAS')"
     >
       Asignadas a mí
-    </button>
+    </cb-button>
   </div>
 
   @if (alertsService.filteredAlerts().length === 0) {

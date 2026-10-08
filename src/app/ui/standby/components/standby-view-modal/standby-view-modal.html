@@ -58,14 +58,14 @@
 
       }
 
-      <button
-        type="button"
-        class="close-button"
+      <cb-button
+        typeButton="secondary"
+        sizeButton="small"
+        width="hug"
         (click)="close()"
-        aria-label="Cerrar"
       >
         ✕
-      </button>
+      </cb-button>
 
     </div>
 
@@ -74,22 +74,22 @@
       @if (hasRowDetail()) {
 
         <nav class="detail-tabs" aria-label="Detalle del standby">
-          <button
-            type="button"
-            class="detail-tabs__btn"
-            [class.detail-tabs__btn--active]="detailTab() === 'info'"
+          <cb-button
+            [typeButton]="detailTab() === 'info' ? 'primary' : 'secondary'"
+            sizeButton="small"
+            width="hug"
             (click)="setDetailTab('info')"
           >
             Información
-          </button>
-          <button
-            type="button"
-            class="detail-tabs__btn"
-            [class.detail-tabs__btn--active]="detailTab() === 'standby'"
+          </cb-button>
+          <cb-button
+            [typeButton]="detailTab() === 'standby' ? 'primary' : 'secondary'"
+            sizeButton="small"
+            width="hug"
             (click)="setDetailTab('standby')"
           >
             Standby
-          </button>
+          </cb-button>
         </nav>
 
       }

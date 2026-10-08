@@ -6,6 +6,9 @@ import {
   output
 } from '@angular/core';
 
+import { CbButtonComponent }
+from '../../../shared/components/cb-button/cb-button';
+
 export interface CalendarDay {
   date: Date;
   dayNumber: number;
@@ -21,6 +24,7 @@ export interface OccupiedRange {
 @Component({
   selector: 'app-standby-calendar',
   standalone: true,
+  imports: [CbButtonComponent],
   templateUrl: './standby-calendar.html',
   styleUrl: './standby-calendar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
