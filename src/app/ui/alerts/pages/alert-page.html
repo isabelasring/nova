@@ -11,12 +11,18 @@
   <div class="list-filters">
 
     <div class="list-toolbar">
-      <input
-        type="search"
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="downloadAlerts()"
+      >
+        Descargar
+      </button>
+      <app-search-field
         class="search-input"
-        placeholder="Buscar por problema, plataforma o código app…"
+        placeholder="Buscar"
         [value]="alertsService.search()"
-        (input)="alertsService.search.set($any($event.target).value)"
+        (valueChange)="alertsService.search.set($event)"
       />
     </div>
 
@@ -24,47 +30,52 @@
 
       <div class="filter-group">
         <span class="filter-group__label">Severidad</span>
-        <div class="filter-links" role="group" aria-label="Severidad">
-          <button
-            type="button"
-            class="filter-link"
-            [class.filter-link--active]="alertsService.filterSeveridad() === ''"
-            (click)="setFilterSeveridad('')"
-          >
-            Todas
-          </button>
-          <button
-            type="button"
-            class="filter-link filter-link--high"
-            [class.filter-link--active]="alertsService.filterSeveridad() === 'High'"
-            (click)="setFilterSeveridad('High')"
-          >
-            High
-          </button>
-          <button
-            type="button"
-            class="filter-link filter-link--medium"
-            [class.filter-link--active]="alertsService.filterSeveridad() === 'Medium'"
-            (click)="setFilterSeveridad('Medium')"
-          >
-            Medium
-          </button>
-          <button
-            type="button"
-            class="filter-link filter-link--low"
-            [class.filter-link--active]="alertsService.filterSeveridad() === 'Low'"
-            (click)="setFilterSeveridad('Low')"
-          >
-            Low
-          </button>
-          <button
-            type="button"
-            class="filter-link filter-link--info"
-            [class.filter-link--active]="alertsService.filterSeveridad() === 'Information'"
-            (click)="setFilterSeveridad('Information')"
-          >
-            Information
-          </button>
+        <div class="choice-list" role="radiogroup" aria-label="Severidad">
+          <label class="choice">
+            <input
+              type="radio"
+              name="severidad"
+              [checked]="alertsService.filterSeveridad() === ''"
+              (change)="setFilterSeveridad('')"
+            />
+            <span>Todas</span>
+          </label>
+          <label class="choice">
+            <input
+              type="radio"
+              name="severidad"
+              [checked]="alertsService.filterSeveridad() === 'High'"
+              (change)="setFilterSeveridad('High')"
+            />
+            <span>High</span>
+          </label>
+          <label class="choice">
+            <input
+              type="radio"
+              name="severidad"
+              [checked]="alertsService.filterSeveridad() === 'Medium'"
+              (change)="setFilterSeveridad('Medium')"
+            />
+            <span>Medium</span>
+          </label>
+          <label class="choice">
+            <input
+              type="radio"
+              name="severidad"
+              [checked]="alertsService.filterSeveridad() === 'Low'"
+              (change)="setFilterSeveridad('Low')"
+            />
+            <span>Low</span>
+          </label>
+          <label class="choice">
+            <input
+              type="radio"
+              name="severidad"
+              [checked]="alertsService.filterSeveridad() === 'Information'"
+              (change)="setFilterSeveridad('Information')"
+            />
+            <span>Information</span>
+          </label>
         </div>
       </div>
 
@@ -81,7 +92,11 @@
       [attr.aria-selected]="alertsService.filterEstado() === 'PROBLEM'"
       (click)="setFilterEstado('PROBLEM')"
     >
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
       Activas
+      @if (alertsService.countVista('PROBLEM'); as total) {
+        <span class="tab-badge">{{ total }}</span>
+      }
     </button>
     <button
       type="button"
@@ -91,7 +106,9 @@
       [attr.aria-selected]="alertsService.filterEstado() === 'RESOLVED'"
       (click)="setFilterEstado('RESOLVED')"
     >
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12.2 10.8 15 16.2 9.2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       Resueltas
+      <span class="tab-dot"></span>
     </button>
     <button
       type="button"
@@ -101,7 +118,11 @@
       [attr.aria-selected]="alertsService.filterEstado() === 'ASIGNADAS'"
       (click)="setFilterEstado('ASIGNADAS')"
     >
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11M9 20v-6h6v6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
       Asignadas
+      @if (alertsService.countVista('ASIGNADAS'); as total) {
+        <span class="tab-badge tab-badge--yellow">{{ total }}</span>
+      }
     </button>
     <button
       type="button"
@@ -111,7 +132,11 @@
       [attr.aria-selected]="alertsService.filterEstado() === 'MIAS'"
       (click)="setFilterEstado('MIAS')"
     >
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 19c1.2-2.6 3.2-3.8 6-3.8S16.8 16.4 18 19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       Asignadas a mí
+      @if (alertsService.countVista('MIAS'); as total) {
+        <span class="tab-badge tab-badge--yellow">{{ total }}</span>
+      }
     </button>
   </div>
 
@@ -154,7 +179,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (alerta of alertsService.filteredAlerts(); track alerta.id) {
+          @for (alerta of pagedAlerts(); track alerta.id) {
             <tr
               class="alertas-table__row"
               [class.alertas-table__row--open]="selectedAlert()?.id === alerta.id"
@@ -212,6 +237,14 @@
         </tbody>
       </table>
     </div>
+
+    <app-pager
+      [page]="listPage()"
+      [pageSize]="listPageSize()"
+      [total]="alertsService.filteredAlerts().length"
+      (pageChange)="listPage.set($event)"
+      (pageSizeChange)="listPageSize.set($event); listPage.set(1)"
+    />
 
   }
 

@@ -26,6 +26,9 @@ from '../../../standby/mocks/standby-applications-mock';
 import { ContactsService }
 from '../../services/contacts-service';
 
+import { OptionSelectComponent }
+from '../../../shared/components/option-select/option-select';
+
 @Component({
   selector: 'app-new-contact-modal',
   standalone: true,
@@ -33,7 +36,8 @@ from '../../services/contacts-service';
   styleUrl: './new-contact-modal.scss',
   imports: [
     ReactiveFormsModule,
-    PhoneInputComponent
+    PhoneInputComponent,
+    OptionSelectComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -103,6 +107,13 @@ export class NewContactModalComponent {
     });
   });
 
+  readonly appChoiceOptions = computed(() =>
+    this.appOptions().map(app => ({
+      value: app.codigoAplicacion,
+      label: `${app.codigoAplicacion} — ${app.nombreAplicacion}`
+    }))
+  );
+
   constructor() {
 
     this.form.valueChanges.subscribe(() => {
@@ -151,11 +162,8 @@ export class NewContactModalComponent {
 
   }
 
-  onAppChange(event: Event): void {
+  onAppChange(codigo: string): void {
 
-    const codigo = (event.target as HTMLSelectElement).value;
-
-    this.form.controls.codigoAplicacion.setValue(codigo);
     this.syncApplication(codigo);
 
   }

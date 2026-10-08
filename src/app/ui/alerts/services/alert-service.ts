@@ -68,6 +68,24 @@ export class AlertsService {
 
   });
 
+  countVista(vista: AlertaVista): number {
+
+    return this.alerts().filter(alerta => {
+
+      if (vista === 'ASIGNADAS') {
+        return Boolean(alerta.asignacion);
+      }
+
+      if (vista === 'MIAS') {
+        return alerta.asignacion?.cgm === CGM_ACTUAL;
+      }
+
+      return alerta.estado === vista;
+
+    }).length;
+
+  }
+
   getById(id: string): Alerta | undefined {
     return this.alertsSource().find(alerta => alerta.id === id);
   }

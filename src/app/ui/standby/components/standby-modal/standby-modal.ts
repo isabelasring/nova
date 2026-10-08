@@ -44,6 +44,9 @@ import { StandbyAlertComponent }
 
 from '../standby-alert/standby-alert';
 
+import { SearchFieldComponent }
+from '../../../shared/components/search-field/search-field';
+
 
 
 import { StandbyApplication }
@@ -114,7 +117,9 @@ interface ProductSelectionState {
 
     StandbyAlertComponent,
 
-    FormsModule
+    FormsModule,
+
+    SearchFieldComponent
 
   ],
 
@@ -170,7 +175,7 @@ export class StandbyModalComponent {
 
   @ViewChild('userSearchInput')
 
-  userSearchInput?: ElementRef<HTMLInputElement>;
+  userSearchInput?: SearchFieldComponent;
 
 
 
@@ -1717,11 +1722,7 @@ export class StandbyModalComponent {
 
       });
 
-      this.userSearchInput?.nativeElement.focus({
-
-        preventScroll: true
-
-      });
+      this.userSearchInput?.focus();
 
     }, 0);
 

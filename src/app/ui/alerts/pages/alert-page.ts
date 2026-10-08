@@ -11,16 +11,25 @@ import { FormsModule } from '@angular/forms';
 import { BreadcrumbComponent }
 from '../../shared/components/breadcrumb/breadcrumb';
 
+import { SearchFieldComponent }
+from '../../shared/components/search-field/search-field';
+
+import { PagerComponent, pageSlice }
+from '../../shared/components/pager/pager';
+
 import { Alerta, AlertaSeveridad, AlertaVista }
 from '../models/alert-model';
 
 import { AlertsService }
 from '../services/alert-service';
 
+import { DownloadTrayService }
+from '../../shared/services/download-tray-service';
+
 @Component({
   selector: 'app-alerts-page',
   standalone: true,
-  imports: [NgClass, FormsModule, BreadcrumbComponent],
+  imports: [NgClass, FormsModule, BreadcrumbComponent, SearchFieldComponent, PagerComponent],
   templateUrl: './alert-page.html',
   styleUrl: './alert-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,6 +37,20 @@ from '../services/alert-service';
 export class AlertsPageComponent {
 
   readonly alertsService = inject(AlertsService);
+
+  readonly listPage = signal(1);
+
+  readonly listPageSize = signal(10);
+
+  readonly pagedAlerts = computed(() =>
+    pageSlice(
+      this.alertsService.filteredAlerts(),
+      this.listPage(),
+      this.listPageSize()
+    )
+  );
+
+  private readonly downloads = inject(DownloadTrayService);
 
   private readonly selectedAlertId = signal<string | undefined>(undefined);
 
@@ -120,6 +143,35 @@ export class AlertsPageComponent {
 
     clearTimeout(this.sheetTimer);
     this.sheetTimer = null;
+  }
+
+  downloadAlerts(): void {
+
+    const rows: string[][] = [[
+      'Hora',
+      'Severidad',
+      'Estado',
+      'Plataforma',
+      'Problema',
+      'Duración'
+    ]];
+
+    for (const alerta of this.alertsService.filteredAlerts()) {
+      rows.push([
+        alerta.hora,
+        alerta.severidad,
+        alerta.estado,
+        alerta.detalle.plataforma,
+        alerta.problema,
+        alerta.duracion
+      ]);
+    }
+
+    this.downloads.enqueue(
+      'alertas.csv',
+      () => DownloadTrayService.csv(rows)
+    );
+
   }
 
   closeComments(): void {

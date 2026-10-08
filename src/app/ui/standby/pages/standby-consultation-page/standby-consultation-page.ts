@@ -16,6 +16,12 @@ from '../../../shared/components/portal-filter-bar/portal-filter-bar';
 import { BreadcrumbComponent }
 from '../../../shared/components/breadcrumb/breadcrumb';
 
+import { SearchFieldComponent }
+from '../../../shared/components/search-field/search-field';
+
+import { PagerComponent, pageSlice }
+from '../../../shared/components/pager/pager';
+
 import { StandbyScheduleService }
 from '../../services/standby-schedule-service';
 
@@ -57,7 +63,9 @@ const PERIOD_COLORS: Record<StandbyPeriod, string> = {
     FormsModule,
     StandbyViewModalComponent,
     PortalFilterBarComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    SearchFieldComponent,
+    PagerComponent
   ],
   templateUrl: './standby-consultation-page.html',
   styleUrl: './standby-consultation-page.scss',
@@ -67,6 +75,18 @@ export class StandbyConsultationPageComponent {
 
   private readonly scheduleService =
     inject(StandbyScheduleService);
+
+  readonly listPage = signal(1);
+
+  readonly listPageSize = signal(10);
+
+  readonly pagedPeople = computed(() =>
+    pageSlice(
+      this.peopleRows(),
+      this.listPage(),
+      this.listPageSize()
+    )
+  );
 
   private readonly portalFilter =
     inject(PortalFilterService);

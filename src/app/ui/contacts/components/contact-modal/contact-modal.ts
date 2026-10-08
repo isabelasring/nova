@@ -22,6 +22,9 @@ from '../../../standby/services/standby-schedule-service';
 import { PhoneInputComponent }
 from '../../../shared/components/phone-input/phone-input';
 
+import { OptionSelectComponent }
+from '../../../shared/components/option-select/option-select';
+
 import { Contact }
 from '../../models/contact-model';
 
@@ -39,7 +42,8 @@ from '../../../shared/services/save-success-service';
   imports: [
     StandbyMonthViewComponent,
     ReactiveFormsModule,
-    PhoneInputComponent
+    PhoneInputComponent,
+    OptionSelectComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

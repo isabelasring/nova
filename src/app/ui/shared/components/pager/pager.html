@@ -1,0 +1,42 @@
+<nav class="pager" aria-label="Paginación">
+
+  <button
+    type="button"
+    class="pager__nav"
+    [disabled]="current() <= 1"
+    (click)="previous()"
+  >
+    Anterior ‹
+  </button>
+
+  <button
+    type="button"
+    class="pager__nav"
+    [disabled]="current() >= pages()"
+    (click)="next()"
+  >
+    › Siguiente
+  </button>
+
+  <label class="pager__size">
+    <select
+      [value]="pageSize()"
+      (change)="changeSize($any($event.target).value)"
+      aria-label="Resultados por página"
+    >
+      @for (size of sizes; track size) {
+        <option [value]="size">{{ size }}</option>
+      }
+    </select>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M7 10l5 5 5-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+      />
+    </svg>
+  </label>
+
+</nav>

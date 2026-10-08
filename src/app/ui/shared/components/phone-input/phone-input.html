@@ -34,12 +34,11 @@
       (click)="$event.stopPropagation()"
     >
 
-      <input
+      <app-search-field
         class="phone-input__search"
-        type="text"
+        placeholder="Buscar país o prefijo"
         [value]="search()"
-        placeholder="Buscar país o prefijo..."
-        (input)="onSearchChange($any($event.target).value)"
+        (valueChange)="onSearchChange($event)"
       />
 
       <div class="phone-input__list">

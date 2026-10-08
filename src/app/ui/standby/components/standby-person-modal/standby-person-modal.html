@@ -66,15 +66,12 @@
               <app-phone-input formControlName="celular" />
             </div>
 
-            <label class="field">
-              <span>Empresa *</span>
-              <select formControlName="empresa">
-                <option value="">Seleccione empresa</option>
-                @for (empresa of empresaOptions; track empresa) {
-                  <option [value]="empresa">{{ empresa }}</option>
-                }
-              </select>
-            </label>
+            <app-option-select
+              formControlName="empresa"
+              label="Empresa"
+              placeholder="Seleccione una opción"
+              [options]="empresaOptions"
+            />
 
           </div>
 

@@ -36,6 +36,9 @@ from '../../shared/components/user-avatar/user-avatar';
 import { BreadcrumbComponent }
 from '../../shared/components/breadcrumb/breadcrumb';
 
+import { PagerComponent }
+from '../../shared/components/pager/pager';
+
 type PerfilTab =
   | 'proximos'
   | 'historial';
@@ -59,7 +62,8 @@ const STANDBY_PERIOD_COLORS: Record<StandbyPeriod, string> = {
     ReactiveFormsModule,
     StandbyMonthViewComponent,
     UserAvatarComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    PagerComponent
   ],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.scss',
@@ -76,7 +80,7 @@ export class ProfilePageComponent {
   private readonly scheduleService =
     inject(StandbyScheduleService);
 
-  readonly pageSize = 2;
+  readonly pageSize = signal(10);
 
   readonly activeTab = signal<PerfilTab>('proximos');
 
@@ -276,11 +280,12 @@ export class ProfilePageComponent {
     page: number
   ): StandbyAssignment[] {
 
-    const start = (page - 1) * this.pageSize;
+    const size = this.pageSize();
+    const start = (page - 1) * size;
 
     return items.slice(
       start,
-      start + this.pageSize
+      start + size
     );
 
   }
@@ -289,7 +294,7 @@ export class ProfilePageComponent {
 
     return Math.max(
       1,
-      Math.ceil(count / this.pageSize)
+      Math.ceil(count / this.pageSize())
     );
 
   }

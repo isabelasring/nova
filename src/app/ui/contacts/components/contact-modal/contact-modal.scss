@@ -70,53 +70,43 @@
 
 .tabs {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   flex-wrap: wrap;
-  gap: $space-8;
-
-  padding: $space-16 $space-24;
-
-  background: $background-body;
+  gap: 8px 18px;
+  padding: 8px 24px 0;
+  background: $surface;
   flex-shrink: 0;
-
-  border-bottom: 1px solid $border-light;
+  border-bottom: 1px solid #e6e6e8;
 }
 
 .tab {
-  border: 2px solid transparent;
-
-  padding: $space-12 $space-20;
-
-  cursor: pointer;
-
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 2px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
   background: transparent;
-  color: $text-secondary;
-
+  color: #2c2a29;
   font-family: $font-family-base;
-  font-size: $font-size-md;
-  font-weight: $font-weight-medium;
-
-  border-radius: $radius-pill;
-
-  @include transition;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .tab:hover {
-  color: $text-primary;
-  background: rgba(253, 218, 36, 0.18);
+  color: #2c2a29;
+  background: transparent;
 }
 
-.tab.active {
-  background: $surface;
-  color: $text-primary !important;
-  font-weight: $font-weight-bold;
-  border: 2px solid $amarillo-macondo;
-}
-
+.tab.active,
 .tab.active:hover {
-  background: $surface;
-  color: $text-primary !important;
-  border-color: $amarillo-macondo;
+  background: transparent;
+  color: #2c2a29 !important;
+  font-weight: 800;
+  border: 0;
+  border-bottom: 3px solid #2c2a29;
 }
 
 .modal-body {

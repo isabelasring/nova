@@ -59,6 +59,14 @@
 
 
       <button
+        class="btn-secondary"
+        type="button"
+        (click)="downloadContacts()"
+      >
+        Descargar
+      </button>
+
+      <button
 
         class="btn-new-contact"
 
@@ -97,17 +105,14 @@
 
     <app-portal-filter-bar />
 
-    <form
-      class="search-container"
-      [class.search-container--expanded]="
-        !!searchForm.controls.searchApp.value?.trim()
-      "
-      [formGroup]="searchForm"
-    >
-      <input
-        type="text"
-        placeholder="Buscar..."
+    <form [formGroup]="searchForm" class="search-form">
+      <app-search-field
+        class="search-container"
+        [class.search-container--expanded]="
+          !!searchForm.controls.searchApp.value?.trim()
+        "
         formControlName="searchApp"
+        placeholder="Buscar"
       />
     </form>
 
@@ -155,7 +160,7 @@
 
 
 
-    @for (contacto of contactsService.filteredContacts(); track contacto.id) {
+    @for (contacto of pagedContacts(); track contacto.id) {
 
 
 
@@ -343,7 +348,13 @@
 
     }
 
-
+    <app-pager
+      [page]="listPage()"
+      [pageSize]="listPageSize()"
+      [total]="contactsService.filteredContacts().length"
+      (pageChange)="listPage.set($event)"
+      (pageSizeChange)="listPageSize.set($event); listPage.set(1)"
+    />
 
   </div>
 

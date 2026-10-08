@@ -1,0 +1,87 @@
+<div class="range-calendar" [class.range-calendar--month]="mode() === 'month'">
+
+  <div class="range-calendar__card">
+
+    <div class="range-calendar__months">
+
+      <section class="month">
+        <header class="month__nav">
+          <button type="button" aria-label="Mes anterior" (click)="shift('left', 'month', -1)">‹</button>
+          <strong>{{ months[left().month] }}</strong>
+          <button type="button" aria-label="Mes siguiente" (click)="shift('left', 'month', 1)">›</button>
+          <button type="button" aria-label="Año anterior" (click)="shift('left', 'year', -1)">‹</button>
+          <strong>{{ left().year }}</strong>
+          <button type="button" aria-label="Año siguiente" (click)="shift('left', 'year', 1)">›</button>
+        </header>
+
+        <div class="month__weekdays">
+          @for (name of weekdays; track name) {
+            <span>{{ name }}</span>
+          }
+        </div>
+
+        <div class="month__days">
+          @for (cell of cells(left()); track cell.key) {
+            <button
+              type="button"
+              [class.is-outside]="cell.outside"
+              [class.is-selected]="isSelected(cell.date)"
+              [class.is-between]="isBetween(cell.date)"
+              (click)="pick(cell.date)"
+            >
+              {{ cell.day }}
+            </button>
+          }
+        </div>
+      </section>
+
+      @if (mode() === 'range') {
+
+        <section class="month">
+          <header class="month__nav">
+            <button type="button" aria-label="Mes anterior" (click)="shift('right', 'month', -1)">‹</button>
+            <strong>{{ months[right().month] }}</strong>
+            <button type="button" aria-label="Mes siguiente" (click)="shift('right', 'month', 1)">›</button>
+            <button type="button" aria-label="Año anterior" (click)="shift('right', 'year', -1)">‹</button>
+            <strong>{{ right().year }}</strong>
+            <button type="button" aria-label="Año siguiente" (click)="shift('right', 'year', 1)">›</button>
+          </header>
+
+          <div class="month__weekdays">
+            @for (name of weekdays; track name) {
+              <span>{{ name }}</span>
+            }
+          </div>
+
+          <div class="month__days">
+            @for (cell of cells(right()); track cell.key) {
+              <button
+                type="button"
+                [class.is-outside]="cell.outside"
+                [class.is-selected]="isSelected(cell.date)"
+                [class.is-between]="isBetween(cell.date)"
+                (click)="pick(cell.date)"
+              >
+                {{ cell.day }}
+              </button>
+            }
+          </div>
+        </section>
+
+      }
+
+    </div>
+
+    <div class="range-calendar__accept">
+      <button type="button" class="btn-accept" (click)="accept()">
+        Aceptar
+      </button>
+    </div>
+
+  </div>
+
+  <button type="button" class="range-calendar__clear" (click)="clear()">
+    Sin selección
+  </button>
+
+</div>

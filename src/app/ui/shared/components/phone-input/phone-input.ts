@@ -19,10 +19,13 @@ import {
   DEFAULT_COUNTRY_ISO
 } from '../../data/country-dial-codes';
 
+import { SearchFieldComponent }
+from '../search-field/search-field';
+
 @Component({
   selector: 'app-phone-input',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SearchFieldComponent],
   templateUrl: './phone-input.html',
   styleUrl: './phone-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

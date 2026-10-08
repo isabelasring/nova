@@ -1,0 +1,239 @@
+@if (tray.visible()) {
+
+  <section class="download-tray" aria-live="polite">
+
+    <header class="download-tray__head">
+
+      <div class="download-tray__title">
+        @if (tray.busy()) {
+          <span class="download-tray__spin" aria-hidden="true"></span>
+        } @else {
+          <span class="download-tray__done" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+        }
+        <strong>{{ tray.title() }}</strong>
+      </div>
+
+      <button
+        type="button"
+        class="download-tray__collapse"
+        (click)="tray.toggleCollapsed()"
+        [attr.aria-expanded]="!tray.collapsed()"
+        [attr.aria-label]="
+          tray.collapsed()
+            ? 'Mostrar descargas'
+            : 'Ocultar descargas'
+        "
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          @if (tray.collapsed()) {
+            <path
+              d="M7 10l5 5 5-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          } @else {
+            <path
+              d="M7 14l5-5 5 5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          }
+        </svg>
+      </button>
+
+    </header>
+
+    @if (!tray.collapsed()) {
+
+      <ul class="download-tray__list">
+
+        @for (job of tray.jobs(); track trackJob($index, job)) {
+
+          <li class="download-item" [attr.data-status]="job.status">
+
+            <span class="download-item__icon" aria-hidden="true">
+              @if (job.status === 'ready') {
+                <svg viewBox="0 0 24 24">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="9"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                  <path
+                    d="M8 12.2 10.8 15 16 9.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              } @else if (job.status === 'error') {
+                <svg viewBox="0 0 24 24">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="9"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                  <path
+                    d="M12 7.5v6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                  />
+                  <circle cx="12" cy="16.5" r="0.9" fill="currentColor" />
+                </svg>
+              } @else {
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M7 3.5h7l4 4V20a1.5 1.5 0 0 1-1.5 1.5h-9.5A1.5 1.5 0 0 1 5.5 20V5A1.5 1.5 0 0 1 7 3.5z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                  <path
+                    d="M14 3.5V8h4.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                </svg>
+              }
+            </span>
+
+            <div class="download-item__body">
+
+              <div class="download-item__line">
+                <span class="download-item__name">
+                  @if (job.status === 'running' || job.status === 'queued') {
+                    Generando {{ job.filename }}
+                  } @else if (job.status === 'ready') {
+                    {{ job.filename }} generado
+                  } @else {
+                    {{ job.filename }}
+                  }
+                </span>
+
+                @if (job.status === 'error') {
+                  <span class="download-item__meta download-item__meta--error">
+                    {{ job.message }}
+                  </span>
+                } @else if (job.status === 'running' || job.status === 'ready') {
+                  <span
+                    class="download-item__meta"
+                    [class.download-item__meta--ready]="job.status === 'ready'"
+                  >
+                    {{ job.progress }}%
+                  </span>
+                }
+              </div>
+
+              <div
+                class="download-item__bar"
+                [attr.data-status]="job.status"
+              >
+                <span [style.width.%]="job.status === 'queued' ? 100 : job.progress"></span>
+              </div>
+
+            </div>
+
+            <div class="download-item__actions">
+
+              @if (job.status === 'error') {
+                <button
+                  type="button"
+                  class="download-item__btn"
+                  (click)="tray.retry(job.id)"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M20 12a8 8 0 1 1-2.3-5.6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M20 5v5h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Reintentar
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  class="download-item__btn"
+                  [disabled]="job.status !== 'ready'"
+                  (click)="tray.saveFile(job)"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M12 4v10m0 0 4-4m-4 4-4-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M5 19h14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Descargar
+                </button>
+              }
+
+              <button
+                type="button"
+                class="download-item__close"
+                (click)="tray.dismiss(job.id)"
+                [attr.aria-label]="'Quitar ' + job.filename"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M7 7l10 10M17 7 7 17"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+
+            </div>
+
+          </li>
+
+        }
+
+      </ul>
+
+    }
+
+  </section>
+
+}

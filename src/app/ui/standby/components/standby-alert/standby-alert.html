@@ -1,25 +1,44 @@
 @if (visible()) {
 
-<div class="alert-backdrop">
+  <div class="alert-backdrop" (click)="close()">
 
-  <div class="alert-container">
-
-    <div class="alert-header">
-
-      <h2>{{ title() }}</h2>
+    <div
+      class="confirm-card"
+      role="alertdialog"
+      (click)="$event.stopPropagation()"
+    >
 
       <button
         type="button"
-        class="close-button"
+        class="confirm-card__close"
+        aria-label="Cerrar"
         (click)="close()"
       >
-        ✕
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M7 7l10 10M17 7 7 17"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+          />
+        </svg>
       </button>
 
-    </div>
+      <span class="confirm-card__badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M7 12.4 10.2 15.6 17 8.6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
 
-    <div class="alert-body">
-
+      <h2>{{ title() }}</h2>
       <p>{{ message() }}</p>
 
       @if (confirmMode()) {
@@ -36,7 +55,7 @@
 
           <button
             type="button"
-            class="btn-corporate"
+            class="btn-primary"
             (click)="confirm()"
           >
             {{ confirmLabel() }}
@@ -44,22 +63,10 @@
 
         </div>
 
-      } @else {
-
-        <button
-          type="button"
-          class="btn-corporate"
-          (click)="close()"
-        >
-          Aceptar
-        </button>
-
       }
 
     </div>
 
   </div>
-
-</div>
 
 }

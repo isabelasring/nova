@@ -8,7 +8,6 @@ import {
   signal
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 
 import { STANDBY_APPLICATIONS }
 from '../../mocks/standby-applications-mock';
@@ -69,6 +68,20 @@ from '../../mocks/standby-person-catalog-mock';
 import { avatarToneForName }
 from '../../../shared/utils/avatar-tone-utils';
 
+import { DownloadTrayService }
+from '../../../shared/services/download-tray-service';
+
+import { SearchFieldComponent }
+from '../../../shared/components/search-field/search-field';
+
+import { PagerComponent, pageSlice }
+from '../../../shared/components/pager/pager';
+
+import {
+  CalendarRange,
+  RangeCalendarComponent
+} from '../../../shared/components/range-calendar/range-calendar';
+
 type StandbyPanelView = 'apps' | 'program' | 'policies' | 'delegate';
 
 type StandbyScope = 'tech' | 'areas';
@@ -77,14 +90,16 @@ type StandbyScope = 'tech' | 'areas';
   selector: 'app-standby-page',
   standalone: true,
   imports: [
-    FormsModule,
     StandbyCardComponent,
     StandbyModalComponent,
     StandbyViewModalComponent,
     StandbyHandoverModalComponent,
     StandbyPersonModalComponent,
     PortalFilterBarComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    SearchFieldComponent,
+    RangeCalendarComponent,
+    PagerComponent
   ],
   templateUrl: './standby-page.html',
   styleUrl: './standby-page.scss',
@@ -97,9 +112,24 @@ export class StandbyPageComponent implements OnInit {
   readonly delegationService = inject(StandbyDelegationService);
   private readonly saveSuccess = inject(SaveSuccessService);
   readonly portalFilter = inject(PortalFilterService);
+  private readonly downloads = inject(DownloadTrayService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   readonly appSearch = signal('');
+
+  readonly listPage = signal(1);
+
+  readonly listPageSize = signal(10);
+
+  readonly downloadOpen = signal(false);
+
+  readonly downloadMode = signal<'range' | 'month'>('range');
+
+  readonly downloadFrom = signal('');
+
+  readonly downloadTo = signal('');
+
+  readonly downloadError = signal('');
 
   readonly panelView = signal<StandbyPanelView>('apps');
 
@@ -486,6 +516,16 @@ export class StandbyPageComponent implements OnInit {
 
   }
 
+  pagedStandbyRows() {
+
+    return pageSlice(
+      this.standbyListRows,
+      this.listPage(),
+      this.listPageSize()
+    );
+
+  }
+
   get standbyListRows() {
 
     this.portalFilter.filters();
@@ -558,6 +598,8 @@ export class StandbyPageComponent implements OnInit {
 
         return {
           id: assignment.id,
+          start: assignment.fechaInicio,
+          end: assignment.fechaFin,
           fechaLabel: this.formatDateRange(
             assignment.fechaInicio,
             assignment.fechaFin
@@ -585,6 +627,100 @@ export class StandbyPageComponent implements OnInit {
       });
 
   }
+
+  openDownload(): void {
+
+    this.downloadError.set('');
+    this.downloadMode.set('range');
+    this.downloadOpen.set(true);
+
+  }
+
+  closeDownload(): void {
+
+    this.downloadOpen.set(false);
+
+  }
+
+  confirmDownload(range: CalendarRange): void {
+
+    this.downloadFrom.set(range.from);
+    this.downloadTo.set(range.to);
+    this.downloadOpen.set(false);
+    this.downloadStandby();
+
+  }
+
+  downloadStandby(): void {
+
+    const from = this.parseIsoDay(this.downloadFrom());
+    const to = this.parseIsoDay(this.downloadTo());
+    let source = this.standbyListRows;
+
+    if (from || to) {
+
+      source = source.filter(row => {
+        const start = this.dayStart(row.start);
+        const end = this.dayStart(row.end);
+
+        if (from && end < from) {
+          return false;
+        }
+
+        if (to && start > to) {
+          return false;
+        }
+
+        return true;
+      });
+
+    } else {
+
+      this.downloadError.set(
+        'Elige un mes o un rango de fechas.'
+      );
+      return;
+
+    }
+
+    if (!source.length) {
+
+      this.downloadError.set('No hay standby en ese rango.');
+      return;
+
+    }
+
+    this.downloadError.set('');
+
+    const rows: string[][] = [[
+      'Fecha',
+      'Nombre',
+      'Aplicación',
+      'BVC',
+      'LdC',
+      'Célula',
+      'Servicio'
+    ]];
+
+    for (const row of source) {
+      rows.push([
+        row.fechaLabel,
+        row.nombre,
+        row.appCodes.join(' '),
+        row.bvc,
+        row.ldc,
+        row.celula,
+        row.service
+      ]);
+    }
+
+    this.downloads.enqueue(
+      'standby.csv',
+      () => DownloadTrayService.csv(rows)
+    );
+
+  }
+
   startAddStandby(): void {
 
     if (this.delegationService.hasDelegatedOut()) {
@@ -647,6 +783,32 @@ export class StandbyPageComponent implements OnInit {
     };
 
     return `${fmt(start)} — ${fmt(end)}`;
+
+  }
+
+  private parseIsoDay(value: string): Date | null {
+
+    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+
+    if (!match) {
+      return null;
+    }
+
+    return new Date(
+      Number(match[1]),
+      Number(match[2]) - 1,
+      Number(match[3])
+    );
+
+  }
+
+  private dayStart(date: Date): Date {
+
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
 
   }
 

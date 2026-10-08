@@ -38,21 +38,14 @@
       (ngSubmit)="save()"
     >
 
-      <div class="field">
-        <label for="relevo-motivo">Motivo</label>
-        <select
-          id="relevo-motivo"
-          formControlName="motivo"
-          (change)="onMotivoChange($event)"
-        >
-          <option value="">Seleccione un motivo</option>
-          @for (reason of reasons; track reason.id) {
-            <option [value]="reason.id">
-              {{ reason.label }}
-            </option>
-          }
-        </select>
-      </div>
+      <app-option-select
+        formControlName="motivo"
+        label="Motivo"
+        placeholder="Seleccione un motivo"
+        hint="Elige el motivo de la delegación"
+        [options]="motivoOptions"
+        (valueChange)="onMotivoChange($event)"
+      />
 
       @if (motivoIsOther()) {
 
@@ -118,13 +111,10 @@
 
         } @else {
 
-          <input
-            id="relevo-buscar"
-            type="text"
-            class="leader-search"
+          <app-search-field
+            placeholder="Buscar"
             [value]="leaderSearch()"
-            placeholder="Buscar por nombre, EVC o línea..."
-            (input)="onLeaderSearch($any($event.target).value)"
+            (valueChange)="onLeaderSearch($event)"
           />
 
           @if (hasLeaderSearch()) {
@@ -170,21 +160,19 @@
 
       <div class="form-grid">
 
-        <div class="field">
+        <div class="field field--date">
           <label for="relevo-desde">Desde</label>
-          <input
-            id="relevo-desde"
-            type="date"
+          <app-date-field
             formControlName="fechaInicio"
+            hint="Selecciona la fecha de inicio"
           />
         </div>
 
-        <div class="field">
-          <label for="relevo-hasta">Hasta</label>
-          <input
-            id="relevo-hasta"
-            type="date"
+        <div class="field field--date">
+          <label>Hasta</label>
+          <app-date-field
             formControlName="fechaFin"
+            hint="Selecciona la fecha de fin"
           />
         </div>
 

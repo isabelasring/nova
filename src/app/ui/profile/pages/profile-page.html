@@ -156,7 +156,11 @@
           [class.active]="activeTab() === 'proximos'"
           (click)="selectTab('proximos')"
         >
-          Próximos standby ({{ upcomingStandby().length }})
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v3M16 5v3M4 10h16M6 6h12a1 1 0 0 1 1 1v12H5V7a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          Próximos
+          @if (upcomingStandby().length) {
+            <span class="tab-badge tab-badge--yellow">{{ upcomingStandby().length }}</span>
+          }
         </button>
 
         <button
@@ -165,7 +169,11 @@
           [class.active]="activeTab() === 'historial'"
           (click)="selectTab('historial')"
         >
-          Historial ({{ pastStandby().length }})
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h8l4 4v12H7V4z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          Historial
+          @if (pastStandby().length) {
+            <span class="tab-badge">{{ pastStandby().length }}</span>
+          }
         </button>
 
       </div>
@@ -253,35 +261,13 @@
 
           </div>
 
-          @if (upcomingStandby().length > pageSize) {
-
-            <div class="pager">
-
-              <button
-                type="button"
-                class="pager__btn"
-                [disabled]="proximosPage() <= 1"
-                (click)="previousProximosPage()"
-              >
-                ‹
-              </button>
-
-              <span class="pager__label">
-                {{ proximosPage() }} / {{ upcomingTotalPages() }}
-              </span>
-
-              <button
-                type="button"
-                class="pager__btn"
-                [disabled]="proximosPage() >= upcomingTotalPages()"
-                (click)="nextProximosPage()"
-              >
-                ›
-              </button>
-
-            </div>
-
-          }
+          <app-pager
+            [page]="proximosPage()"
+            [pageSize]="pageSize()"
+            [total]="upcomingStandby().length"
+            (pageChange)="proximosPage.set($event)"
+            (pageSizeChange)="pageSize.set($event); proximosPage.set(1)"
+          />
 
         }
 
@@ -352,35 +338,13 @@
 
           </div>
 
-          @if (pastStandby().length > pageSize) {
-
-            <div class="pager">
-
-              <button
-                type="button"
-                class="pager__btn"
-                [disabled]="historialPage() <= 1"
-                (click)="previousHistorialPage()"
-              >
-                ‹
-              </button>
-
-              <span class="pager__label">
-                {{ historialPage() }} / {{ historialTotalPages() }}
-              </span>
-
-              <button
-                type="button"
-                class="pager__btn"
-                [disabled]="historialPage() >= historialTotalPages()"
-                (click)="nextHistorialPage()"
-              >
-                ›
-              </button>
-
-            </div>
-
-          }
+          <app-pager
+            [page]="historialPage()"
+            [pageSize]="pageSize()"
+            [total]="pastStandby().length"
+            (pageChange)="historialPage.set($event)"
+            (pageSizeChange)="pageSize.set($event); historialPage.set(1)"
+          />
 
         }
 

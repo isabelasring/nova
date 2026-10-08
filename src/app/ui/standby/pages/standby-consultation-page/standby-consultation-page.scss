@@ -2,7 +2,7 @@
 
 .consulta-page {
   padding: $space-32;
-  min-height: calc(100vh - 32px);
+  min-height: 100%;
 }
 
 .consulta-header {
@@ -41,23 +41,13 @@
 }
 
 .consulta-search__input {
-  @include input-base;
-
-  width: 160px;
+  width: 180px;
   flex: 0 1 auto;
-
-  transition:
-    width 0.28s ease,
-    min-width 0.28s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
 }
 
-.consulta-search__input:focus,
-.consulta-search__input--expanded {
+.consulta-search__input--expanded,
+.consulta-search__input:focus-within {
   width: min(100%, 360px);
-  border-color: $link-color;
-  box-shadow: 0 0 0 3px rgba(0, 153, 216, 0.12);
 }
 
 .consulta-search__clear {
@@ -73,8 +63,15 @@
 }
 
 .consulta-table {
-  @include flex-column;
-  gap: $space-8;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  padding: 16px;
+
+  border: 1px solid #e5e5e7;
+  border-radius: 12px;
+  background: #f3f4f6;
 }
 
 .consulta-row {
@@ -88,35 +85,43 @@
   align-items: center;
 
   width: 100%;
-  padding: $space-16 $space-12;
+  padding: 16px 20px;
 
-  border: 1.5px solid transparent;
-  border-radius: $radius-md;
-  background: $surface;
+  border: 0;
+  border-bottom: 1px solid #ececee;
+  border-radius: 0;
+  background: #ffffff;
 
+  font: inherit;
+  font-weight: 400;
+  color: #2c2a29;
   text-align: left;
   cursor: pointer;
+}
 
-  @include transition;
+.consulta-row:last-child {
+  border-bottom: 0;
+  border-radius: 0 0 12px 12px;
 }
 
 .consulta-row--header {
-  padding: $space-8 $space-12 $space-12;
+  padding: 16px 20px;
 
-  border-bottom: 3px solid $amarillo-macondo;
-  border-radius: 0;
+  border-bottom: 1px solid #ececee;
+  border-radius: 12px 12px 0 0;
+  background: #ffffff;
 
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
-  color: $text-secondary;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2c2a29;
+  text-transform: none;
+  letter-spacing: 0;
   cursor: default;
 }
 
 .consulta-row:not(.consulta-row--header):hover {
-  background: $background-body;
-  border-color: rgba(0, 153, 216, 0.18);
+  background: #fafafa;
+  border-color: transparent;
 }
 
 .consulta-row__person {
@@ -145,8 +150,8 @@
 
 .consulta-row__person strong {
   font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
-  color: $text-primary;
+  font-weight: 400;
+  color: #2c2a29;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -207,10 +212,35 @@
 }
 
 .consulta-table__empty {
-  padding: $space-32;
+  padding: 24px;
   text-align: center;
   font-size: $font-size-sm;
-  color: $text-secondary;
+  color: #6b7280;
+  background: #ffffff;
+  border-radius: 0 0 12px 12px;
+}
+
+:host-context([data-theme='dark']) {
+  .consulta-table {
+    background: #2a2826;
+    border-color: #3f3d3b;
+  }
+
+  .consulta-row,
+  .consulta-row--header,
+  .consulta-table__empty {
+    background: #343230;
+    color: #f4f5f7;
+    border-bottom-color: #4a4745;
+  }
+
+  .consulta-row:not(.consulta-row--header):hover {
+    background: #3d3b39;
+  }
+
+  .consulta-row__person strong {
+    color: #f4f5f7;
+  }
 }
 
 @media (max-width: 960px) {

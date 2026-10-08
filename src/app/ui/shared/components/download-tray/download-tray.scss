@@ -1,0 +1,281 @@
+:host {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 70;
+  width: min(560px, calc(100vw - 48px));
+  pointer-events: none;
+}
+
+.download-tray {
+  pointer-events: auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow:
+    0 12px 40px rgba(44, 42, 41, 0.16),
+    0 0 0 1px rgba(44, 42, 41, 0.04);
+  padding: 8px 8px 12px;
+}
+
+.download-tray__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 8px 4px 12px;
+}
+
+.download-tray__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+
+  strong {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2c2a29;
+  }
+}
+
+.download-tray__spin {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d9d9d9;
+  border-top-color: #2c2a29;
+  border-radius: 50%;
+  animation: download-spin 0.8s linear infinite;
+}
+
+.download-tray__done {
+  width: 18px;
+  height: 18px;
+  color: #1faf6e;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
+}
+
+.download-tray__collapse {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #2c2a29;
+  cursor: pointer;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.download-tray__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.download-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 8px;
+}
+
+.download-item__icon {
+  width: 24px;
+  height: 24px;
+  color: #2c2a29;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+}
+
+.download-item[data-status='error'] .download-item__icon {
+  color: #e11d48;
+}
+
+.download-item[data-status='ready'] .download-item__icon {
+  color: #1faf6e;
+}
+
+.download-item__line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.download-item__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c2a29;
+}
+
+.download-item__meta {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2c2a29;
+}
+
+.download-item__meta--ready {
+  color: #1faf6e;
+}
+
+.download-item__meta--error {
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #e11d48;
+  font-weight: 500;
+}
+
+.download-item__bar {
+  height: 4px;
+  border-radius: 999px;
+  background: #2c2a29;
+  overflow: hidden;
+}
+
+.download-item__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #f5c400;
+}
+
+.download-item__bar[data-status='ready'] {
+  background: #1faf6e;
+}
+
+.download-item__bar[data-status='ready'] span {
+  background: #1faf6e;
+}
+
+.download-item__bar[data-status='error'] {
+  background: #e11d48;
+}
+
+.download-item__bar[data-status='error'] span {
+  background: #e11d48;
+}
+
+.download-item__bar[data-status='queued'] {
+  background: #d9d9d9;
+}
+
+.download-item__bar[data-status='queued'] span {
+  background: #d9d9d9;
+}
+
+.download-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.download-item__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+
+  border: 1px solid #d7d7d7;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #2c2a29 !important;
+
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.download-item__btn:disabled {
+  border-color: transparent;
+  background: #ececee;
+  color: #9a9a9a !important;
+  cursor: not-allowed;
+}
+
+.download-item__close {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e4e4e4;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #2c2a29;
+  cursor: pointer;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@keyframes download-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+:host-context([data-theme='dark']) {
+  .download-tray {
+    background: #2c2a29;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .download-tray__title strong,
+  .download-item__name,
+  .download-item__meta,
+  .download-tray__collapse,
+  .download-item__icon,
+  .download-item__close {
+    color: #f4f5f7;
+  }
+
+  .download-item__btn,
+  .download-item__close {
+    background: #3a3836;
+    border-color: #5a5754;
+    color: #f4f5f7 !important;
+  }
+
+  .download-item__btn:disabled {
+    background: #4a4745;
+    color: #b0aaa4 !important;
+  }
+
+  .download-item__bar[data-status='running'] {
+    background: #11100f;
+  }
+
+  .download-item__bar[data-status='running'] span {
+    background: #f5c400;
+  }
+}

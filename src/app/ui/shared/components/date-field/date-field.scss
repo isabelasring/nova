@@ -1,0 +1,131 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.date-field__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.date-box {
+  flex: 1 1 150px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 68px;
+  margin: 0;
+  padding: 10px 14px;
+
+  border: 1px solid #d5d5d5;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #2c2a29;
+  cursor: text;
+}
+
+.date-box:focus-within {
+  border-color: #2c2a29;
+}
+
+.date-box__icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  color: #2c2a29;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+  }
+}
+
+.date-box__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.date-box__label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #6b7280;
+}
+
+.date-box__value,
+.date-box__month select {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+
+  border: 0 !important;
+  border-radius: 0;
+  outline: none;
+  box-shadow: none !important;
+  background: transparent !important;
+
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #2c2a29 !important;
+}
+
+.date-box__value::placeholder {
+  color: #2c2a29;
+  font-weight: 700;
+  opacity: 1;
+}
+
+.date-box__month {
+  position: relative;
+  display: block;
+}
+
+.date-box__month select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 18px !important;
+}
+
+.date-box__month svg {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.date-field__hint {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+:host-context([data-theme='dark']) {
+  .date-box {
+    background: #343230;
+    border-color: #5a5754;
+    color: #f4f5f7;
+  }
+
+  .date-box__icon,
+  .date-box__value,
+  .date-box__month select,
+  .date-box__value::placeholder {
+    color: #f4f5f7 !important;
+  }
+
+  .date-box__label,
+  .date-field__hint {
+    color: #c4bfb9;
+  }
+}

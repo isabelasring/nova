@@ -32,13 +32,27 @@ from '../../services/standby-delegation-service';
 import { SaveSuccessService }
 from '../../../shared/services/save-success-service';
 
+import { DateFieldComponent }
+from '../../../shared/components/date-field/date-field';
+
+import { SearchFieldComponent }
+from '../../../shared/components/search-field/search-field';
+
+import { OptionSelectComponent }
+from '../../../shared/components/option-select/option-select';
+
 import { avatarToneForName }
 from '../../../shared/utils/avatar-tone-utils';
 
 @Component({
   selector: 'app-standby-handover-modal',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    DateFieldComponent,
+    SearchFieldComponent,
+    OptionSelectComponent
+  ],
   templateUrl: './standby-handover-modal.html',
   styleUrl: './standby-handover-modal.scss'
 })
@@ -61,6 +75,11 @@ export class StandbyHandoverModalComponent {
   readonly owner = CURRENT_USER;
 
   readonly reasons = STANDBY_DELEGATION_REASONS;
+
+  readonly motivoOptions = this.reasons.map(reason => ({
+    value: reason.id,
+    label: reason.label
+  }));
 
   readonly allLeaders = STANDBY_LEADER_PEERS.filter(
     leader => leader.nombre !== CURRENT_USER.nombre
@@ -141,10 +160,7 @@ export class StandbyHandoverModalComponent {
     return avatarToneForName(name);
   }
 
-  onMotivoChange(event: Event): void {
-
-    const value =
-      (event.target as HTMLSelectElement).value;
+  onMotivoChange(value: string): void {
 
     this.motivoIsOther.set(value === 'otro');
     this.syncNotaValidators(value === 'otro');

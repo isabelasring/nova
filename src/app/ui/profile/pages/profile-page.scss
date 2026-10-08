@@ -198,41 +198,36 @@
 
 .tabs {
   display: flex;
-  gap: $space-24;
-
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 8px 20px;
   margin-bottom: $space-20;
-
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid #e6e6e8;
 }
 
 .tab {
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-bottom: 3px solid transparent;
   background: transparent;
-
-  padding: 0 0 $space-12;
-
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  color: $text-secondary;
-
+  padding: 8px 2px 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2c2a29;
   cursor: pointer;
-  position: relative;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .tab.active {
-  color: $text-primary;
-  font-weight: $font-weight-semibold;
-}
-
-.tab.active::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 3px;
-  background: $amarillo-macondo;
-  border-radius: 2px;
+  color: #2c2a29;
+  font-weight: 800;
+  border-bottom-color: #2c2a29;
 }
 
 .visit-list {
@@ -283,25 +278,38 @@
 }
 
 .status-pill {
-  @include badge;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 8px;
+  border-radius: 999px;
+  background: #d7eef8;
+  color: #1a6f8a;
+  font-size: 13px;
+  font-weight: 600;
 
-  background: rgba(253, 218, 36, 0.35);
-  color: $text-primary;
+  &::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm6 1.5V9h4.5'/></svg>") center / contain no-repeat;
+  }
 }
 
 .status-pill--past {
-  background: rgba(156, 163, 175, 0.35);
-  color: $text-secondary;
+  background: #ececee;
+  color: #5c5854;
 }
 
 .status-pill--current {
-  background: rgba(0, 195, 137, 0.25);
-  color: $verde-andino;
+  background: #d8f5e6;
+  color: #0f7a45;
 }
 
 .status-pill--next {
-  background: rgba(89, 203, 235, 0.3);
-  color: #1a7a96;
+  background: #ffe8a3;
+  color: #8a5a00;
 }
 
 .status-pill--muted {

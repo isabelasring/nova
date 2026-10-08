@@ -149,13 +149,13 @@
 
               <div class="field">
 
-                <label>LISTA DE DISTRIBUCIÓN</label>
-
-                <select [disabled]="!canEditContactoTab">
-                  <option>
-                    {{ contacto()?.correo || '—' }}
-                  </option>
-                </select>
+                <app-option-select
+                  label="Lista de distribución"
+                  placeholder="Seleccione una opción"
+                  [disabled]="!canEditContactoTab"
+                  [value]="contacto()?.correo || ''"
+                  [options]="contacto()?.correo ? [contacto()!.correo] : []"
+                />
 
               </div>
 
@@ -186,13 +186,13 @@
 
               <div class="field">
 
-                <label>LISTA DE DISTRIBUCIÓN</label>
-
-                <select [disabled]="!canEditContactoTab">
-                  <option>
-                    {{ contacto()?.correo || '—' }}
-                  </option>
-                </select>
+                <app-option-select
+                  label="Lista de distribución"
+                  placeholder="Seleccione una opción"
+                  [disabled]="!canEditContactoTab"
+                  [value]="contacto()?.correo || ''"
+                  [options]="contacto()?.correo ? [contacto()!.correo] : []"
+                />
 
               </div>
 
@@ -223,13 +223,13 @@
 
               <div class="field">
 
-                <label>LISTA DE DISTRIBUCIÓN</label>
-
-                <select [disabled]="!canEditContactoTab">
-                  <option>
-                    {{ contacto()?.correo || '—' }}
-                  </option>
-                </select>
+                <app-option-select
+                  label="Lista de distribución"
+                  placeholder="Seleccione una opción"
+                  [disabled]="!canEditContactoTab"
+                  [value]="contacto()?.correo || ''"
+                  [options]="contacto()?.correo ? [contacto()!.correo] : []"
+                />
 
               </div>
 

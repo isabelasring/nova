@@ -25,16 +25,14 @@
 
       <app-portal-filter-bar />
 
-      <input
-        id="person-search"
-        type="search"
+      <app-search-field
         class="consulta-search__input"
         [class.consulta-search__input--expanded]="
           searchTerm().trim().length > 0
         "
-        placeholder="Buscar..."
-        [ngModel]="searchTerm()"
-        (ngModelChange)="onSearchChange($event)"
+        placeholder="Buscar"
+        [value]="searchTerm()"
+        (valueChange)="onSearchChange($event)"
       />
 
       @if (searchTerm()) {
@@ -66,7 +64,7 @@
         <div>Estado / próximo standby</div>
       </div>
 
-      @for (row of peopleRows(); track row.name) {
+      @for (row of pagedPeople(); track row.name) {
         <button
           type="button"
           class="consulta-row"
@@ -106,6 +104,14 @@
       }
 
     </div>
+
+    <app-pager
+      [page]="listPage()"
+      [pageSize]="listPageSize()"
+      [total]="peopleRows().length"
+      (pageChange)="listPage.set($event)"
+      (pageSizeChange)="listPageSize.set($event); listPage.set(1)"
+    />
 
   </section>
 

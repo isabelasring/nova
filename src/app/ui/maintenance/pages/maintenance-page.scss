@@ -85,25 +85,21 @@
 .list-filters > .filters-grid select,
 .list-filters > .filters-grid input,
 .list-toolbar .filters-grid select,
-.list-toolbar .filters-grid input,
-.filters-grid__search {
+.list-toolbar .filters-grid input {
   @include input-base;
 
   width: 160px;
   flex: 0 1 auto;
-
-  transition:
-    width 0.28s ease,
-    min-width 0.28s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
 }
 
-.filters-grid__search:focus,
-.filters-grid__search--expanded {
+.filters-grid__search {
+  width: 180px;
+  flex: 0 1 auto;
+}
+
+.filters-grid__search--expanded,
+.filters-grid__search:focus-within {
   width: min(100%, 360px);
-  border-color: $link-color;
-  box-shadow: 0 0 0 3px rgba(0, 153, 216, 0.12);
 }
 
 .filter-toolbar {
@@ -133,34 +129,38 @@
 }
 
 .filter-tabs {
-  display: inline-flex;
-  align-items: stretch;
-  gap: 0;
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 8px 20px;
 
-  border: 1px solid $border-color;
-  border-radius: $radius-sm;
-  background: $surface;
-  overflow: hidden;
+  border: 0;
+  border-bottom: 1px solid #e6e6e8;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
 }
 
 .filter-tab {
-  @include button-base;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 
   position: relative;
-
   margin: 0;
-  padding: $space-8 $space-16;
-  min-height: 36px;
+  padding: 8px 2px 10px;
+  min-height: 44px;
 
-  border: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
   border-radius: 0;
-  border-right: 1px solid $border-light;
   background: transparent;
 
-  color: $text-secondary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
+  color: #2c2a29;
+  font-size: 15px;
+  font-weight: 600;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .filter-tab:last-child {
@@ -168,28 +168,25 @@
 }
 
 .filter-tab:hover {
-  color: $text-primary;
-  background: $background-body;
+  color: #2c2a29;
+  background: transparent;
 }
 
-.filter-tab--active {
-  color: $text-primary;
-  font-weight: $font-weight-semibold;
-  background: $background-body;
-}
-
-.filter-tab--todos.filter-tab--active {
-  box-shadow: inset 0 -2px 0 #9ca3af;
-}
-
+.filter-tab--active,
+.filter-tab--todos.filter-tab--active,
 .filter-tab--programada.filter-tab--active {
-  color: $link-color;
-  box-shadow: inset 0 -2px 0 $link-color;
+  color: #2c2a29;
+  font-weight: 800;
+  background: transparent;
+  border-bottom-color: #2c2a29;
+  box-shadow: none;
 }
 
 .filter-tab--promesa.filter-tab--active {
-  color: $violeta-orquidea;
-  box-shadow: inset 0 -2px 0 $violeta-orquidea;
+  color: #2c2a29;
+  background: transparent;
+  border-bottom-color: #2c2a29;
+  box-shadow: none;
 }
 
 .filter-links {
@@ -339,15 +336,30 @@
 }
 
 .tipo-label {
-  font-size: 11px;
-  font-weight: $font-weight-semibold;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: $link-color;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 8px;
+  border-radius: 999px;
+  background: #d7eef8;
+  color: #1a6f8a;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+
+  &::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm6 1.5V9h4.5'/></svg>") center / contain no-repeat;
+  }
 }
 
 .tipo-label--promesa {
-  color: $violeta-orquidea;
+  color: #5b3d8a;
+  background: #eadcff;
 }
 
 .window-tile__dot {
@@ -360,19 +372,20 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-
-  font-size: $font-size-xs;
-  font-weight: $font-weight-medium;
-  color: $text-secondary;
+  padding: 4px 12px 4px 8px;
+  border-radius: 999px;
+  background: #d8f5e6;
+  color: #0f7a45;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .status-label::before {
   content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
+  width: 16px;
+  height: 16px;
   background: currentColor;
-  flex-shrink: 0;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm6 1.5V9h4.5'/></svg>") center / contain no-repeat;
 }
 
 .status-label.status--scheduled {
@@ -1080,7 +1093,8 @@
   gap: $space-20;
 }
 
-.field--full {
+.field--full,
+.field--date {
   grid-column: 1 / -1;
 }
 
@@ -1354,7 +1368,6 @@
   .filter-tab {
     flex: 1 1 auto;
     border-right: none;
-    border-bottom: 1px solid $border-light;
   }
 
   .list-toolbar {

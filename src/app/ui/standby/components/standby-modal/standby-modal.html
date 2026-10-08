@@ -102,16 +102,15 @@
 
               @if (showAddAppMenu) {
                 <div class="add-app__menu" role="listbox">
-                  <input
-                    type="search"
+                  <app-search-field
                     class="add-app__search"
                     [placeholder]="
                       serviceMode()
-                        ? 'Buscar servicio...'
-                        : 'Buscar aplicación...'
+                        ? 'Buscar servicio'
+                        : 'Buscar aplicación'
                     "
-                    [ngModel]="addAppSearch"
-                    (ngModelChange)="addAppSearch = $event"
+                    [value]="addAppSearch"
+                    (valueChange)="addAppSearch = $event"
                   />
 
                   <div class="add-app__list">
@@ -229,13 +228,12 @@
 
         }
 
-        <input
+        <app-search-field
           #userSearchInput
           class="user-search"
-          type="text"
-          placeholder="Buscar contacto..."
-          [(ngModel)]="userSearch"
-          name="userSearch"
+          placeholder="Buscar contacto"
+          [value]="userSearch"
+          (valueChange)="userSearch = $event"
         />
 
         <div class="users-list">
@@ -358,21 +356,23 @@
               <small>
                 Si la primera persona no contesta, se llama a la siguiente.
               </small>
-              <div class="cgm-question__actions">
-                <button
-                  type="button"
-                  class="btn-primary"
-                  (click)="confirmPriority(true)"
-                >
-                  Sí, con prioridad
-                </button>
-                <button
-                  type="button"
-                  class="btn-secondary"
-                  (click)="confirmPriority(false)"
-                >
-                  No, sin prioridad
-                </button>
+              <div class="choice-list" role="radiogroup" aria-label="Prioridad de llamada">
+                <label class="choice">
+                  <input
+                    type="radio"
+                    name="prioridad-llamada"
+                    (change)="confirmPriority(true)"
+                  />
+                  <span>Sí, con prioridad</span>
+                </label>
+                <label class="choice">
+                  <input
+                    type="radio"
+                    name="prioridad-llamada"
+                    (change)="confirmPriority(false)"
+                  />
+                  <span>No, sin prioridad</span>
+                </label>
               </div>
             </div>
           } @else if (responsablesForSummaryDisplay.length > 0) {

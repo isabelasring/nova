@@ -7,13 +7,17 @@ import { SidebarComponent } from '../sidebar/sidebar';
 import { SaveSuccessModalComponent }
 from '../../shared/components/save-success-modal/save-success-modal';
 
+import { DownloadTrayComponent }
+from '../../shared/components/download-tray/download-tray';
+
 @Component({
   selector: 'app-main-layout',
   standalone: true,
   imports: [
     RouterOutlet,
     SidebarComponent,
-    SaveSuccessModalComponent
+    SaveSuccessModalComponent,
+    DownloadTrayComponent
   ],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss',

@@ -39,6 +39,21 @@ from '../../shared/components/portal-filter-bar/portal-filter-bar';
 import { BreadcrumbComponent, BreadcrumbItem }
 from '../../shared/components/breadcrumb/breadcrumb';
 
+import { DateFieldComponent }
+from '../../shared/components/date-field/date-field';
+
+import { SearchFieldComponent }
+from '../../shared/components/search-field/search-field';
+
+import { OptionSelectComponent }
+from '../../shared/components/option-select/option-select';
+
+import { PagerComponent, pageSlice }
+from '../../shared/components/pager/pager';
+
+import { DownloadTrayService }
+from '../../shared/services/download-tray-service';
+
 @Component({
   selector: 'app-maintenance-page',
   standalone: true,
@@ -46,7 +61,11 @@ from '../../shared/components/breadcrumb/breadcrumb';
     ReactiveFormsModule,
     NgClass,
     PortalFilterBarComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    DateFieldComponent,
+    SearchFieldComponent,
+    OptionSelectComponent,
+    PagerComponent
   ],
   templateUrl: './maintenance-page.html',
   styleUrl: './maintenance-page.scss',
@@ -58,9 +77,23 @@ export class MaintenancePageComponent {
 
   readonly maintenance = inject(MaintenanceService);
 
+  readonly listPage = signal(1);
+
+  readonly listPageSize = signal(10);
+
+  readonly pagedWindows = computed(() =>
+    pageSlice(
+      this.displayWindows(),
+      this.listPage(),
+      this.listPageSize()
+    )
+  );
+
   private readonly saveSuccess = inject(SaveSuccessService);
 
   private readonly portalFilter = inject(PortalFilterService);
+
+  private readonly downloads = inject(DownloadTrayService);
 
   readonly applications: StandbyApplication[] =
     STANDBY_APPLICATIONS.map(app => ({ ...app }));
@@ -408,6 +441,37 @@ export class MaintenancePageComponent {
 
   }
 
+  downloadWindows(): void {
+
+    const rows: string[][] = [[
+      'Aplicación',
+      'Nombre',
+      'Inicio',
+      'Fin',
+      'Estado',
+      'Frecuencia',
+      'Célula'
+    ]];
+
+    for (const window of this.displayWindows()) {
+      rows.push([
+        window.aplicacion,
+        window.nombreAplicacion,
+        window.fechaInicio,
+        window.fechaFin,
+        window.estado,
+        window.frecuencia,
+        window.celula
+      ]);
+    }
+
+    this.downloads.enqueue(
+      'ventanas.csv',
+      () => DownloadTrayService.csv(rows)
+    );
+
+  }
+
   isPromesa(window: MaintenanceWindow): boolean {
 
     return window.tipo === 'Promesa de servicio';
@@ -460,8 +524,12 @@ export class MaintenancePageComponent {
     this.maintenance.updateWindow(window.id, {
       estado: values.estado ?? window.estado,
       frecuencia: values.frecuencia ?? window.frecuencia,
-      fechaInicio: values.fechaInicio ?? window.fechaInicio,
-      fechaFin: values.fechaFin ?? window.fechaFin,
+      fechaInicio: MaintenanceService.formatDateTime(
+        values.fechaInicio ?? window.fechaInicio
+      ),
+      fechaFin: MaintenanceService.formatDateTime(
+        values.fechaFin ?? window.fechaFin
+      ),
       zonaHoraria: values.zonaHoraria ?? window.zonaHoraria,
       impacto: values.impacto ?? window.impacto,
       observacion: values.observacion ?? window.observacion

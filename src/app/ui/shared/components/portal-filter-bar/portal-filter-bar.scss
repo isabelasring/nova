@@ -25,28 +25,26 @@
   display: inline-flex;
   align-items: stretch;
 
-  min-height: 40px;
+  min-height: 48px;
 
-  border: 1px solid $border-color;
-  border-radius: $radius-sm;
-  background: $surface;
+  border: 1px solid #d0d0d0;
+  border-radius: 12px;
+  background: #ffffff;
   overflow: hidden;
-
-  @include transition;
 }
 
 .portal-chip__shell:hover {
-  border-color: $text-secondary;
-  background: $background-body;
+  border-color: #bdbdbd;
 }
 
 .portal-chip--active .portal-chip__shell {
-  border-color: $border-color;
-  background: $background-body;
+  border-color: #d0d0d0;
+  background: #ffffff;
 }
 
 .portal-chip--open .portal-chip__shell {
-  border-color: $text-secondary;
+  border-color: #1a9a6a;
+  box-shadow: 0 0 0 1px #1a9a6a;
 }
 
 .portal-chip__trigger {
@@ -114,46 +112,67 @@
 
   display: flex;
   flex-direction: column;
-  gap: 2px;
 
   min-width: 220px;
-  max-width: 300px;
-  max-height: 260px;
+  max-width: 320px;
+  max-height: 220px;
   overflow-y: auto;
 
-  padding: $space-8;
+  padding: 8px 0;
 
-  border: 1px solid $border-color;
-  border-radius: $radius-sm;
-  background: $surface;
-  box-shadow: $shadow-md;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(44, 42, 41, 0.16);
 }
 
 .portal-chip__option {
   width: 100%;
-  padding: $space-8 $space-12;
+  padding: 10px 16px;
 
   border: 0;
-  border-radius: $radius-sm;
   background: transparent;
 
   text-align: left;
-  font-size: $font-size-sm;
-  color: $text-primary;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2c2a29;
   cursor: pointer;
 }
 
-.portal-chip__option:hover {
-  background: $background-body;
-}
-
+.portal-chip__option:hover,
 .portal-chip__option--selected {
-  background: $background-body;
-  font-weight: $font-weight-semibold;
+  background: #f4f6f5;
 }
 
 .portal-filter__clear {
   @include button-secondary;
   font-size: $font-size-sm;
   white-space: nowrap;
+}
+
+:host-context([data-theme='dark']) {
+  .portal-chip__shell,
+  .portal-chip__menu {
+    background: #343230;
+  }
+
+  .portal-chip__shell {
+    border-color: #5a5754;
+  }
+
+  .portal-chip__trigger,
+  .portal-chip__name,
+  .portal-chip__caret,
+  .portal-chip__option {
+    color: #f4f5f7;
+  }
+
+  .portal-chip__value {
+    color: #c4bfb9;
+  }
+
+  .portal-chip__option:hover,
+  .portal-chip__option--selected {
+    background: #3d3b39;
+  }
 }

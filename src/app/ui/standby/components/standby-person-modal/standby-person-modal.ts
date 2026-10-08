@@ -20,6 +20,9 @@ from '../capped-slot-adder/capped-slot-adder';
 import { PhoneInputComponent }
 from '../../../shared/components/phone-input/phone-input';
 
+import { OptionSelectComponent }
+from '../../../shared/components/option-select/option-select';
+
 import { SaveSuccessService }
 from '../../../shared/services/save-success-service';
 
@@ -36,7 +39,8 @@ import {
   imports: [
     ReactiveFormsModule,
     CappedSlotAdderComponent,
-    PhoneInputComponent
+    PhoneInputComponent,
+    OptionSelectComponent
   ],
   templateUrl: './standby-person-modal.html',
   styleUrl: './standby-person-modal.scss',

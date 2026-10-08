@@ -20,6 +20,12 @@ from '../components/new-contact-modal/new-contact-modal';
 import { BreadcrumbComponent }
 from '../../shared/components/breadcrumb/breadcrumb';
 
+import { SearchFieldComponent }
+from '../../shared/components/search-field/search-field';
+
+import { PagerComponent, pageSlice }
+from '../../shared/components/pager/pager';
+
 import { PhoneInputComponent }
 from '../../shared/components/phone-input/phone-input';
 
@@ -38,6 +44,9 @@ from '../../standby/services/standby-schedule-service';
 import { SaveSuccessService }
 from '../../shared/services/save-success-service';
 
+import { DownloadTrayService }
+from '../../shared/services/download-tray-service';
+
 @Component({
   selector: 'app-contacts-page',
   standalone: true,
@@ -47,7 +56,9 @@ from '../../shared/services/save-success-service';
     NewContactModalComponent,
     PhoneInputComponent,
     PortalFilterBarComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    SearchFieldComponent,
+    PagerComponent
   ],
   templateUrl: './contact-page.html',
   styleUrl: './contact-page.scss',
@@ -59,9 +70,23 @@ export class ContactsPageComponent {
 
   readonly contactsService = inject(ContactsService);
 
+  readonly listPage = signal(1);
+
+  readonly listPageSize = signal(10);
+
+  readonly pagedContacts = computed(() =>
+    pageSlice(
+      this.contactsService.filteredContacts(),
+      this.listPage(),
+      this.listPageSize()
+    )
+  );
+
   private readonly standbySchedule = inject(StandbyScheduleService);
 
   private readonly saveSuccess = inject(SaveSuccessService);
+
+  private readonly downloads = inject(DownloadTrayService);
 
   readonly searchForm = this.fb.group({
     searchApp: ['']
@@ -293,6 +318,41 @@ export class ContactsPageComponent {
   openNewContactModal(): void {
 
     this.showNewContactModal.set(true);
+
+  }
+
+  downloadContacts(): void {
+
+    const rows: string[][] = [[
+      'Código',
+      'Aplicación',
+      'Nombre',
+      'Celular',
+      'Correo',
+      'Horario',
+      'Célula',
+      'BVC',
+      'LdC'
+    ]];
+
+    for (const contacto of this.contactsService.filteredContacts()) {
+      rows.push([
+        contacto.codigoAplicacion,
+        contacto.nombreAplicacion,
+        contacto.nombre,
+        contacto.celular,
+        contacto.correo,
+        contacto.horario,
+        contacto.celula,
+        contacto.bvc,
+        contacto.ldc
+      ]);
+    }
+
+    this.downloads.enqueue(
+      'contactos.csv',
+      () => DownloadTrayService.csv(rows)
+    );
 
   }
 

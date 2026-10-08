@@ -99,16 +99,8 @@
 }
 
 .phone-input__search {
-  width: 100%;
-
-  padding: $space-12 $space-16;
-
-  border: none;
-  border-bottom: 1px solid $border-light;
-
-  font-size: $font-size-sm;
-  font-family: inherit;
-  outline: none;
+  display: block;
+  margin: $space-12;
 }
 
 .phone-input__list {

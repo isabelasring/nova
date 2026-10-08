@@ -1,7 +1,7 @@
 @use '../../../styles/abstracts' as *;
 
 .policies-page {
-  min-height: calc(100vh - 32px);
+  min-height: 100%;
   background: $background-body;
 }
 

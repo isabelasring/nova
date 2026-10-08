@@ -14,19 +14,26 @@
 
         <div class="list-toolbar">
 
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="downloadWindows()"
+          >
+            Descargar
+          </button>
+
           <div class="filters-grid">
 
             <app-portal-filter-bar />
 
-            <input
-              type="text"
+            <app-search-field
               class="filters-grid__search"
               [class.filters-grid__search--expanded]="
                 !!maintenance.listSearchApp().trim()
               "
-              placeholder="Buscar..."
+              placeholder="Buscar"
               [value]="maintenance.listSearchApp()"
-              (input)="maintenance.listSearchApp.set($any($event.target).value)"
+              (valueChange)="maintenance.listSearchApp.set($event)"
             />
 
           </div>
@@ -91,48 +98,43 @@
           <div class="filter-group">
             <span class="filter-group__label">Estado</span>
 
-            <div
-              class="filter-links"
-              role="group"
-              aria-label="Estado de la ventana"
-            >
-
-              <button
-                type="button"
-                class="filter-link"
-                [class.filter-link--active]="maintenance.listFilterEstado() === ''"
-                (click)="clearEstadoFilter()"
-              >
-                Todas
-              </button>
-
-              <button
-                type="button"
-                class="filter-link"
-                [class.filter-link--active]="maintenance.listFilterEstado() === 'Programada'"
-                (click)="toggleEstadoFilter('Programada')"
-              >
-                Programada
-              </button>
-
-              <button
-                type="button"
-                class="filter-link"
-                [class.filter-link--active]="maintenance.listFilterEstado() === 'En ejecución'"
-                (click)="toggleEstadoFilter('En ejecución')"
-              >
-                En ejecución
-              </button>
-
-              <button
-                type="button"
-                class="filter-link"
-                [class.filter-link--active]="maintenance.listFilterEstado() === 'Finalizada'"
-                (click)="toggleEstadoFilter('Finalizada')"
-              >
-                Finalizada
-              </button>
-
+            <div class="choice-list" role="radiogroup" aria-label="Estado de la ventana">
+              <label class="choice">
+                <input
+                  type="radio"
+                  name="estado-ventana"
+                  [checked]="maintenance.listFilterEstado() === ''"
+                  (change)="clearEstadoFilter()"
+                />
+                <span>Todas</span>
+              </label>
+              <label class="choice">
+                <input
+                  type="radio"
+                  name="estado-ventana"
+                  [checked]="maintenance.listFilterEstado() === 'Programada'"
+                  (change)="toggleEstadoFilter('Programada')"
+                />
+                <span>Programada</span>
+              </label>
+              <label class="choice">
+                <input
+                  type="radio"
+                  name="estado-ventana"
+                  [checked]="maintenance.listFilterEstado() === 'En ejecución'"
+                  (change)="toggleEstadoFilter('En ejecución')"
+                />
+                <span>En ejecución</span>
+              </label>
+              <label class="choice">
+                <input
+                  type="radio"
+                  name="estado-ventana"
+                  [checked]="maintenance.listFilterEstado() === 'Finalizada'"
+                  (change)="toggleEstadoFilter('Finalizada')"
+                />
+                <span>Finalizada</span>
+              </label>
             </div>
           </div>
 
@@ -172,7 +174,7 @@
           <div class="windows-grid">
 
             @for (
-              window of displayWindows();
+              window of pagedWindows();
               track window.id
             ) {
 
@@ -287,6 +289,14 @@
 
           </div>
 
+          <app-pager
+            [page]="listPage()"
+            [pageSize]="listPageSize()"
+            [total]="displayWindows().length"
+            (pageChange)="listPage.set($event)"
+            (pageSizeChange)="listPageSize.set($event); listPage.set(1)"
+          />
+
         </div>
 
       }
@@ -351,56 +361,48 @@
           [formGroup]="editForm"
         >
 
-          <div class="field">
-            <label>Estado</label>
-            <select formControlName="estado">
-              <option>Programada</option>
-              <option>En ejecución</option>
-              <option>Finalizada</option>
-              <option>Cancelada</option>
-            </select>
-          </div>
+          <app-option-select
+            formControlName="estado"
+            label="Estado"
+            placeholder="Seleccione una opción"
+            [options]="['Programada', 'En ejecución', 'Finalizada', 'Cancelada']"
+          />
 
-          <div class="field">
-            <label>Frecuencia</label>
-            <select formControlName="frecuencia">
-              <option>Una vez</option>
-              <option>Diaria</option>
-              <option>Semanal</option>
-              <option>Mensual</option>
-            </select>
-          </div>
+          <app-option-select
+            formControlName="frecuencia"
+            label="Frecuencia"
+            placeholder="Seleccione una opción"
+            [options]="['Una vez', 'Diaria', 'Semanal', 'Mensual']"
+          />
 
           <div class="edit-modal__grid">
 
-            <div class="field">
+            <div class="field field--date">
               <label>Fecha inicio</label>
-              <input
-                type="text"
+              <app-date-field
                 formControlName="fechaInicio"
-                placeholder="dd/MM/yyyy HH:mm"
+                [withTime]="true"
+                hint="Selecciona la fecha de inicio"
               />
             </div>
 
-            <div class="field">
+            <div class="field field--date">
               <label>Fecha fin</label>
-              <input
-                type="text"
+              <app-date-field
                 formControlName="fechaFin"
-                placeholder="dd/MM/yyyy HH:mm"
+                [withTime]="true"
+                hint="Selecciona la fecha de fin"
               />
             </div>
 
           </div>
 
-          <div class="field">
-            <label>Zona horaria</label>
-            <select formControlName="zonaHoraria">
-              <option>América / Bogotá</option>
-              <option>América / Lima</option>
-              <option>UTC</option>
-            </select>
-          </div>
+          <app-option-select
+            formControlName="zonaHoraria"
+            label="Zona horaria"
+            placeholder="Seleccione una opción"
+            [options]="['América / Bogotá', 'América / Lima', 'UTC']"
+          />
 
           <div class="field">
             <label>Aplicación</label>
@@ -668,31 +670,26 @@
 
                 <div class="filters-grid">
 
-                  <select
+                  <app-option-select
+                    label="Célula"
+                    placeholder="Todas las células"
                     [value]="filterEvc()"
-                    (change)="updateAppFilter('evc', $any($event.target).value)"
-                  >
-                    <option value="">Todas las células</option>
-                    @for (celula of celulaOptions(); track celula) {
-                      <option [value]="celula">{{ celula }}</option>
-                    }
-                  </select>
+                    [options]="celulaOptions()"
+                    (valueChange)="updateAppFilter('evc', $event)"
+                  />
 
-                  <select
+                  <app-option-select
+                    label="LdC"
+                    placeholder="Todas las LdC"
                     [value]="filterLinea()"
-                    (change)="updateAppFilter('linea', $any($event.target).value)"
-                  >
-                    <option value="">Todas las LdC</option>
-                    @for (ldc of ldcOptions(); track ldc) {
-                      <option [value]="ldc">{{ ldc }}</option>
-                    }
-                  </select>
+                    [options]="ldcOptions()"
+                    (valueChange)="updateAppFilter('linea', $event)"
+                  />
 
-                  <input
-                    type="text"
-                    placeholder="Buscar aplicación (código o nombre)"
+                  <app-search-field
+                    placeholder="Buscar"
                     [value]="searchApp()"
-                    (input)="updateAppFilter('searchApp', $any($event.target).value)"
+                    (valueChange)="updateAppFilter('searchApp', $event)"
                   />
 
                 </div>
@@ -768,50 +765,44 @@
 
                 <div class="form-grid">
 
-                  <div class="field">
-                    <label>Estado</label>
-                    <select formControlName="estado">
-                      <option>Programada</option>
-                      <option>En ejecución</option>
-                      <option>Finalizada</option>
-                      <option>Cancelada</option>
-                    </select>
-                  </div>
+                  <app-option-select
+                    formControlName="estado"
+                    label="Estado"
+                    placeholder="Seleccione una opción"
+                    [options]="['Programada', 'En ejecución', 'Finalizada', 'Cancelada']"
+                  />
 
-                  <div class="field">
-                    <label>Frecuencia</label>
-                    <select formControlName="frecuencia">
-                      <option>Una vez</option>
-                      <option>Diaria</option>
-                      <option>Semanal</option>
-                      <option>Mensual</option>
-                    </select>
-                  </div>
+                  <app-option-select
+                    formControlName="frecuencia"
+                    label="Frecuencia"
+                    placeholder="Seleccione una opción"
+                    [options]="['Una vez', 'Diaria', 'Semanal', 'Mensual']"
+                  />
 
-                  <div class="field">
+                  <div class="field field--date">
                     <label>Fecha inicio</label>
-                    <input
-                      type="datetime-local"
+                    <app-date-field
                       formControlName="fechaInicio"
+                      [withTime]="true"
+                      hint="Selecciona la fecha de inicio"
                     />
                   </div>
 
-                  <div class="field">
+                  <div class="field field--date">
                     <label>Fecha fin</label>
-                    <input
-                      type="datetime-local"
+                    <app-date-field
                       formControlName="fechaFin"
+                      [withTime]="true"
+                      hint="Selecciona la fecha de fin"
                     />
                   </div>
 
-                  <div class="field">
-                    <label>Zona horaria</label>
-                    <select formControlName="zonaHoraria">
-                      <option>América / Bogotá</option>
-                      <option>América / Lima</option>
-                      <option>UTC</option>
-                    </select>
-                  </div>
+                  <app-option-select
+                    formControlName="zonaHoraria"
+                    label="Zona horaria"
+                    placeholder="Seleccione una opción"
+                    [options]="['América / Bogotá', 'América / Lima', 'UTC']"
+                  />
 
                   <div class="field">
                     <label>Aplicación</label>

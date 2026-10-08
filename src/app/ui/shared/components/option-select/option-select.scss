@@ -1,0 +1,160 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.option-select {
+  position: relative;
+}
+
+.option-select__box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 14px;
+
+  border: 1px solid #d0d0d0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #2c2a29;
+  text-align: left;
+  cursor: pointer;
+}
+
+.option-select--open .option-select__box {
+  border-color: #1a9a6a;
+  box-shadow: 0 0 0 1px #1a9a6a;
+}
+
+.option-select--disabled .option-select__box {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.option-select__icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+  }
+}
+
+.option-select__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.option-select__label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #6b7280;
+}
+
+.option-select__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #2c2a29;
+}
+
+.option-select__value--empty {
+  font-weight: 600;
+  color: #3a3a3a;
+}
+
+.option-select__chevron {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
+}
+
+.option-select__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+
+  max-height: 220px;
+  margin: 0;
+  padding: 8px 0;
+  overflow: auto;
+
+  list-style: none;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(44, 42, 41, 0.16);
+}
+
+.option-select__option {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+
+  border: 0;
+  background: transparent;
+  color: #2c2a29;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.option-select__option:hover,
+.option-select__option--selected {
+  background: #f4f6f5;
+}
+
+.option-select__hint {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+:host-context([data-theme='dark']) {
+  .option-select__box,
+  .option-select__menu {
+    background: #343230;
+    color: #f4f5f7;
+  }
+
+  .option-select__box {
+    border-color: #5a5754;
+  }
+
+  .option-select__value,
+  .option-select__option,
+  .option-select__chevron,
+  .option-select__icon {
+    color: #f4f5f7;
+  }
+
+  .option-select__label,
+  .option-select__hint {
+    color: #c4bfb9;
+  }
+
+  .option-select__option:hover,
+  .option-select__option--selected {
+    background: #3d3b39;
+  }
+}

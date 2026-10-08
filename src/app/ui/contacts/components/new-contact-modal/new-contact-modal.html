@@ -35,33 +35,25 @@
 
         <div class="field">
 
-          <label>Célula</label>
-
-          <select
+          <app-option-select
             formControlName="evc"
-            (change)="onEvcChange()"
-          >
-            <option value="">Seleccione una célula</option>
-            @for (evc of evcOptions; track evc) {
-              <option [value]="evc">{{ evc }}</option>
-            }
-          </select>
+            label="Célula"
+            placeholder="Seleccione una célula"
+            [options]="evcOptions"
+            (valueChange)="onEvcChange()"
+          />
 
         </div>
 
         <div class="field">
 
-          <label>LC</label>
-
-          <select
+          <app-option-select
             formControlName="linea"
-            (change)="onLineaChange()"
-          >
-            <option value="">Seleccione una LC</option>
-            @for (linea of lineaOptions(); track linea) {
-              <option [value]="linea">{{ linea }}</option>
-            }
-          </select>
+            label="LC"
+            placeholder="Seleccione una LC"
+            [options]="lineaOptions()"
+            (valueChange)="onLineaChange()"
+          />
 
         </div>
 
@@ -69,19 +61,13 @@
 
       <div class="field">
 
-        <label>Aplicación</label>
-
-        <select
+        <app-option-select
           formControlName="codigoAplicacion"
-          (change)="onAppChange($event)"
-        >
-          <option value="">Seleccione una aplicación</option>
-          @for (app of appOptions(); track app.codigoAplicacion) {
-            <option [value]="app.codigoAplicacion">
-              {{ app.codigoAplicacion }} — {{ app.nombreAplicacion }}
-            </option>
-          }
-        </select>
+          label="Aplicación"
+          placeholder="Seleccione una aplicación"
+          [options]="appChoiceOptions()"
+          (valueChange)="onAppChange($event)"
+        />
 
       </div>
 

@@ -3,103 +3,118 @@
 .alert-backdrop {
   position: fixed;
   inset: 0;
-
-  background: rgba(44, 42, 41, 0.45);
-
-  @include flex-center;
-
   z-index: 2000;
-}
-
-.alert-container {
-  width: 480px;
-  max-width: 90vw;
-
-  background: $surface;
-
-  border-radius: $radius-md;
-  border: 1px solid $border-light;
-
-  overflow: hidden;
-
-  box-shadow: $shadow-lg;
-}
-
-.alert-header {
-  background: $surface;
-  color: $text-primary;
-
-  padding: $space-20 $space-24;
 
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
 
-  border-bottom: 1px solid $border-light;
+  padding: 24px;
+  background: rgba(44, 42, 41, 0.55);
 }
 
-.alert-header h2 {
-  margin: 0;
-  font-size: $font-size-h3;
-  color: $text-primary;
-}
+.confirm-card {
+  position: relative;
 
-.close-button {
-  width: 36px;
-  height: 36px;
+  width: min(560px, 100%);
+  padding: 36px 40px 32px;
 
-  border: none;
-
-  border-radius: 50%;
-
-  background: $amarillo-macondo;
-  color: $on-yellow;
-
-  cursor: pointer;
-
-  font-size: $font-size-md;
-  font-weight: $font-weight-bold;
-}
-
-.alert-body {
-  padding: $space-32 $space-24;
-
-  @include flex-column;
-  align-items: center;
-
-  gap: $space-20;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(44, 42, 41, 0.18);
 
   text-align: center;
-
-  background: $surface;
 }
 
-.alert-body p {
+.confirm-card__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #2c2a29;
+  cursor: pointer;
+}
+
+.confirm-card__close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.confirm-card__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 56px;
+  height: 56px;
+  margin-bottom: 18px;
+
+  border-radius: 50%;
+  background: #7dcea0;
+  color: #146c43;
+}
+
+.confirm-card__badge svg {
+  width: 28px;
+  height: 28px;
+}
+
+.confirm-card h2 {
+  margin: 0 0 12px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #2c2a29;
+}
+
+.confirm-card p {
   margin: 0;
-  font-size: $font-size-md;
-  font-weight: $font-weight-medium;
-  color: $text-primary;
-}
-
-.btn-corporate {
-  @include button-add;
-  min-width: 160px;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #6b7280;
 }
 
 .alert-actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: $space-12;
-  width: 100%;
+  gap: 12px;
+
+  margin-top: 24px;
+}
+
+.btn-primary {
+  @include button-primary;
+  min-width: 140px;
 }
 
 .btn-secondary {
   @include button-secondary;
-  min-width: 160px;
+  min-width: 140px;
 }
 
-.btn-secondary:hover {
-  border-color: $link-color;
-  color: $link-color;
+:host-context([data-theme='dark']) {
+  .confirm-card {
+    background: #2c2a29;
+  }
+
+  .confirm-card__close,
+  .confirm-card h2 {
+    color: #f4f5f7;
+  }
+
+  .confirm-card p {
+    color: #c4bfb9;
+  }
 }
