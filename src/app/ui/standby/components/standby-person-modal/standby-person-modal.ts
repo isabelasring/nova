@@ -17,6 +17,9 @@ import {
 import { CappedSlotAdderComponent }
 from '../capped-slot-adder/capped-slot-adder';
 
+import { CbButtonComponent }
+from '../../../shared/components/cb-button/cb-button';
+
 import { PhoneInputComponent }
 from '../../../shared/components/phone-input/phone-input';
 
@@ -36,7 +39,8 @@ import {
   imports: [
     ReactiveFormsModule,
     CappedSlotAdderComponent,
-    PhoneInputComponent
+    PhoneInputComponent,
+    CbButtonComponent
   ],
   templateUrl: './standby-person-modal.html',
   styleUrl: './standby-person-modal.scss',

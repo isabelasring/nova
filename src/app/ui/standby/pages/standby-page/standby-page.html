@@ -60,20 +60,22 @@
           {{ itemLabel }}(s) listo(s) para programar
         </p>
         <div class="selection-banner__actions">
-          <button
-            type="button"
-            class="btn-ghost"
+          <cb-button
+            typeButton="secondary"
+            sizeButton="default"
+            width="hug"
             (click)="cancelSelectionMode()"
           >
             Limpiar selección
-          </button>
-          <button
-            type="button"
-            class="btn-add"
+          </cb-button>
+          <cb-button
+            typeButton="primary"
+            sizeButton="default"
+            width="hug"
             (click)="continueSelection()"
           >
             Continuar programación
-          </button>
+          </cb-button>
         </div>
       </div>
 
@@ -197,13 +199,14 @@
         </div>
 
         <div class="list-toolbar">
-          <button
-            type="button"
-            class="btn-person-sm"
+          <cb-button
+            typeButton="secondary"
+            sizeButton="small"
+            width="hug"
             (click)="openPersonModal()"
           >
             + Agregar persona
-          </button>
+          </cb-button>
         </div>
 
         <div class="standby-board">
@@ -316,13 +319,14 @@
         </div>
 
         <div class="list-toolbar">
-          <button
-            type="button"
-            class="btn-person-sm"
+          <cb-button
+            typeButton="secondary"
+            sizeButton="small"
+            width="hug"
             (click)="openPersonModal()"
           >
             + Agregar persona
-          </button>
+          </cb-button>
         </div>
 
         <div class="select-all-row">
@@ -430,13 +434,14 @@
                 {{ outgoing.toLeader }} programa por ti hasta el
                 {{ formatDelegationDate(outgoing.fechaFin) }}.
               </p>
-              <button
-                type="button"
-                class="btn-add"
+              <cb-button
+                typeButton="primary"
+                sizeButton="default"
+                width="hug"
                 (click)="revokeHandover()"
               >
                 Recuperar programación
-              </button>
+              </cb-button>
             </div>
 
           } @else {
@@ -447,13 +452,14 @@
                 Elige un líder, el motivo y las fechas para transferir
                 temporalmente la programación.
               </p>
-              <button
-                type="button"
-                class="btn-add"
+              <cb-button
+                typeButton="primary"
+                sizeButton="default"
+                width="hug"
                 (click)="openHandoverModal()"
               >
                 Iniciar delegación
-              </button>
+              </cb-button>
             </div>
 
           }
@@ -536,14 +542,15 @@
 
       <div class="standby-panel__footer">
 
-        <button
-          type="button"
-          class="btn-add"
+        <cb-button
+          typeButton="primary"
+          sizeButton="default"
+          width="hug"
           [disabled]="panelApplications.length === 0"
           (click)="openStandbyModal()"
         >
           Continuar programación
-        </button>
+        </cb-button>
 
       </div>
 

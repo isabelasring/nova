@@ -6,31 +6,34 @@
 
       @if (!profileService.editing()) {
 
-        <button
-          class="btn-primary"
-          type="button"
+        <cb-button
+          typeButton="primary"
+          sizeButton="default"
+          width="hug"
           (click)="startEdit()"
         >
           Editar
-        </button>
+        </cb-button>
 
       } @else {
 
-        <button
-          class="btn-outline"
-          type="button"
+        <cb-button
+          typeButton="secondary"
+          sizeButton="default"
+          width="hug"
           (click)="cancelEdit()"
         >
           Cancelar
-        </button>
+        </cb-button>
 
-        <button
-          class="btn-save"
-          type="button"
+        <cb-button
+          typeButton="primary"
+          sizeButton="default"
+          width="hug"
           (click)="saveEdit()"
         >
           Guardar
-        </button>
+        </cb-button>
 
       }
 

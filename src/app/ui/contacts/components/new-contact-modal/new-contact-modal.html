@@ -140,22 +140,24 @@
 
     <div class="modal-footer">
 
-      <button
-        type="button"
-        class="btn-secondary"
+      <cb-button
+        typeButton="secondary"
+        sizeButton="default"
+        width="hug"
         (click)="close()"
       >
         Cancelar
-      </button>
+      </cb-button>
 
-      <button
-        type="button"
-        class="btn-save"
+      <cb-button
+        typeButton="primary"
+        sizeButton="default"
+        width="hug"
         [disabled]="!canSave()"
         (click)="save()"
       >
         Guardar contacto
-      </button>
+      </cb-button>
 
     </div>
 

@@ -359,20 +359,22 @@
                 Si la primera persona no contesta, se llama a la siguiente.
               </small>
               <div class="cgm-question__actions">
-                <button
-                  type="button"
-                  class="btn-primary"
+                <cb-button
+                  typeButton="primary"
+                  sizeButton="default"
+                  width="hug"
                   (click)="confirmPriority(true)"
                 >
                   Sí, con prioridad
-                </button>
-                <button
-                  type="button"
-                  class="btn-secondary"
+                </cb-button>
+                <cb-button
+                  typeButton="secondary"
+                  sizeButton="default"
+                  width="hug"
                   (click)="confirmPriority(false)"
                 >
                   No, sin prioridad
-                </button>
+                </cb-button>
               </div>
             </div>
           } @else if (responsablesForSummaryDisplay.length > 0) {
@@ -502,23 +504,25 @@
           }
 
           <div class="summary-actions">
-            <button
-              type="button"
-              class="btn-secondary add-person-link"
+            <cb-button
+              typeButton="secondary"
+              sizeButton="default"
+              width="hug"
               [disabled]="!showAddPersonOnCalendar"
               (click)="startAddCoResponsable()"
             >
               + Añadir otra persona
-            </button>
+            </cb-button>
 
-            <button
-              type="button"
-              class="btn-primary accept-button"
+            <cb-button
+              typeButton="primary"
+              sizeButton="default"
+              width="hug"
               [disabled]="!canAccept"
               (click)="acceptSelection()"
             >
               Aceptar selección
-            </button>
+            </cb-button>
           </div>
 
         </div>
@@ -634,14 +638,15 @@
 
     <div class="modal-footer">
 
-      <button
-        type="button"
-        class="btn-primary"
+      <cb-button
+        typeButton="primary"
+        sizeButton="default"
+        width="hug"
         [disabled]="!canSave"
         (click)="save()"
       >
         Guardar
-      </button>
+      </cb-button>
 
     </div>
 

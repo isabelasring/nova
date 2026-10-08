@@ -8,6 +8,9 @@ import {
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { CbButtonComponent }
+from '../../shared/components/cb-button/cb-button';
+
 import { Alerta, AlertaSeveridad, AlertaVista }
 from '../models/alert-model';
 
@@ -17,7 +20,7 @@ from '../services/alert-service';
 @Component({
   selector: 'app-alerts-page',
   standalone: true,
-  imports: [NgClass, FormsModule],
+  imports: [NgClass, FormsModule, CbButtonComponent],
   templateUrl: './alert-page.html',
   styleUrl: './alert-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

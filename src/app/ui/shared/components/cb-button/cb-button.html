@@ -1,0 +1,12 @@
+<button
+  type="button"
+  class="cb-button"
+  [class.cb-button--primary]="typeButton() === 'primary'"
+  [class.cb-button--secondary]="typeButton() === 'secondary'"
+  [class.cb-button--danger]="typeButton() === 'danger'"
+  [class.cb-button--small]="sizeButton() === 'small'"
+  [class.cb-button--fill]="width() === 'fill'"
+  [disabled]="disabled()"
+>
+  <ng-content />
+</button>

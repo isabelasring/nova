@@ -6,6 +6,9 @@ import {
   signal
 } from '@angular/core';
 import { NgClass } from '@angular/common';
+
+import { CbButtonComponent }
+from '../../shared/components/cb-button/cb-button';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -39,7 +42,7 @@ from '../../shared/components/portal-filter-bar/portal-filter-bar';
 @Component({
   selector: 'app-maintenance-page',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, PortalFilterBarComponent],
+  imports: [ReactiveFormsModule, NgClass, PortalFilterBarComponent, CbButtonComponent],
   templateUrl: './maintenance-page.html',
   styleUrl: './maintenance-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

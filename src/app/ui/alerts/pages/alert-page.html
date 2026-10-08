@@ -355,14 +355,15 @@
                 [ngModel]="draftComment()"
                 (ngModelChange)="draftComment.set($event)"
               ></textarea>
-              <button
-                type="button"
-                class="btn-primary"
+              <cb-button
+                typeButton="primary"
+                sizeButton="default"
+                width="hug"
                 [disabled]="!draftComment().trim()"
                 (click)="submitComment(alerta.id)"
               >
                 Publicar
-              </button>
+              </cb-button>
             </div>
           </section>
 
@@ -433,26 +434,28 @@
               [ngModel]="draftComment()"
               (ngModelChange)="draftComment.set($event)"
             ></textarea>
-            <button
-              type="button"
-              class="btn-primary"
+            <cb-button
+              typeButton="primary"
+              sizeButton="default"
+              width="hug"
               [disabled]="!draftComment().trim()"
               (click)="submitComment(alerta.id)"
             >
               Agregar comentario
-            </button>
+            </cb-button>
           </div>
 
         </div>
 
         <footer class="detail-modal__footer">
-          <button
-            type="button"
-            class="btn-secondary"
+          <cb-button
+            typeButton="secondary"
+            sizeButton="default"
+            width="hug"
             (click)="closeComments()"
           >
             Cerrar
-          </button>
+          </cb-button>
         </footer>
 
       </div>

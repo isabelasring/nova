@@ -6,6 +6,9 @@ import {
   signal
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
+
+import { CbButtonComponent }
+from '../../shared/components/cb-button/cb-button';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -51,7 +54,8 @@ const STANDBY_PERIOD_COLORS: Record<StandbyPeriod, string> = {
   imports: [
     DatePipe,
     ReactiveFormsModule,
-    StandbyMonthViewComponent
+    StandbyMonthViewComponent,
+    CbButtonComponent
   ],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.scss',

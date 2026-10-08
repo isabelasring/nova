@@ -5,10 +5,13 @@ import {
   output
 } from '@angular/core';
 
+import { CbButtonComponent }
+from '../../../shared/components/cb-button/cb-button';
 
 @Component({
   selector: 'app-standby-selection-bar',
   standalone: true,
+  imports: [CbButtonComponent],
   templateUrl: './standby-selection-bar.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

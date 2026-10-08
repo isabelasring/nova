@@ -14,13 +14,14 @@
 
         <div class="card-actions" (click)="$event.stopPropagation()">
 
-          <button
-            type="button"
-            class="btn-view"
+          <cb-button
+            typeButton="secondary"
+            sizeButton="small"
+            width="hug"
             (click)="onView($event)"
           >
             Ver standby
-          </button>
+          </cb-button>
 
           <button
             type="button"

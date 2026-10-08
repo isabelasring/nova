@@ -26,33 +26,36 @@
 
         <div class="alert-actions">
 
-          <button
-            type="button"
-            class="btn-secondary"
+          <cb-button
+            typeButton="secondary"
+            sizeButton="default"
+            width="hug"
             (click)="cancel()"
           >
             {{ cancelLabel() }}
-          </button>
+          </cb-button>
 
-          <button
-            type="button"
-            class="btn-corporate"
+          <cb-button
+            typeButton="primary"
+            sizeButton="default"
+            width="hug"
             (click)="confirm()"
           >
             {{ confirmLabel() }}
-          </button>
+          </cb-button>
 
         </div>
 
       } @else {
 
-        <button
-          type="button"
-          class="btn-corporate"
+        <cb-button
+          typeButton="primary"
+          sizeButton="default"
+          width="hug"
           (click)="close()"
         >
           Aceptar
-        </button>
+        </cb-button>
 
       }
 

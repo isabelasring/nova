@@ -14,6 +14,9 @@ import {
   Validators
 } from '@angular/forms';
 
+import { CbButtonComponent }
+from '../../../shared/components/cb-button/cb-button';
+
 import { PhoneInputComponent }
 from '../../../shared/components/phone-input/phone-input';
 
@@ -33,7 +36,8 @@ from '../../services/contacts-service';
   styleUrl: './new-contact-modal.scss',
   imports: [
     ReactiveFormsModule,
-    PhoneInputComponent
+    PhoneInputComponent,
+    CbButtonComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -19,6 +19,9 @@ from '../../../standby/components/standby-month-view/standby-month-view';
 import { StandbyScheduleService }
 from '../../../standby/services/standby-schedule-service';
 
+import { CbButtonComponent }
+from '../../../shared/components/cb-button/cb-button';
+
 import { PhoneInputComponent }
 from '../../../shared/components/phone-input/phone-input';
 
@@ -39,7 +42,8 @@ from '../../../shared/services/save-success-service';
   imports: [
     StandbyMonthViewComponent,
     ReactiveFormsModule,
-    PhoneInputComponent
+    PhoneInputComponent,
+    CbButtonComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

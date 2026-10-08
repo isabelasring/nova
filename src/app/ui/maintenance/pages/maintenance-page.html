@@ -29,13 +29,14 @@
 
           </div>
 
-          <button
-            type="button"
-            class="btn-save list-toolbar__add"
+          <cb-button
+            typeButton="primary"
+            sizeButton="default"
+            width="hug"
             (click)="openForm()"
           >
             Agregar ventana
-          </button>
+          </cb-button>
 
         </div>
 
@@ -153,13 +154,14 @@
             }
           </p>
           @if (maintenance.windows().length === 0) {
-            <button
-              type="button"
-              class="btn-save"
+            <cb-button
+              typeButton="primary"
+              sizeButton="default"
+              width="hug"
               (click)="openForm()"
             >
               Agregar ventana
-            </button>
+            </cb-button>
           }
         </div>
 
@@ -430,22 +432,24 @@
 
         <div class="edit-modal__footer">
 
-          <button
-            type="button"
-            class="btn-secondary"
+          <cb-button
+            typeButton="secondary"
+            sizeButton="default"
+            width="hug"
             (click)="closeEditPanel()"
           >
             Cancelar
-          </button>
+          </cb-button>
 
-          <button
-            type="button"
-            class="btn-save"
+          <cb-button
+            typeButton="primary"
+            sizeButton="default"
+            width="hug"
             [disabled]="!canSaveEdit()"
             (click)="saveEdit()"
           >
             Guardar cambios
-          </button>
+          </cb-button>
 
         </div>
 
@@ -951,22 +955,24 @@
 
           <footer class="type-modal__footer">
 
-            <button
-              type="button"
-              class="btn-secondary"
+            <cb-button
+              typeButton="secondary"
+              sizeButton="default"
+              width="hug"
               (click)="closeTypeModal()"
             >
               Cancelar
-            </button>
+            </cb-button>
 
-            <button
-              type="button"
-              class="btn-save"
+            <cb-button
+              typeButton="primary"
+              sizeButton="default"
+              width="hug"
               [disabled]="!canSave()"
               (click)="saveMaintenanceWindow()"
             >
               Guardar ventana
-            </button>
+            </cb-button>
 
           </footer>
 

@@ -17,6 +17,9 @@ from '../components/contact-modal/contact-modal';
 import { NewContactModalComponent }
 from '../components/new-contact-modal/new-contact-modal';
 
+import { CbButtonComponent }
+from '../../shared/components/cb-button/cb-button';
+
 import { PhoneInputComponent }
 from '../../shared/components/phone-input/phone-input';
 
@@ -43,7 +46,8 @@ from '../../shared/services/save-success-service';
     ContactModalComponent,
     NewContactModalComponent,
     PhoneInputComponent,
-    PortalFilterBarComponent
+    PortalFilterBarComponent,
+    CbButtonComponent
   ],
   templateUrl: './contact-page.html',
   styleUrl: './contact-page.scss',

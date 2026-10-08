@@ -9,6 +9,9 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
+import { CbButtonComponent }
+from '../../../shared/components/cb-button/cb-button';
+
 import { STANDBY_APPLICATIONS }
 from '../../mocks/standby-applications-mock';
 
@@ -79,7 +82,8 @@ type StandbyScope = 'tech' | 'areas';
     StandbyViewModalComponent,
     StandbyHandoverModalComponent,
     StandbyPersonModalComponent,
-    PortalFilterBarComponent
+    PortalFilterBarComponent,
+    CbButtonComponent
   ],
   templateUrl: './standby-page.html',
   styleUrl: './standby-page.scss',

@@ -22,6 +22,9 @@ import { DatePipe } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
 
+import { CbButtonComponent }
+from '../../../shared/components/cb-button/cb-button';
+
 
 
 import {
@@ -114,7 +117,9 @@ interface ProductSelectionState {
 
     StandbyAlertComponent,
 
-    FormsModule
+    FormsModule,
+
+    CbButtonComponent
 
   ],
 
