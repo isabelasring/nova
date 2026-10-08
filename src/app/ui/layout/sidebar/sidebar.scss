@@ -1,8 +1,23 @@
 @use '../../styles/abstracts' as *;
 
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-self: flex-start;
+
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 20;
+
+  background: $negro-cib;
+}
+
 .sidebar {
   width: $sidebar-width;
-  height: 100vh;
+  height: 100%;
+  min-height: 100%;
 
   background: $negro-cib;
   color: $blanco;
