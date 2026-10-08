@@ -1,2 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 @use './app/ui/styles/main';
+/* You can add global styles to this file, and also import other style files 
+@import 'https://library-sdb.apps.bancolombia.com/bds/(versión)/bds.min.css';@import 'https://library-sdb.apps.bancolombia.com/bds/(versión)/bds.min.css';
+@import 'https://library-sdb.apps.bancolombia.com/bds/(versión)/bds-black.min.css';
+@use '@bancolombia/caribe-design-system' as cb;
+@use '@bancolombia/caribe-brand-bancolombia' as cb-brand;
+
+@include cb.system-classes();
+
+html {
+  height: 100%;
+  @include cb.theme(cb-brand.$config, cb-brand.$overrides);
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--cb-sys-background-secondary-01);
+  color: var(--cb-sys-text-default);
+  font: var(--cb-sys-plain-font-style-4-regular);
+  margin: 0;
+  height: 100%;
+}
+  */

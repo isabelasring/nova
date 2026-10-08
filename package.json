@@ -28,6 +28,10 @@
     "@angular/forms": "^20.3.0",
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
+    "@bancolombia/caribe-brand-bancolombia": "^1.0.0",
+    "@bancolombia/caribe-design-system": "^1.23.2",
+    "@bancolombia/design-system-behaviors": "^9.51.14",
+    "@bancolombia/design-system-web": "^16.8.0",
     "@bancolombia/toolkit-angular": "^20.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
