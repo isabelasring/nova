@@ -292,7 +292,7 @@
             }
             Selecciona un responsable para habilitar
             la programación de standby.
-            Luego elige un viernes de inicio.
+            Luego elige el periodo en el calendario.
 
           </div>
 
@@ -306,7 +306,8 @@
             }
             Responsable seleccionado:
             {{ selectedUser }}
-            · Selecciona un viernes (de las 12:00 a las 12:00 del viernes siguiente)
+            · Elige el periodo. El turno queda de viernes 12:00
+            a viernes 12:00.
             <button
               type="button"
               class="link-clear"
@@ -319,15 +320,17 @@
 
         }
 
-        <app-standby-calendar
-          [enabled]="!!selectedUser || addingCoResponsable"
-          [occupiedRanges]="occupiedRanges"
-          [showAddPerson]="showAddPersonOnCalendar"
-          [lockSelection]="lockCalendarSelection"
-          (selectionChange)="onSelectionChange($event)"
-          (addPerson)="startAddCoResponsable()"
-          (conflict)="onConflict($event)">
-        </app-standby-calendar>
+        <div
+          class="program-calendar"
+          [class.program-calendar--locked]="
+            (!selectedUser && !addingCoResponsable) || lockCalendarSelection
+          "
+        >
+          <app-range-calendar
+            (accepted)="onProgramRange($event)"
+            (cleared)="onProgramClear()"
+          ></app-range-calendar>
+        </div>
 
       </div>
 

@@ -693,25 +693,76 @@ export class StandbyPageComponent implements OnInit {
     this.downloadError.set('');
 
     const rows: string[][] = [[
-      'Fecha',
-      'Nombre',
-      'Aplicación',
-      'BVC',
-      'LdC',
-      'Célula',
-      'Servicio'
+      'Mes a pagar',
+      'FC:Cédula',
+      'NOMBRE',
+      'ID UNIDAD ORG.',
+      'UNIDAD ORGANIZATIVA',
+      'POSICIONES',
+      'NIVEL_1',
+      'NIVEL_2',
+      'NIVEL_3',
+      'NIVEL_4',
+      'NIVEL_5',
+      'NIVEL_6',
+      'NIVEL_7',
+      'Nombre_Formateado',
+      'Cédula',
+      'Producto Soportado',
+      'Servicio TI',
+      'Empresa',
+      'Función',
+      'Observación'
     ]];
 
+    const assignments = [
+      ...this.scheduleService.savedAssignments,
+      ...this.scheduleService.draftAssignments
+    ];
+
     for (const row of source) {
-      rows.push([
-        row.fechaLabel,
-        row.nombre,
-        row.appCodes.join(' '),
-        row.bvc,
-        row.ldc,
-        row.celula,
-        row.service
-      ]);
+      const assignment = assignments.find(item => item.id === row.id);
+      const person = this.registeredPeople().find(
+        item =>
+          item.funcionario.trim().toLowerCase() ===
+          row.nombre.trim().toLowerCase()
+      );
+      const apps = row.appCodes.length
+        ? row.appCodes.map((code, index) => ({
+            code,
+            name: row.appNames[index] || code
+          }))
+        : [{ code: '', name: '' }];
+
+      for (const app of apps) {
+        const catalog = this.applications.find(
+          item => item.codigoAplicacion === app.code
+        );
+        const empresa = person?.empresa ?? '';
+
+        rows.push([
+          this.paymentMonth(row.start),
+          person?.cedula ?? '',
+          row.nombre,
+          '',
+          catalog?.celula || row.celula,
+          person?.funcion ?? '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          row.nombre.toLocaleUpperCase('es'),
+          person?.cedula ?? '',
+          catalog?.nombreAplicacion || app.name,
+          catalog?.service || row.service,
+          this.companyKind(empresa),
+          person?.funcion ?? '',
+          assignment?.observacion || person?.observaciones || ''
+        ]);
+      }
     }
 
     this.downloads.enqueue(
@@ -771,6 +822,30 @@ export class StandbyPageComponent implements OnInit {
       ...app,
       selected: false
     }));
+
+  }
+
+  private paymentMonth(date: Date): string {
+
+    const months = [
+      'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO',
+      'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'
+    ];
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+
+    return `${date.getFullYear()}/${month} - ${months[date.getMonth()]}`;
+
+  }
+
+  private companyKind(empresa: string): string {
+
+    const name = empresa.trim().toLowerCase();
+
+    if (!name) {
+      return '';
+    }
+
+    return name === 'bancolombia' ? 'INTERNO' : 'EXTERNO';
 
   }
 

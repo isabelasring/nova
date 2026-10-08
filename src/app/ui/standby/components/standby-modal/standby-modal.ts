@@ -24,13 +24,13 @@ import { FormsModule } from '@angular/forms';
 
 
 
+import { OccupiedRange }
+from '../standby-calendar/standby-calendar';
+
 import {
-
-  OccupiedRange,
-
-  StandbyCalendarComponent
-
-} from '../standby-calendar/standby-calendar';
+  CalendarRange,
+  RangeCalendarComponent
+} from '../../../shared/components/range-calendar/range-calendar';
 
 
 
@@ -111,7 +111,7 @@ interface ProductSelectionState {
 
   imports: [
 
-    StandbyCalendarComponent,
+    RangeCalendarComponent,
 
     DatePipe,
 
@@ -161,9 +161,9 @@ export class StandbyModalComponent {
 
 
 
-  @ViewChild(StandbyCalendarComponent)
+  @ViewChild(RangeCalendarComponent)
 
-  calendar?: StandbyCalendarComponent;
+  calendar?: RangeCalendarComponent;
 
 
 
@@ -1176,6 +1176,50 @@ export class StandbyModalComponent {
 
 
 
+  onProgramRange(range: CalendarRange): void {
+
+    if (
+      this.lockCalendarSelection ||
+      (!this.selectedUser && !this.addingCoResponsable)
+    ) {
+      return;
+    }
+
+    const from = this.parseProgramDay(range.from);
+
+    if (!from) {
+      return;
+    }
+
+    const week = toStandbyWeek(from);
+    const occupants = this.occupantsForWeek(week.start, week.end);
+
+    if (occupants.length > 0) {
+      const names = [...new Set(occupants)];
+      const verb = names.length === 1 ? 'está' : 'están';
+      this.onConflict(
+        `En esos días ${verb}: ${names.join(', ')}. Elige otro periodo.`
+      );
+      this.calendar?.clearSelection();
+      return;
+    }
+
+    this.onSelectionChange([week.start]);
+    this.calendar?.setSelection([week.start]);
+
+  }
+
+  onProgramClear(): void {
+
+    if (this.lockCalendarSelection) {
+      return;
+    }
+
+    this.onSelectionChange([]);
+    this.calendar?.clearSelection();
+
+  }
+
   onSelectionChange(dates: Date[]): void {
 
 
@@ -1349,6 +1393,38 @@ export class StandbyModalComponent {
   }
 
 
+
+  private occupantsForWeek(start: Date, end: Date): string[] {
+
+    const startTime = this.dayKey(start);
+    const endTime = this.dayKey(end);
+
+    return this.occupiedRanges
+      .filter(range => {
+        const rangeStart = this.dayKey(range.start);
+        const rangeEnd = this.dayKey(range.end);
+        return startTime <= rangeEnd && rangeStart <= endTime;
+      })
+      .map(range => range.responsable)
+      .filter((name): name is string => !!name);
+
+  }
+
+  private parseProgramDay(value: string): Date | null {
+
+    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+
+    if (!match) {
+      return null;
+    }
+
+    return new Date(
+      Number(match[1]),
+      Number(match[2]) - 1,
+      Number(match[3])
+    );
+
+  }
 
   private dayKey(date: Date): number {
 

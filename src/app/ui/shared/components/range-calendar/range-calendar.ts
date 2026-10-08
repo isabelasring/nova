@@ -182,9 +182,46 @@ export class RangeCalendarComponent {
 
   clear(): void {
 
+    this.clearSelection();
+    this.cleared.emit();
+
+  }
+
+  /** Marca un periodo ya elegido, sin volver a emitir la selección. */
+  setSelection(dates: Date[]): void {
+
+    if (dates.length === 0) {
+      this.clearSelection();
+      return;
+    }
+
+    const start = new Date(
+      dates[0].getFullYear(),
+      dates[0].getMonth(),
+      dates[0].getDate()
+    );
+    const end = new Date(start);
+    end.setDate(end.getDate() + 7);
+
+    this.start.set(start);
+    this.end.set(end);
+    this.left.set({
+      year: start.getFullYear(),
+      month: start.getMonth()
+    });
+
+    const next = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+    this.right.set({
+      year: next.getFullYear(),
+      month: next.getMonth()
+    });
+
+  }
+
+  clearSelection(): void {
+
     this.start.set(null);
     this.end.set(null);
-    this.cleared.emit();
 
   }
 

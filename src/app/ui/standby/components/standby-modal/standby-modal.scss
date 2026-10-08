@@ -388,6 +388,12 @@
 
 .calendar-section {
   padding: $space-24;
+  min-width: 0;
+}
+
+.program-calendar--locked {
+  opacity: 0.72;
+  pointer-events: none;
 }
 
 .info-message {
