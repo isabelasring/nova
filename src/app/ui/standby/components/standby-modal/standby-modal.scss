@@ -391,6 +391,10 @@
   min-width: 0;
 }
 
+.program-calendar {
+  max-width: 440px;
+}
+
 .program-calendar--locked {
   opacity: 0.72;
   pointer-events: none;

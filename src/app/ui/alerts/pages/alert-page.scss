@@ -840,6 +840,28 @@ $estado-problema: $naranja-alba;
   font-weight: $font-weight-bold;
 }
 
+.alert-card--story {
+  grid-column: 1 / -1;
+}
+
+.alert-card__follow {
+  margin-top: 18px;
+}
+
+.alert-attendant {
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #2c2a29;
+}
+
+.alert-board__standby {
+  margin: 8px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a6f8a;
+}
+
 .alert-card--story p {
   margin: 0;
   font-size: 15px;

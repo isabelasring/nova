@@ -1,4 +1,7 @@
-<div class="range-calendar" [class.range-calendar--month]="mode() === 'month'">
+<div
+  class="range-calendar"
+  [class.range-calendar--month]="mode() === 'month' || mode() === 'week'"
+>
 
   <div class="range-calendar__card">
 

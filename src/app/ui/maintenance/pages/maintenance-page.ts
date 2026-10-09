@@ -129,6 +129,8 @@ export class MaintenancePageComponent {
 
   readonly highlightedWindowId = signal<number | null>(null);
 
+  readonly flippedWindowId = signal<number | null>(null);
+
   private saveToastTimer: ReturnType<typeof setTimeout> | null = null;
 
   private highlightTimer: ReturnType<typeof setTimeout> | null = null;
@@ -475,6 +477,14 @@ export class MaintenancePageComponent {
   isPromesa(window: MaintenanceWindow): boolean {
 
     return window.tipo === 'Promesa de servicio';
+
+  }
+
+  toggleWindowFlip(id: number): void {
+
+    this.flippedWindowId.update(current =>
+      current === id ? null : id
+    );
 
   }
 

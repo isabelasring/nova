@@ -60,7 +60,11 @@ export class AlertsService {
         alerta.problema.toLowerCase().includes(term) ||
         alerta.detalle.plataforma.toLowerCase().includes(term) ||
         alerta.detalle.codigoApp.toLowerCase().includes(term) ||
-        alerta.detalle.aplicacion.toLowerCase().includes(term);
+        alerta.detalle.aplicacion.toLowerCase().includes(term) ||
+        (alerta.aplicacionesAfectadas ?? []).some(app =>
+          app.codigo.toLowerCase().includes(term) ||
+          app.nombre.toLowerCase().includes(term)
+        );
 
       return matchEstado && matchSeveridad && matchSearch;
 

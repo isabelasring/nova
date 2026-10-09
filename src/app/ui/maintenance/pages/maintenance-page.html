@@ -179,110 +179,88 @@
             ) {
 
               <article
-                class="window-tile"
+                class="window-flip"
                 [attr.id]="'window-card-' + window.id"
                 [ngClass]="statusClass(window.estado)"
-                [class.window-tile--just-saved]="
+                [class.is-flipped]="flippedWindowId() === window.id"
+                [class.window-flip--saved]="
                   highlightedWindowId() === window.id
                 "
+                (click)="toggleWindowFlip(window.id)"
               >
+                <div class="window-flip__inner">
 
-                <div class="window-tile__top">
-
-                  <div class="window-tile__meta-row">
-                    <span
-                      class="tipo-label"
-                      [class.tipo-label--promesa]="isPromesa(window)"
-                    >
-                      {{ tipoLabel(window.tipo) }}
-                    </span>
-
-                    <span class="window-tile__dot" aria-hidden="true">·</span>
-
-                    <span
-                      class="status-label"
-                      [ngClass]="statusClass(window.estado)"
-                    >
-                      {{ window.estado }}
-                    </span>
-                  </div>
-
-                  <div class="window-tile__actions">
-
-                    <span class="window-tile__freq">
-                      {{ window.frecuencia }}
-                    </span>
-
-                    <button
-                      type="button"
-                      class="icon-btn"
-                      title="Editar ventana"
-                      (click)="openEditPanel(window, $event)"
-                    >
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path
-                          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
-                        />
-                      </svg>
-                    </button>
-
-                  </div>
-
-                </div>
-
-                <div class="window-tile__body">
-
-                  <span class="window-tile__code">
-                    {{ window.aplicacion }}
-                  </span>
-
-                  <h3 class="window-tile__name">
-                    {{ window.nombreAplicacion }}
-                  </h3>
-
-                  <p class="window-tile__org">
-                    {{ window.celula }} · {{ window.ldc }}
-                  </p>
-
-                  @if (isPromesa(window) && window.crq) {
-                    <p class="window-tile__crq">
-                      <span>CRQ</span>
-                      {{ window.crq }}
+                  <div class="window-flip__face window-flip__front">
+                    <p class="window-face__label">CRQ</p>
+                    <p class="window-face__crq">
+                      {{ window.crq || 'Sin CRQ' }}
                     </p>
-                  }
-
-                  <p class="window-tile__impact">
-                    {{ window.impacto }}
-                  </p>
-
-                  @if (window.observacion) {
-                    <p class="window-tile__note">
-                      {{ window.observacion }}
+                    <p class="window-face__label">Título</p>
+                    <h3 class="window-face__title">{{ window.impacto }}</h3>
+                    <p class="window-face__label">Descripción</p>
+                    <p class="window-face__text">
+                      {{ window.observacion || 'Sin descripción' }}
                     </p>
-                  }
-
-                </div>
-
-                <div class="window-tile__footer">
-
-                  <div class="window-tile__dates">
-                    <div class="date-block">
-                      <span class="date-block__label">Inicio</span>
-                      <span class="date-block__value">{{ window.fechaInicio }}</span>
-                    </div>
-                    <span class="arrow" aria-hidden="true">→</span>
-                    <div class="date-block">
-                      <span class="date-block__label">Fin</span>
-                      <span class="date-block__value">{{ window.fechaFin }}</span>
-                    </div>
+                    <p class="window-face__label">Aplicación asociada</p>
+                    <p class="window-face__app">
+                      <strong>{{ window.aplicacion }}</strong>
+                      {{ window.nombreAplicacion }}
+                    </p>
                   </div>
 
-                  <span class="window-tile__zone">
-                    {{ window.zonaHoraria }}
-                  </span>
+                  <div class="window-flip__face window-flip__back">
+                    <div class="window-tile__top">
+                      <div class="window-tile__meta-row">
+                        <span
+                          class="tipo-label"
+                          [class.tipo-label--promesa]="isPromesa(window)"
+                        >
+                          {{ tipoLabel(window.tipo) }}
+                        </span>
+                        <span
+                          class="status-label"
+                          [ngClass]="statusClass(window.estado)"
+                        >
+                          {{ window.estado }}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        class="icon-btn"
+                        title="Editar ventana"
+                        (click)="openEditPanel(window, $event)"
+                      >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <p class="window-face__back-title">
+                      {{ window.nombreAplicacion }}
+                    </p>
+                    <p class="window-tile__org">
+                      {{ window.celula }} · {{ window.ldc }}
+                    </p>
+                    <p class="window-tile__freq">{{ window.frecuencia }}</p>
+
+                    <div class="window-tile__dates">
+                      <div class="date-block">
+                        <span class="date-block__label">Inicio</span>
+                        <span class="date-block__value">{{ window.fechaInicio }}</span>
+                      </div>
+                      <span class="arrow" aria-hidden="true">→</span>
+                      <div class="date-block">
+                        <span class="date-block__label">Fin</span>
+                        <span class="date-block__value">{{ window.fechaFin }}</span>
+                      </div>
+                    </div>
+                    <span class="window-tile__zone">{{ window.zonaHoraria }}</span>
+                  </div>
 
                 </div>
-
               </article>
 
             }

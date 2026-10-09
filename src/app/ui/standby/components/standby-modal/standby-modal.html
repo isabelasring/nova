@@ -292,7 +292,8 @@
             }
             Selecciona un responsable para habilitar
             la programación de standby.
-            Luego elige el periodo en el calendario.
+            Luego elige un día: el turno se cuenta solo
+            de viernes a viernes.
 
           </div>
 
@@ -306,7 +307,7 @@
             }
             Responsable seleccionado:
             {{ selectedUser }}
-            · Elige el periodo. El turno queda de viernes 12:00
+            · Elige un día. El turno queda de viernes 12:00
             a viernes 12:00.
             <button
               type="button"
@@ -327,6 +328,7 @@
           "
         >
           <app-range-calendar
+            mode="week"
             (accepted)="onProgramRange($event)"
             (cleared)="onProgramClear()"
           ></app-range-calendar>

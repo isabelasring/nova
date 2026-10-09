@@ -206,7 +206,7 @@
               <td class="col-problema">{{ alerta.problema }}</td>
               <td class="col-apps">
                 @for (app of alerta.aplicacionesAfectadas ?? []; track app.codigo) {
-                  <span class="app-chip">{{ app.codigo }}</span>
+                  <span class="app-chip">{{ app.codigo }} · {{ app.nombre }}</span>
                 }
               </td>
               @if (
@@ -220,7 +220,7 @@
                 <button
                   type="button"
                   class="comments-btn"
-                  title="Comentarios CGM"
+                  title="Comentarios y trazabilidad"
                   (click)="openComments(alerta, $event)"
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -304,6 +304,9 @@
           <p class="alert-board__eyebrow">{{ alerta.detalle.nombreAlarma }}</p>
           <h2 id="alerta-detail-title">{{ alerta.problema }}</h2>
           <p class="alert-board__desc">{{ alerta.descripcion }}</p>
+          <p class="alert-board__standby">
+            Standby {{ alerta.detalle.standby ?? 'sin turno asignado' }}
+          </p>
           <p class="alert-board__when">
             Inicio {{ alerta.fechaHora }}
             @if (alerta.horaRecuperacion) {
@@ -325,48 +328,17 @@
                 </li>
               }
             </ul>
-          </section>
 
-          <section class="alert-card">
-            <h3>Quién atiende</h3>
-            <ul class="alert-contact">
-              <li>
-                <span>Stand by</span>
-                <strong>{{ alerta.detalle.standby ?? '—' }}</strong>
-              </li>
-              <li>
-                <span>Teléfono</span>
-                <strong>{{ alerta.detalle.telefono ?? '—' }}</strong>
-              </li>
-              <li>
-                <span>Correo</span>
-                <strong>{{ alerta.detalle.correo ?? '—' }}</strong>
-              </li>
-              <li>
-                <span>Teams</span>
-                <strong>{{ alerta.detalle.teams ?? '—' }}</strong>
-              </li>
-              @if (alerta.asignacion) {
-                <li>
-                  <span>Asignada a</span>
-                  <strong>{{ alerta.asignacion.cgm }}</strong>
-                </li>
-              }
-            </ul>
-          </section>
-
-          <section class="alert-card alert-card--thread">
-            <h3>Comentarios y acciones</h3>
-
+            <h3 class="alert-card__follow">Comentarios y acciones</h3>
             @if ((alerta.trazas ?? []).length === 0) {
               <p class="comments-empty">Todavía no hay trazabilidad.</p>
             } @else {
               <table class="trace-table">
                 <thead>
                   <tr>
-                    <th scope="col">Time</th>
-                    <th scope="col">User</th>
-                    <th scope="col">Message</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Quién</th>
+                    <th scope="col">Qué pasó</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -401,6 +373,27 @@
             </div>
           </section>
 
+          <section class="alert-card">
+            <h3>Quién atiende</h3>
+            <p class="alert-attendant">
+              {{ alerta.asignacion?.cgm ?? 'Sin asignar' }}
+            </p>
+            <ul class="alert-contact">
+              <li>
+                <span>Teléfono</span>
+                <strong>{{ alerta.detalle.telefono ?? '—' }}</strong>
+              </li>
+              <li>
+                <span>Correo</span>
+                <strong>{{ alerta.asignacion?.correo ?? alerta.detalle.correo ?? '—' }}</strong>
+              </li>
+              <li>
+                <span>Teams</span>
+                <strong>{{ alerta.detalle.teams ?? '—' }}</strong>
+              </li>
+            </ul>
+          </section>
+
         </div>
       </div>
 
@@ -424,7 +417,7 @@
 
         <header class="detail-modal__header">
           <div>
-            <p class="detail-modal__eyebrow">Comentarios CGM</p>
+            <p class="detail-modal__eyebrow">Comentarios y trazabilidad</p>
             <h2 id="alerta-comments-title">{{ alerta.detalle.nombreAlarma }}</h2>
             <p class="detail-modal__subtitle">{{ alerta.problema }}</p>
           </div>
@@ -440,9 +433,30 @@
 
         <div class="detail-modal__body">
 
+          @if ((alerta.trazas ?? []).length > 0) {
+            <table class="trace-table">
+              <thead>
+                <tr>
+                  <th scope="col">Hora</th>
+                  <th scope="col">Quién</th>
+                  <th scope="col">Qué pasó</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (traza of alerta.trazas ?? []; track traza.id) {
+                  <tr>
+                    <td>{{ traza.fechaHora }}</td>
+                    <td>{{ traza.usuario }}</td>
+                    <td>{{ traza.mensaje }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+
           @if (alerta.comentariosCgm.length === 0) {
             <p class="comments-empty">
-              No hay comentarios gestionados por usuarios CGM.
+              Todavía no hay comentarios. La asignación queda en la trazabilidad.
             </p>
           } @else {
             <ul class="comments-list">
@@ -464,7 +478,7 @@
             <textarea
               id="panel-comentario"
               rows="3"
-              placeholder="Agregar comentario CGM…"
+              placeholder="Agregar comentario…"
               [ngModel]="draftComment()"
               (ngModelChange)="draftComment.set($event)"
             ></textarea>

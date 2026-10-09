@@ -250,6 +250,91 @@
   gap: $space-20;
 }
 
+.window-flip {
+  position: relative;
+  min-height: 320px;
+  perspective: 1200px;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+.window-flip__inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.4, 0.15, 0.2, 1);
+}
+
+.window-flip.is-flipped .window-flip__inner {
+  transform: rotateY(180deg);
+}
+
+.window-flip__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 22px 18px;
+  background: $surface;
+  border: 1px solid $border-light;
+  border-radius: $radius-md;
+  backface-visibility: hidden;
+  overflow: auto;
+}
+
+.window-flip__back {
+  transform: rotateY(180deg);
+}
+
+.window-flip--saved .window-flip__face {
+  border-color: $verde-andino;
+}
+
+.window-face__label {
+  margin: 8px 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $text-disabled;
+}
+
+.window-face__label:first-child {
+  margin-top: 0;
+}
+
+.window-face__crq {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: $text-primary;
+}
+
+.window-face__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: $text-primary;
+}
+
+.window-face__text,
+.window-face__app,
+.window-face__back-title {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: $text-secondary;
+}
+
+.window-face__app strong,
+.window-face__back-title {
+  color: $text-primary;
+  font-weight: 700;
+}
+
 .window-tile {
   position: relative;
 

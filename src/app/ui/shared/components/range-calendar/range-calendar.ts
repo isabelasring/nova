@@ -32,7 +32,7 @@ interface CalendarCell {
 })
 export class RangeCalendarComponent {
 
-  readonly mode = input<'range' | 'month'>('range');
+  readonly mode = input<'range' | 'month' | 'week'>('range');
 
   readonly accepted = output<CalendarRange>();
 
@@ -114,6 +114,28 @@ export class RangeCalendarComponent {
       return;
     }
 
+    if (this.mode() === 'week') {
+      const friday = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      );
+
+      while (friday.getDay() !== 5) {
+        friday.setDate(friday.getDate() - 1);
+      }
+
+      const nextFriday = new Date(friday);
+      nextFriday.setDate(nextFriday.getDate() + 7);
+      this.start.set(friday);
+      this.end.set(nextFriday);
+      this.left.set({
+        year: friday.getFullYear(),
+        month: friday.getMonth()
+      });
+      return;
+    }
+
     const start = this.start();
     const end = this.end();
 
@@ -162,6 +184,21 @@ export class RangeCalendarComponent {
       this.accepted.emit({
         from: this.iso(from),
         to: this.iso(to)
+      });
+      return;
+    }
+
+    if (this.mode() === 'week') {
+      const start = this.start();
+
+      if (!start) {
+        return;
+      }
+
+      const end = this.end() ?? start;
+      this.accepted.emit({
+        from: this.iso(start),
+        to: this.iso(end)
       });
       return;
     }
