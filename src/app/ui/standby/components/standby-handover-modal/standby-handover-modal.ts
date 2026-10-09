@@ -81,13 +81,15 @@ export class StandbyHandoverModalComponent {
     label: reason.label
   }));
 
-  readonly allLeaders = STANDBY_LEADER_PEERS.filter(
-    leader => leader.nombre !== CURRENT_USER.nombre
+  readonly maxUsers = 3;
+
+  readonly allUsers = STANDBY_LEADER_PEERS.filter(
+    user => user.nombre !== CURRENT_USER.nombre
   );
 
-  readonly leaderSearch = signal('');
+  readonly userSearch = signal('');
 
-  readonly selectedLeader = signal<StandbyLeaderPeer | null>(null);
+  readonly selectedUsers = signal<StandbyLeaderPeer[]>([]);
 
   readonly motivoIsOther = signal(false);
 
@@ -98,22 +100,25 @@ export class StandbyHandoverModalComponent {
     nota: ['']
   });
 
-  readonly hasLeaderSearch = computed(
-    () => this.leaderSearch().trim().length > 0
+  readonly hasUserSearch = computed(
+    () => this.userSearch().trim().length > 0
   );
 
-  readonly filteredLeaders = computed(() => {
+  readonly filteredUsers = computed(() => {
 
-    const term = this.leaderSearch().trim().toLowerCase();
+    const term = this.userSearch().trim().toLowerCase();
+    const chosen = new Set(this.selectedUsers().map(user => user.id));
 
     if (!term) {
       return [];
     }
 
-    return this.allLeaders.filter(leader =>
-      leader.nombre.toLowerCase().includes(term) ||
-      leader.evc.toLowerCase().includes(term) ||
-      leader.linea.toLowerCase().includes(term)
+    return this.allUsers.filter(user =>
+      !chosen.has(user.id) && (
+        user.nombre.toLowerCase().includes(term) ||
+        user.evc.toLowerCase().includes(term) ||
+        user.linea.toLowerCase().includes(term)
+      )
     );
 
   });
@@ -133,14 +138,15 @@ export class StandbyHandoverModalComponent {
   get canSave(): boolean {
 
     const values = this.form.getRawValue();
-    const leader = this.selectedLeader();
+    const users = this.selectedUsers();
     const noteOk =
       !this.motivoIsOther() ||
       values.nota.trim().length >= 10;
 
     return Boolean(
       values.motivo &&
-      leader &&
+      users.length > 0 &&
+      users.length <= this.maxUsers &&
       values.fechaInicio &&
       values.fechaFin &&
       values.fechaFin >= values.fechaInicio &&
@@ -167,23 +173,28 @@ export class StandbyHandoverModalComponent {
 
   }
 
-  onLeaderSearch(value: string): void {
+  onUserSearch(value: string): void {
 
-    this.leaderSearch.set(value);
-
-  }
-
-  selectLeader(leader: StandbyLeaderPeer): void {
-
-    this.selectedLeader.set(leader);
-    this.leaderSearch.set('');
+    this.userSearch.set(value);
 
   }
 
-  clearLeaderSelection(): void {
+  selectUser(user: StandbyLeaderPeer): void {
 
-    this.selectedLeader.set(null);
-    this.leaderSearch.set('');
+    if (this.selectedUsers().length >= this.maxUsers) {
+      return;
+    }
+
+    this.selectedUsers.update(list => [...list, user]);
+    this.userSearch.set('');
+
+  }
+
+  removeUser(id: number): void {
+
+    this.selectedUsers.update(list =>
+      list.filter(user => user.id !== id)
+    );
 
   }
 
@@ -197,14 +208,16 @@ export class StandbyHandoverModalComponent {
     }
 
     const values = this.form.getRawValue();
-    const leader = this.selectedLeader();
+    const users = this.selectedUsers();
 
-    if (!leader) {
+    if (users.length === 0) {
       return;
     }
 
+    const names = users.map(user => user.nombre);
+
     this.delegationService.delegate({
-      toLeader: leader.nombre,
+      toUsers: names,
       motivo: values.motivo as StandbyDelegationReason,
       nota: values.nota.trim(),
       fechaInicio: new Date(values.fechaInicio + 'T00:00:00'),
@@ -214,10 +227,17 @@ export class StandbyHandoverModalComponent {
     this.delegated.emit();
     this.close();
 
+    const listed = names.length === 1
+      ? names[0]
+      : names.length === 2
+        ? `${names[0]} y ${names[1]}`
+        : `${names.slice(0, -1).join(', ')} y ${names[names.length - 1]}`;
+
     this.saveSuccess.show({
       title: 'Relevo registrado',
-      message:
-        `${leader.nombre} podrá programar standby por ti. Sigues siendo la líder titular.`
+      message: names.length === 1
+        ? `${listed} podrá programar standby por ti.`
+        : `${listed} podrán programar standby por ti.`
     });
 
   }
@@ -231,8 +251,8 @@ export class StandbyHandoverModalComponent {
       nota: ''
     });
 
-    this.leaderSearch.set('');
-    this.selectedLeader.set(null);
+    this.userSearch.set('');
+    this.selectedUsers.set([]);
     this.motivoIsOther.set(false);
     this.syncNotaValidators(false);
 

@@ -263,12 +263,12 @@ $estado-problema: $naranja-alba;
 
 .alertas-table__row--open td,
 .alertas-table__row--open:hover td {
-  background: #f7f7f8;
+  background: rgba(253, 218, 36, 0.42);
+  color: #2c2a29;
 }
 
-:host-context([data-theme='dark']) .alertas-table__row--open td,
-:host-context([data-theme='dark']) .alertas-table__row--open:hover td {
-  background: #3d3b39;
+.alertas-table__row--open td:first-child {
+  box-shadow: inset 4px 0 0 #fdda24;
 }
 
 :host-context([data-theme='dark']) {
@@ -290,6 +290,12 @@ $estado-problema: $naranja-alba;
 
   .alertas-table__row:hover td {
     background: #3d3b39;
+  }
+
+  .alertas-table__row--open td,
+  .alertas-table__row--open:hover td {
+    background: rgba(253, 218, 36, 0.72);
+    color: #2c2a29;
   }
 }
 

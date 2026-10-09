@@ -202,6 +202,17 @@
   color: $text-secondary;
 }
 
+.leader-option__remove {
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: $font-size-sm;
+  color: $link-color;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .leader-hint {
   margin: 0;
   font-size: $font-size-sm;

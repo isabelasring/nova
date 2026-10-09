@@ -15,7 +15,9 @@
         <div class="relevo-status__copy">
           <strong>Delegación activa</strong>
           <p>
-            {{ outgoing.toLeader }} programa standby por ti hasta el
+            {{ delegationService.namesOf(outgoing) }}
+            {{ delegationService.receiverCount(outgoing) === 1 ? 'programa' : 'programan' }}
+            standby por ti hasta el
             {{ formatDelegationDate(outgoing.fechaFin) }}
             ({{ delegationService.reasonLabel(outgoing.motivo) }}).
           </p>
@@ -105,7 +107,7 @@
             <h2 class="section-title">Programar standby</h2>
             <p class="section-subtitle">
               @if (delegationService.hasDelegatedOut()) {
-                Tienes una delegación activa: otro líder programa por ti.
+                Tienes una delegación activa: hay usuarios programando por ti.
               } @else if (delegationService.isActingForAnotherLeader()) {
                 Programa standby en nombre de
                 <strong>{{ delegationService.activeIncoming()?.fromLeader }}</strong>.
@@ -127,7 +129,7 @@
 
             <h2 class="section-title">Delegar programación</h2>
             <p class="section-subtitle">
-              Asigna a otro líder la programación de standby de tu equipo.
+              Asigna a hasta 3 usuarios la programación de standby de tu equipo.
             </p>
 
           }
@@ -441,8 +443,8 @@
         <div class="inline-panel inline-panel--delegate">
 
           <p class="inline-panel__lead">
-            Conservas tu rol de líder titular. La persona delegada podrá
-            programar standby de tu equipo durante el periodo que indiques.
+            Los usuarios delegados podrán programar standby de tu equipo
+            durante el periodo que indiques. Puedes elegir hasta 3.
           </p>
 
           @if (delegationService.activeOutgoing(); as outgoing) {
@@ -450,7 +452,9 @@
             <div class="delegate-card">
               <strong>Ya tienes una delegación activa</strong>
               <p>
-                {{ outgoing.toLeader }} programa por ti hasta el
+                {{ delegationService.namesOf(outgoing) }}
+                {{ delegationService.receiverCount(outgoing) === 1 ? 'programa' : 'programan' }}
+                por ti hasta el
                 {{ formatDelegationDate(outgoing.fechaFin) }}.
               </p>
               <button
@@ -467,7 +471,7 @@
             <div class="delegate-card">
               <strong>Nueva delegación</strong>
               <p>
-                Elige un líder, el motivo y las fechas para transferir
+                Elige hasta 3 usuarios, el motivo y las fechas para transferir
                 temporalmente la programación.
               </p>
               <button

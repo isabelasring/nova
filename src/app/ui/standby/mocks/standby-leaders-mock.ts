@@ -57,7 +57,7 @@ export const STANDBY_DELEGATION_REASONS: {
     id: 'vacaciones',
     label: 'Vacaciones',
     emoji: '🏖️',
-    hint: 'Te ausentas y otro líder cubre la programación'
+    hint: 'Te ausentas y otro usuario cubre la programación'
   },
   {
     id: 'licencia',
@@ -69,7 +69,7 @@ export const STANDBY_DELEGATION_REASONS: {
     id: 'rotacion',
     label: 'Rotación',
     emoji: '🔄',
-    hint: 'Reparto temporal de carga entre líderes'
+    hint: 'Reparto temporal de carga entre usuarios'
   },
   {
     id: 'proyecto',

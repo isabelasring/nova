@@ -37,7 +37,7 @@ export class StandbyDelegationService {
 
   readonly activeIncoming = computed(() =>
     this.delegationsSource().find(item =>
-      item.toLeader === this.ownerLeader &&
+      this.receiverNames(item).includes(this.ownerLeader) &&
       this.isActiveToday(item)
     ) ?? null
   );
@@ -61,25 +61,54 @@ export class StandbyDelegationService {
     }
 
     if (outgoing) {
-      return `${outgoing.toLeader} programa por ti`;
+      const verb = this.receiverNames(outgoing).length === 1
+        ? 'programa'
+        : 'programan';
+
+      return `${this.namesOf(outgoing)} ${verb} por ti`;
     }
 
     return 'Programación a tu cargo';
 
   });
 
+  namesOf(item: StandbyDelegation): string {
+
+    const names = this.receiverNames(item);
+
+    if (names.length <= 1) {
+      return names[0] ?? '';
+    }
+
+    if (names.length === 2) {
+      return `${names[0]} y ${names[1]}`;
+    }
+
+    return `${names.slice(0, -1).join(', ')} y ${names[names.length - 1]}`;
+
+  }
+
+  receiverCount(item: StandbyDelegation): number {
+
+    return this.receiverNames(item).length;
+
+  }
+
   delegate(payload: {
-    toLeader: string;
+    toUsers: string[];
     motivo: StandbyDelegationReason;
     nota: string;
     fechaInicio: Date;
     fechaFin: Date;
   }): StandbyDelegation {
 
+    const toUsers = payload.toUsers.slice(0, 3);
+
     const created: StandbyDelegation = {
       id: Date.now(),
       fromLeader: this.ownerLeader,
-      toLeader: payload.toLeader,
+      toLeader: toUsers[0] ?? '',
+      toUsers,
       motivo: payload.motivo,
       nota: payload.nota.trim(),
       fechaInicio: payload.fechaInicio,
@@ -135,6 +164,16 @@ export class StandbyDelegationService {
 
   }
 
+  private receiverNames(item: StandbyDelegation): string[] {
+
+    if (item.toUsers?.length) {
+      return item.toUsers;
+    }
+
+    return item.toLeader ? [item.toLeader] : [];
+
+  }
+
   private isActiveToday(
     delegation: StandbyDelegation
   ): boolean {
@@ -176,6 +215,9 @@ export class StandbyDelegationService {
 
       return parsed.map(item => ({
         ...item,
+        toUsers: item.toUsers?.length
+          ? item.toUsers.slice(0, 3)
+          : (item.toLeader ? [item.toLeader] : []),
         fechaInicio: new Date(item.fechaInicio),
         fechaFin: new Date(item.fechaFin),
         createdAt: new Date(item.createdAt)

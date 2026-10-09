@@ -387,12 +387,16 @@
 }
 
 .calendar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: $space-24;
   min-width: 0;
 }
 
 .program-calendar {
-  max-width: 440px;
+  width: min(100%, 440px);
+  margin-inline: auto;
 }
 
 .program-calendar--locked {
@@ -401,6 +405,7 @@
 }
 
 .info-message {
+  align-self: stretch;
   background: transparent;
   color: $text-primary;
 
@@ -618,10 +623,14 @@
 
 .observation-field {
   @include input-base;
+  display: block;
   width: 100%;
+  height: auto;
+  min-height: 112px;
   margin-top: $space-8;
+  padding: $space-12 $space-16;
+  line-height: 1.45;
   resize: vertical;
-  min-height: 72px;
 }
 
 .trace-observation {

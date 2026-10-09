@@ -17,8 +17,8 @@
       <div>
         <h2 id="relevo-title">Delegar programación</h2>
         <p class="relevo-modal__subtitle">
-          Transfiere temporalmente la programación de standby a otro
-          líder. {{ owner.nombre }} permanece como líder titular.
+          Transfiere temporalmente la programación de standby
+          a hasta 3 usuarios.
         </p>
       </div>
 
@@ -81,69 +81,78 @@
       }
 
       <div class="field">
-        <label for="relevo-buscar">Líder que recibe</label>
+        <label for="relevo-buscar">
+          Usuarios que reciben
+        </label>
+        <small class="field-hint">
+          Puedes elegir hasta {{ maxUsers }} usuarios
+          ({{ selectedUsers().length }} de {{ maxUsers }}).
+        </small>
 
-        @if (selectedLeader(); as leader) {
+        @if (selectedUsers().length > 0) {
 
           <div class="leader-picked">
-            <div class="leader-option leader-option--selected">
-              <span
-                class="leader-option__avatar"
-                [style.background]="avatarTone(leader.nombre).background"
-                [style.color]="avatarTone(leader.nombre).color"
-              >
-                {{ leader.initials }}
-              </span>
-              <span class="leader-option__info">
-                <strong>{{ leader.nombre }}</strong>
-                <small>{{ leader.evc }} · {{ leader.linea }}</small>
-              </span>
-            </div>
-
-            <button
-              type="button"
-              class="leader-change"
-              (click)="clearLeaderSelection()"
-            >
-              Cambiar líder
-            </button>
+            @for (user of selectedUsers(); track user.id) {
+              <div class="leader-option leader-option--selected">
+                <span
+                  class="leader-option__avatar"
+                  [style.background]="avatarTone(user.nombre).background"
+                  [style.color]="avatarTone(user.nombre).color"
+                >
+                  {{ user.initials }}
+                </span>
+                <span class="leader-option__info">
+                  <strong>{{ user.nombre }}</strong>
+                  <small>{{ user.evc }} · {{ user.linea }}</small>
+                </span>
+                <button
+                  type="button"
+                  class="leader-option__remove"
+                  (click)="removeUser(user.id)"
+                >
+                  Quitar
+                </button>
+              </div>
+            }
           </div>
 
-        } @else {
+        }
+
+        @if (selectedUsers().length < maxUsers) {
 
           <app-search-field
-            placeholder="Buscar"
-            [value]="leaderSearch()"
-            (valueChange)="onLeaderSearch($event)"
+            placeholder="Buscar usuario"
+            [value]="userSearch()"
+            (valueChange)="onUserSearch($event)"
           />
 
-          @if (hasLeaderSearch()) {
+          @if (hasUserSearch()) {
 
             <div class="leader-list">
 
-              @for (leader of filteredLeaders(); track leader.id) {
+              @for (user of filteredUsers(); track user.id) {
                 <button
                   type="button"
                   class="leader-option"
-                  (click)="selectLeader(leader)"
+                  (click)="selectUser(user)"
                 >
                   <span
                     class="leader-option__avatar"
-                    [style.background]="avatarTone(leader.nombre).background"
-                    [style.color]="avatarTone(leader.nombre).color"
+                    [style.background]="avatarTone(user.nombre).background"
+                    [style.color]="avatarTone(user.nombre).color"
                   >
-                    {{ leader.initials }}
+                    {{ user.initials }}
                   </span>
                   <span class="leader-option__info">
-                    <strong>{{ leader.nombre }}</strong>
-                    <small>{{ leader.evc }} · {{ leader.linea }}</small>
+                    <strong>{{ user.nombre }}</strong>
+                    <small>{{ user.evc }} · {{ user.linea }}</small>
                   </span>
                 </button>
               }
 
-              @if (filteredLeaders().length === 0) {
+              @if (filteredUsers().length === 0) {
                 <p class="leader-empty">
-                  No se encontraron líderes con esa búsqueda.
+                  No se encontraron usuarios con esa búsqueda.
                 </p>
               }
 
@@ -151,7 +160,7 @@
 
           } @else {
             <p class="leader-hint">
-              Escribe en el buscador para ver líderes disponibles.
+              Escribe en el buscador para ver usuarios disponibles.
             </p>
           }
 
@@ -188,7 +197,7 @@
             id="relevo-nota"
             formControlName="nota"
             rows="3"
-            placeholder="Contexto para el líder que recibe el relevo."
+            placeholder="Contexto para los usuarios que reciben el relevo."
           ></textarea>
 
         </div>
@@ -196,8 +205,8 @@
       }
 
       <aside class="relevo-note">
-        Solo se delega la acción de programar. Tu rol de líder no
-        cambia y puedes recuperar la programación cuando lo necesites.
+        Solo se delega la acción de programar. Puedes recuperar
+        la programación cuando lo necesites.
       </aside>
 
     </form>

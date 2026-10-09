@@ -257,6 +257,23 @@
   cursor: pointer;
   background: transparent;
   border: 0;
+  animation: window-rise 0.4s ease both;
+}
+
+.window-flip:hover {
+  transform: translateY(-3px);
+}
+
+@keyframes window-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .window-flip__inner {
@@ -276,12 +293,35 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 22px 22px 18px;
+  padding: 22px 22px 18px 26px;
   background: $surface;
   border: 1px solid $border-light;
+  border-left: 4px solid $link-color;
   border-radius: $radius-md;
+  box-shadow: 0 10px 24px rgba(44, 42, 41, 0.07);
   backface-visibility: hidden;
   overflow: auto;
+  transition: box-shadow 0.25s ease;
+}
+
+.window-flip.status--scheduled .window-flip__face {
+  border-left-color: $link-color;
+}
+
+.window-flip.status--running .window-flip__face {
+  border-left-color: $naranja-alba;
+}
+
+.window-flip.status--done .window-flip__face {
+  border-left-color: $verde-andino;
+}
+
+.window-flip.status--cancel .window-flip__face {
+  border-left-color: #9ca3af;
+}
+
+.window-flip:hover .window-flip__face {
+  box-shadow: 0 16px 32px rgba(44, 42, 41, 0.12);
 }
 
 .window-flip__back {

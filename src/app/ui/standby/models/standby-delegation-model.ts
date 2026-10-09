@@ -9,6 +9,7 @@ export interface StandbyDelegation {
   id: number;
   fromLeader: string;
   toLeader: string;
+  toUsers: string[];
   motivo: StandbyDelegationReason;
   nota: string;
   fechaInicio: Date;
