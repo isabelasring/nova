@@ -615,7 +615,7 @@
 
 .observation-label {
   display: block;
-  margin-top: $space-16;
+  margin: 16px 0 0;
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   color: $text-primary;
@@ -627,10 +627,11 @@
   width: 100%;
   height: auto;
   min-height: 112px;
-  margin-top: $space-8;
-  padding: $space-12 $space-16;
+  margin: 8px 0 0;
+  padding: 12px 16px;
   line-height: 1.45;
   resize: vertical;
+  box-sizing: border-box;
 }
 
 .trace-observation {

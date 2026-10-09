@@ -304,9 +304,6 @@
           <p class="alert-board__eyebrow">{{ alerta.detalle.nombreAlarma }}</p>
           <h2 id="alerta-detail-title">{{ alerta.problema }}</h2>
           <p class="alert-board__desc">{{ alerta.descripcion }}</p>
-          <p class="alert-board__standby">
-            Standby {{ alerta.detalle.standby ?? 'sin turno asignado' }}
-          </p>
           <p class="alert-board__when">
             Inicio {{ alerta.fechaHora }}
             @if (alerta.horaRecuperacion) {
@@ -317,7 +314,7 @@
 
         <div class="alert-board__layout">
 
-          <section class="alert-card alert-card--story">
+          <section class="alert-card">
             <h3>Impacto ahora</h3>
             <p>{{ alerta.detalle.serviciosImpactados }}</p>
             <ul class="affected-apps">
@@ -328,17 +325,45 @@
                 </li>
               }
             </ul>
+          </section>
 
-            <h3 class="alert-card__follow">Comentarios y acciones</h3>
+          <section class="alert-card">
+            <h3>Quién atiende</h3>
+            <span class="alert-contact-label">Stand by</span>
+            <p class="alert-attendant">
+              {{ alerta.detalle.standby ?? 'Sin turno asignado' }}
+            </p>
+            <ul class="alert-contact">
+              <li>
+                <span>Teléfono</span>
+                <strong>{{ alerta.detalle.telefono ?? '—' }}</strong>
+              </li>
+              <li>
+                <span>Correo</span>
+                <strong>{{ alerta.detalle.correo ?? '—' }}</strong>
+              </li>
+              <li>
+                <span>Teams</span>
+                <strong>{{ alerta.detalle.teams ?? '—' }}</strong>
+              </li>
+              <li>
+                <span>Asignada a</span>
+                <strong>{{ alerta.asignacion?.cgm ?? 'Sin asignar' }}</strong>
+              </li>
+            </ul>
+          </section>
+
+          <section class="alert-card alert-card--story">
+            <h3>Comentarios y acciones</h3>
             @if ((alerta.trazas ?? []).length === 0) {
               <p class="comments-empty">Todavía no hay trazabilidad.</p>
             } @else {
               <table class="trace-table">
                 <thead>
                   <tr>
-                    <th scope="col">Hora</th>
-                    <th scope="col">Quién</th>
-                    <th scope="col">Qué pasó</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Message</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -371,27 +396,6 @@
                 Publicar
               </button>
             </div>
-          </section>
-
-          <section class="alert-card">
-            <h3>Quién atiende</h3>
-            <p class="alert-attendant">
-              {{ alerta.asignacion?.cgm ?? 'Sin asignar' }}
-            </p>
-            <ul class="alert-contact">
-              <li>
-                <span>Teléfono</span>
-                <strong>{{ alerta.detalle.telefono ?? '—' }}</strong>
-              </li>
-              <li>
-                <span>Correo</span>
-                <strong>{{ alerta.asignacion?.correo ?? alerta.detalle.correo ?? '—' }}</strong>
-              </li>
-              <li>
-                <span>Teams</span>
-                <strong>{{ alerta.detalle.teams ?? '—' }}</strong>
-              </li>
-            </ul>
           </section>
 
         </div>
