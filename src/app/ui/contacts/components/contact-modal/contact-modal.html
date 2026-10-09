@@ -96,8 +96,12 @@
           </div>
 
           <div class="detalle-item">
-            <label>RESPONSABLE</label>
-            <span>{{ contacto()?.nombre || '—' }}</span>
+            <label>CONTACTOS</label>
+            @for (persona of contactosDeLaApp(); track persona.id) {
+              <span>
+                {{ persona.nombre }} · {{ persona.correo }} · {{ persona.celular }}
+              </span>
+            }
           </div>
 
         </div>
@@ -112,31 +116,20 @@
           [formGroup]="contactoForm"
         >
 
-          <div class="form-row">
-
-            <div class="field">
-
-              <label>NOMBRE</label>
-
-              <input
-                type="text"
-                [value]="contacto()?.nombre || ''"
-                readonly
-                class="field-locked"
-              />
-
-            </div>
-
-            <div class="field">
-
-              <label>CELULAR</label>
-
-              <app-phone-input
-                formControlName="celular"
-              />
-
-            </div>
-
+          <p class="contact-people__count">
+            {{ contactosDeLaApp().length }} contacto(s) de esta aplicación
+          </p>
+          <div class="contact-people">
+            @for (persona of contactosDeLaApp(); track persona.id) {
+              <article class="contact-person">
+                <header class="contact-person__top">
+                  <strong>{{ persona.nombre }}</strong>
+                  <span>{{ persona.horario }}</span>
+                </header>
+                <p>{{ persona.correo }}</p>
+                <p>{{ persona.celular }}</p>
+              </article>
+            }
           </div>
 
           <div class="distribution-card">
@@ -148,15 +141,12 @@
             <div class="distribution-content">
 
               <div class="field">
-
-                <app-option-select
-                  label="Lista de distribución"
-                  placeholder="Seleccione una opción"
-                  [disabled]="!canEditContactoTab"
-                  [value]="contacto()?.correo || ''"
-                  [options]="contacto()?.correo ? [contacto()!.correo] : []"
-                />
-
+                <label>Lista de distribución</label>
+                <ul class="contact-mails">
+                  @for (correo of correosDeLaApp(); track correo) {
+                    <li>{{ correo }}</li>
+                  }
+                </ul>
               </div>
 
               <div class="field">
@@ -185,15 +175,12 @@
             <div class="distribution-content">
 
               <div class="field">
-
-                <app-option-select
-                  label="Lista de distribución"
-                  placeholder="Seleccione una opción"
-                  [disabled]="!canEditContactoTab"
-                  [value]="contacto()?.correo || ''"
-                  [options]="contacto()?.correo ? [contacto()!.correo] : []"
-                />
-
+                <label>Lista de distribución</label>
+                <ul class="contact-mails">
+                  @for (correo of correosDeLaApp(); track correo) {
+                    <li>{{ correo }}</li>
+                  }
+                </ul>
               </div>
 
               <div class="field">
@@ -222,15 +209,12 @@
             <div class="distribution-content">
 
               <div class="field">
-
-                <app-option-select
-                  label="Lista de distribución"
-                  placeholder="Seleccione una opción"
-                  [disabled]="!canEditContactoTab"
-                  [value]="contacto()?.correo || ''"
-                  [options]="contacto()?.correo ? [contacto()!.correo] : []"
-                />
-
+                <label>Lista de distribución</label>
+                <ul class="contact-mails">
+                  @for (correo of correosDeLaApp(); track correo) {
+                    <li>{{ correo }}</li>
+                  }
+                </ul>
               </div>
 
               <div class="field">

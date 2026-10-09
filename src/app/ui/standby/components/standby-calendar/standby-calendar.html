@@ -13,9 +13,12 @@
       ‹
     </button>
 
-    <h3>
-      {{ monthLabel }}
-    </h3>
+    <button type="button" class="calendar-label" (click)="togglePicker('month')">
+      {{ monthName }}
+    </button>
+    <button type="button" class="calendar-label" (click)="togglePicker('year')">
+      {{ yearLabel }}
+    </button>
 
     <button
       type="button"
@@ -27,6 +30,14 @@
 
   </div>
 
+  @if (picker(); as kind) {
+    <app-period-picker
+      [kind]="kind"
+      [year]="yearLabel"
+      [month]="currentDate.getMonth()"
+      (chosen)="applyPeriod($event)"
+    />
+  } @else {
   <div class="weekdays">
 
     @for (
@@ -100,5 +111,6 @@
     }
 
   </div>
+  }
 
 </div>

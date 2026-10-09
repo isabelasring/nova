@@ -19,12 +19,6 @@ from '../../../standby/components/standby-month-view/standby-month-view';
 import { StandbyScheduleService }
 from '../../../standby/services/standby-schedule-service';
 
-import { PhoneInputComponent }
-from '../../../shared/components/phone-input/phone-input';
-
-import { OptionSelectComponent }
-from '../../../shared/components/option-select/option-select';
-
 import { Contact }
 from '../../models/contact-model';
 
@@ -41,9 +35,7 @@ from '../../../shared/services/save-success-service';
   styleUrls: ['./contact-modal.scss'],
   imports: [
     StandbyMonthViewComponent,
-    ReactiveFormsModule,
-    PhoneInputComponent,
-    OptionSelectComponent
+    ReactiveFormsModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -65,6 +57,26 @@ export class ContactModalComponent {
 
   private readonly saveSuccess =
     inject(SaveSuccessService);
+
+  readonly contactosDeLaApp = computed(() => {
+
+    const codigo = this.contacto()?.codigoAplicacion;
+
+    if (!codigo) {
+      return [];
+    }
+
+    return this.contactsService.contacts().filter(
+      item => item.codigoAplicacion === codigo
+    );
+
+  });
+
+  readonly correosDeLaApp = computed(() =>
+    this.contactosDeLaApp()
+      .map(item => item.correo)
+      .filter(correo => !!correo)
+  );
 
   readonly standbyAssignments = computed(() => {
 

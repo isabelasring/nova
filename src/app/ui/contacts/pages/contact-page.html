@@ -59,14 +59,6 @@
 
 
       <button
-        class="btn-secondary"
-        type="button"
-        (click)="downloadContacts()"
-      >
-        Descargar
-      </button>
-
-      <button
 
         class="btn-new-contact"
 
@@ -160,64 +152,36 @@
 
 
 
-    @for (contacto of pagedContacts(); track contacto.id) {
-
-
+    @for (group of pagedGroups(); track group.codigo) {
 
       <div
-
         class="contact-row"
-
-        [class.contact-row--selected]="isSelected(contacto.id)"
-
+        [class.contact-row--selected]="groupSelected(group.ids)"
       >
 
-
-
         <div class="contact-row__check">
-
           <input
-
             type="checkbox"
-
             class="row-check"
-
-            [checked]="isSelected(contacto.id)"
-
-            (change)="toggleContact(contacto.id)"
-
-            [attr.aria-label]="'Seleccionar ' + contacto.nombre"
-
+            [checked]="groupSelected(group.ids)"
+            (change)="toggleGroup(group.ids)"
+            [attr.aria-label]="'Seleccionar contactos de ' + group.codigo"
           />
-
         </div>
-
-
 
         <div class="contact-row__app">
-
           <a
-
             class="application-link"
-
-            (click)="openEditModal(contacto)"
-
+            (click)="openEditModal(group.contacts[0])"
           >
-
-            {{ contacto.codigoAplicacion }}
-
+            {{ group.codigo }}
           </a>
-
-          <small>{{ contacto.nombreAplicacion }}</small>
-
+          <small>{{ group.nombre }}</small>
         </div>
 
-
-
         <div class="contact-row__person contact-row__standby">
-
           @for (
-            person of standbyDe(contacto.codigoAplicacion);
+            person of standbyDe(group.codigo);
             track person.nombre
           ) {
             <div class="standby-person">
@@ -227,104 +191,47 @@
           } @empty {
             <span class="standby-empty">Sin programación</span>
           }
-
         </div>
-
-
 
         <div class="contact-row__mail">
-
-          <strong>{{ contacto.correo }}</strong>
-
-          <small>Correo</small>
-
+          @for (persona of group.contacts; track persona.id) {
+            <div class="contact-person-line">
+              <strong>{{ persona.correo }}</strong>
+              <small>{{ persona.nombre }} · {{ persona.celular }}</small>
+            </div>
+          }
         </div>
-
-
 
         <div class="contact-row__schedule">
-
-          <strong>24/7</strong>
-
-          <small>Horario</small>
-
+          @for (persona of group.contacts; track persona.id) {
+            <div class="contact-person-line">
+              <strong>{{ persona.horario }}</strong>
+              <small>{{ persona.nombre }}</small>
+            </div>
+          }
         </div>
-
-
 
         <div class="contact-row__meta">
-
-          <strong>{{ contacto.celula }}</strong>
-
-          <small>{{ contacto.ldc }} · {{ contacto.bvc }}</small>
-
+          <strong>{{ group.celula }}</strong>
+          <small>{{ group.ldc }} · {{ group.bvc }}</small>
         </div>
-
-
 
         <div class="contact-row__actions">
-
-
-
           <button
-
             type="button"
-
             class="icon-btn"
-
             title="Editar"
-
-            (click)="openEditModal(contacto)"
-
+            (click)="openEditModal(group.contacts[0])"
           >
-
             <svg viewBox="0 0 24 24" aria-hidden="true">
-
               <path
-
                 d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
-
               />
-
             </svg>
-
           </button>
-
-
-
-          <button
-
-            type="button"
-
-            class="icon-btn icon-btn--danger"
-
-            title="Eliminar"
-
-            (click)="askDeleteContact(contacto)"
-
-          >
-
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-
-              <path
-
-                d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-
-              />
-
-            </svg>
-
-          </button>
-
-
-
         </div>
 
-
-
       </div>
-
-
 
     }
 
@@ -351,7 +258,7 @@
     <app-pager
       [page]="listPage()"
       [pageSize]="listPageSize()"
-      [total]="contactsService.filteredContacts().length"
+      [total]="appGroups().length"
       (pageChange)="listPage.set($event)"
       (pageSizeChange)="listPageSize.set($event); listPage.set(1)"
     />

@@ -1,0 +1,19 @@
+<div class="period-picker">
+  <header class="period-picker__nav">
+    <button type="button" aria-label="Anterior" (click)="step(-1)">‹</button>
+    <strong>{{ title() }}</strong>
+    <button type="button" aria-label="Siguiente" (click)="step(1)">›</button>
+  </header>
+
+  <div class="period-picker__grid">
+    @for (item of items(); track item.key) {
+      <button
+        type="button"
+        [class.is-current]="item.current"
+        (click)="choose(item)"
+      >
+        {{ item.label }}
+      </button>
+    }
+  </div>
+</div>

@@ -2,9 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
-  input
+  input,
+  signal
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
+
+import {
+  PeriodChoice,
+  PeriodPickerComponent
+} from '../../../shared/components/period-picker/period-picker';
 
 import { CalendarDay }
 from '../../models/calendar-day-model';
@@ -15,7 +21,7 @@ from '../../models/standby-assignment-model';
 @Component({
   selector: 'app-standby-month-view',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, PeriodPickerComponent],
   templateUrl: './standby-month-view.html',
   styleUrl: './standby-month-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,18 +42,29 @@ export class StandbyMonthViewComponent {
 
   currentDate = new Date();
 
+  readonly picker = signal<'month' | 'year' | null>(null);
+
   calendarDays: CalendarDay[] = [];
 
   private didFocusAssignments = false;
 
   readonly weekDays = [
+    'Dom',
     'Lun',
     'Mar',
     'Mié',
     'Jue',
     'Vie',
-    'Sáb',
-    'Dom'
+    'Sáb'
+  ];
+
+  private readonly corporatePalette = [
+    '#fdda24',
+    '#00c389',
+    '#ff7f41',
+    '#9063cd',
+    '#59cbeb',
+    '#f586cd'
   ];
 
   constructor() {
@@ -226,6 +243,87 @@ export class StandbyMonthViewComponent {
 
   }
 
+  corporateColor(color: string | undefined): string {
+
+    const known = this.corporatePalette.find(
+      item => item.toLowerCase() === (color ?? '').toLowerCase()
+    );
+
+    if (known) {
+      return known;
+    }
+
+    const seed = (color ?? '').split('').reduce(
+      (total, char) => total + char.charCodeAt(0),
+      0
+    );
+
+    return this.corporatePalette[seed % this.corporatePalette.length];
+
+  }
+
+  inkFor(color: string): string {
+
+    return color.toLowerCase() === '#9063cd' ? '#ffffff' : '#2c2a29';
+
+  }
+
+  togglePicker(kind: 'month' | 'year'): void {
+
+    this.picker.update(current => current === kind ? null : kind);
+
+  }
+
+  applyPeriod(choice: PeriodChoice): void {
+
+    const kind = this.picker();
+
+    this.currentDate = new Date(
+      choice.year,
+      kind === 'month' ? choice.month : this.currentDate.getMonth(),
+      1
+    );
+    this.picker.set(null);
+    this.buildCalendar();
+
+  }
+
+  previousYear(): void {
+
+    this.currentDate = new Date(
+      this.currentDate.getFullYear() - 1,
+      this.currentDate.getMonth(),
+      1
+    );
+    this.buildCalendar();
+
+  }
+
+  nextYear(): void {
+
+    this.currentDate = new Date(
+      this.currentDate.getFullYear() + 1,
+      this.currentDate.getMonth(),
+      1
+    );
+    this.buildCalendar();
+
+  }
+
+  get monthName(): string {
+
+    return this.currentDate.toLocaleDateString('es-CO', {
+      month: 'long'
+    });
+
+  }
+
+  get yearLabel(): number {
+
+    return this.currentDate.getFullYear();
+
+  }
+
   previousMonth(): void {
 
     this.currentDate =
@@ -312,12 +410,7 @@ export class StandbyMonthViewComponent {
     const totalDays =
       new Date(year, month + 1, 0).getDate();
 
-    let firstWeekDay = firstDay.getDay();
-
-    firstWeekDay =
-      firstWeekDay === 0
-        ? 6
-        : firstWeekDay - 1;
+    const firstWeekDay = firstDay.getDay();
 
     for (
       let i = 0;

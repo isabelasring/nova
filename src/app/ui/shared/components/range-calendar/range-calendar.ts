@@ -6,6 +6,11 @@ import {
   signal
 } from '@angular/core';
 
+import {
+  PeriodChoice,
+  PeriodPickerComponent
+} from '../period-picker/period-picker';
+
 export interface CalendarRange {
   from: string;
   to: string;
@@ -26,6 +31,7 @@ interface CalendarCell {
 @Component({
   selector: 'app-range-calendar',
   standalone: true,
+  imports: [PeriodPickerComponent],
   templateUrl: './range-calendar.html',
   styleUrl: './range-calendar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -52,6 +58,11 @@ export class RangeCalendarComponent {
   readonly start = signal<Date | null>(null);
 
   readonly end = signal<Date | null>(null);
+
+  readonly openPicker = signal<{
+    side: 'left' | 'right';
+    kind: 'month' | 'year';
+  } | null>(null);
 
   cells(panel: CalendarPanel): CalendarCell[] {
 
@@ -99,6 +110,38 @@ export class RangeCalendarComponent {
       year: date.getFullYear(),
       month: date.getMonth()
     });
+
+  }
+
+  togglePicker(side: 'left' | 'right', kind: 'month' | 'year'): void {
+
+    const current = this.openPicker();
+
+    if (current?.side === side && current.kind === kind) {
+      this.openPicker.set(null);
+      return;
+    }
+
+    this.openPicker.set({ side, kind });
+
+  }
+
+  applyPeriod(choice: PeriodChoice): void {
+
+    const current = this.openPicker();
+
+    if (!current) {
+      return;
+    }
+
+    const target = current.side === 'left' ? this.left : this.right;
+
+    target.update(panel => ({
+      year: choice.year,
+      month: current.kind === 'month' ? choice.month : panel.month
+    }));
+
+    this.openPicker.set(null);
 
   }
 

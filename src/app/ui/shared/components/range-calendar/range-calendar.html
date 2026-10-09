@@ -10,13 +10,25 @@
       <section class="month">
         <header class="month__nav">
           <button type="button" aria-label="Mes anterior" (click)="shift('left', 'month', -1)">‹</button>
-          <strong>{{ months[left().month] }}</strong>
+          <button type="button" class="month__label" (click)="togglePicker('left', 'month')">
+            {{ months[left().month] }}
+          </button>
           <button type="button" aria-label="Mes siguiente" (click)="shift('left', 'month', 1)">›</button>
           <button type="button" aria-label="Año anterior" (click)="shift('left', 'year', -1)">‹</button>
-          <strong>{{ left().year }}</strong>
+          <button type="button" class="month__label" (click)="togglePicker('left', 'year')">
+            {{ left().year }}
+          </button>
           <button type="button" aria-label="Año siguiente" (click)="shift('left', 'year', 1)">›</button>
         </header>
 
+        @if (openPicker()?.side === 'left') {
+          <app-period-picker
+            [kind]="openPicker()!.kind"
+            [year]="left().year"
+            [month]="left().month"
+            (chosen)="applyPeriod($event)"
+          />
+        } @else {
         <div class="month__weekdays">
           @for (name of weekdays; track name) {
             <span>{{ name }}</span>
@@ -36,6 +48,7 @@
             </button>
           }
         </div>
+        }
       </section>
 
       @if (mode() === 'range') {
@@ -43,13 +56,25 @@
         <section class="month">
           <header class="month__nav">
             <button type="button" aria-label="Mes anterior" (click)="shift('right', 'month', -1)">‹</button>
-            <strong>{{ months[right().month] }}</strong>
+            <button type="button" class="month__label" (click)="togglePicker('right', 'month')">
+              {{ months[right().month] }}
+            </button>
             <button type="button" aria-label="Mes siguiente" (click)="shift('right', 'month', 1)">›</button>
             <button type="button" aria-label="Año anterior" (click)="shift('right', 'year', -1)">‹</button>
-            <strong>{{ right().year }}</strong>
+            <button type="button" class="month__label" (click)="togglePicker('right', 'year')">
+              {{ right().year }}
+            </button>
             <button type="button" aria-label="Año siguiente" (click)="shift('right', 'year', 1)">›</button>
           </header>
 
+          @if (openPicker()?.side === 'right') {
+            <app-period-picker
+              [kind]="openPicker()!.kind"
+              [year]="right().year"
+              [month]="right().month"
+              (chosen)="applyPeriod($event)"
+            />
+          } @else {
           <div class="month__weekdays">
             @for (name of weekdays; track name) {
               <span>{{ name }}</span>
@@ -69,6 +94,7 @@
               </button>
             }
           </div>
+          }
         </section>
 
       }

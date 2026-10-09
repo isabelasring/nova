@@ -30,12 +30,19 @@
   margin-bottom: 12px;
 }
 
-.month__nav strong {
+.month__nav strong,
+.month__label {
   min-width: 92px;
   font-size: 20px;
   font-weight: 800;
   text-align: center;
   color: #2c2a29;
+}
+
+.month__label {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 .month__nav button {
@@ -125,6 +132,7 @@
   }
 
   .month__nav strong,
+  .month__label,
   .month__nav button,
   .month__days button {
     color: #f4f5f7;

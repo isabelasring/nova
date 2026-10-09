@@ -6,8 +6,18 @@
   margin-bottom: $space-16;
 }
 
-.calendar-header h3 {
+.calendar-header h3,
+.calendar-label {
   text-transform: capitalize;
+}
+
+.calendar-label {
+  border: 0;
+  background: transparent;
+  color: $text-primary;
+  font-size: $font-size-md;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .calendar-nav {

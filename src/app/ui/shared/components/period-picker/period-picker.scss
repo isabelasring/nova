@@ -1,0 +1,83 @@
+.period-picker {
+  padding: 8px 8px 16px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(44, 42, 41, 0.12);
+}
+
+.period-picker__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px 12px;
+  border-bottom: 1px solid #ececee;
+}
+
+.period-picker__nav strong {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #2c2a29;
+}
+
+.period-picker__nav button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #6b7280;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.period-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px 4px;
+  padding: 18px 8px 4px;
+}
+
+.period-picker__grid button {
+  min-height: 40px;
+  padding: 8px 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.period-picker__grid button.is-current {
+  color: #2c2a29;
+  font-weight: 800;
+}
+
+.period-picker__grid button:hover {
+  background: #f4f5f6;
+  color: #2c2a29;
+}
+
+:host-context([data-theme='dark']) {
+  .period-picker {
+    background: #2c2a29;
+  }
+
+  .period-picker__nav {
+    border-bottom-color: #4a4745;
+  }
+
+  .period-picker__nav strong,
+  .period-picker__grid button.is-current {
+    color: #f4f5f7;
+  }
+
+  .period-picker__grid button:hover {
+    background: #3a3836;
+    color: #f4f5f7;
+  }
+}

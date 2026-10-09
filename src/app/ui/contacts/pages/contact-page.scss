@@ -90,7 +90,7 @@
     minmax(140px, 1fr)
     auto;
   gap: $space-16;
-  align-items: center;
+  align-items: start;
 
   padding: 16px 20px;
 
@@ -147,6 +147,14 @@
 
 .contact-row--selected:hover {
   background: #f7f7f8;
+}
+
+.contact-row--header {
+  align-items: center;
+}
+
+.contact-person-line + .contact-person-line {
+  margin-top: 8px;
 }
 
 .contact-row__actions-header {

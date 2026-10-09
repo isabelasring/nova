@@ -173,6 +173,62 @@
   gap: $space-24;
 }
 
+.contact-people {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-people__count {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: $text-primary;
+}
+
+.contact-mails {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contact-mails li {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f4f5f6;
+  color: $text-primary;
+  font-size: 14px;
+}
+
+.contact-person {
+  padding: 14px 16px;
+  border: 1px solid $border-light;
+  border-radius: 12px;
+  background: $surface;
+}
+
+.contact-person__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.contact-person__top strong {
+  font-size: 16px;
+  color: $text-primary;
+}
+
+.contact-person__top span,
+.contact-person p {
+  margin: 4px 0 0;
+  color: $text-secondary;
+  font-size: 14px;
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

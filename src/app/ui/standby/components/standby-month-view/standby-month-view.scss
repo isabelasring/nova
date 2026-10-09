@@ -18,61 +18,20 @@
   padding: 0;
 }
 
-.standby-layout--outline .calendar-header {
-  margin-bottom: $space-16;
+.standby-layout--outline .month-nav strong {
+  min-width: 72px;
+  font-size: 16px;
 }
 
-.standby-layout--outline .calendar-header h3 {
-  font-size: $font-size-md;
-}
-
-.standby-layout--outline .total-days {
-  display: none;
-}
-
-.standby-layout--outline .calendar-nav {
-  width: 32px;
-  height: 32px;
-}
-
-.standby-layout--outline .weekdays {
-  margin-bottom: $space-8;
-  font-size: $font-size-xs;
-}
-
-.standby-layout--outline .days-grid {
-  gap: 6px;
-}
-
-.standby-layout--outline .calendar-day {
-  height: 44px;
-  border-radius: $radius-sm;
-  background: $surface;
-  cursor: default;
-}
-
+.standby-layout--outline .calendar-day,
 .standby-layout--outline .empty-day {
-  height: 44px;
+  height: 36px;
 }
 
 .standby-layout--outline .day-number {
-  font-size: $font-size-sm;
-}
-
-.standby-layout--outline .calendar-day:hover {
-  transform: none;
-  box-shadow: none;
-}
-
-.standby-layout--outline .calendar-day.has-assignment {
-  background: color-mix(in srgb, var(--assignment-color, #00c389) 18%, transparent);
-  border: 2px solid var(--assignment-color, #00c389);
-  box-shadow: none;
-}
-
-.standby-layout--outline .calendar-day.has-assignment .day-number {
-  color: var(--assignment-color, #00c389);
-  font-weight: $font-weight-bold;
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
 }
 
 .person-apps {
@@ -241,120 +200,106 @@
 
 .calendar-container {
   flex: 1;
-  padding: $space-24;
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(44, 42, 41, 0.08);
 }
 
-.calendar-header {
-  @include flex-between;
-
-  margin-bottom: $space-24;
-}
-
-.calendar-header h3 {
-  text-transform: capitalize;
-  font-size: $font-size-h3;
-  font-weight: $font-weight-semibold;
-}
-
-.calendar-header-actions {
+.month-nav {
   display: flex;
   align-items: center;
-  gap: $space-12;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
-.total-days {
-  font-size: $font-size-sm;
-  color: $text-secondary;
+.month-nav strong,
+.month-label {
+  min-width: 92px;
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+  text-transform: capitalize;
+  color: #2c2a29;
 }
 
-.calendar-nav {
-  width: 36px;
-  height: 36px;
-
-  border: 1px solid $border-color;
-
-  border-radius: $radius-sm;
-
-  background: $surface;
-
+.month-label {
+  border: 0;
+  background: transparent;
   cursor: pointer;
-
-  font-size: $font-size-lg;
-
-  @include flex-center;
-  @include transition;
 }
 
-.calendar-nav:hover {
-  background: $violeta-orquidea;
-  border-color: $violeta-orquidea;
-  color: $blanco;
+.month-nav button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #2c2a29;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-
-  margin-bottom: $space-12;
-
-  color: $text-secondary;
-
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
+  margin-bottom: 4px;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
   text-align: center;
 }
 
 .days-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-
-  gap: $space-8;
+  gap: 0;
 }
 
 .calendar-day {
   position: relative;
-
-  height: 72px;
-
-  border: 1.5px solid $border-light;
-
-  border-radius: $radius-md;
-
-  background: $background-body;
-
-  cursor: pointer;
-
+  height: 40px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: default;
   @include flex-center;
-  @include transition;
 }
 
 .day-number {
-  font-size: $font-size-md;
-  font-weight: $font-weight-semibold;
-  color: $text-primary;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2c2a29;
 }
 
 .calendar-day.has-assignment {
-  box-shadow: $shadow-sm;
+  background: color-mix(in srgb, var(--assignment-color, #fdda24) 28%, white);
 }
 
 .calendar-day.has-assignment .day-number {
-  font-weight: $font-weight-bold;
+  background: var(--assignment-color, #fdda24);
+  color: var(--assignment-ink, #2c2a29);
+  font-weight: 800;
 }
 
 .calendar-day.is-range-start {
-  border-top-left-radius: $radius-lg;
-  border-bottom-left-radius: $radius-lg;
+  border-radius: 999px 0 0 999px;
 }
 
 .calendar-day.is-range-end {
-  border-top-right-radius: $radius-lg;
-  border-bottom-right-radius: $radius-lg;
+  border-radius: 0 999px 999px 0;
 }
 
 .calendar-day:hover {
-  transform: translateY(-2px);
-  box-shadow: $shadow-md;
+  transform: none;
+  box-shadow: none;
 }
 
 .tooltip {
@@ -417,5 +362,22 @@
 }
 
 .empty-day {
-  height: 72px;
+  height: 40px;
+}
+
+:host-context([data-theme='dark']) {
+  .calendar-container {
+    background: #2c2a29;
+  }
+
+  .month-nav strong,
+  .month-label,
+  .month-nav button,
+  .day-number {
+    color: #f4f5f7;
+  }
+
+  .calendar-day.has-assignment .day-number {
+    color: var(--assignment-ink, #2c2a29);
+  }
 }

@@ -3,8 +3,14 @@ import {
   Component,
   effect,
   input,
-  output
+  output,
+  signal
 } from '@angular/core';
+
+import {
+  PeriodChoice,
+  PeriodPickerComponent
+} from '../../../shared/components/period-picker/period-picker';
 
 export interface CalendarDay {
   date: Date;
@@ -21,6 +27,7 @@ export interface OccupiedRange {
 @Component({
   selector: 'app-standby-calendar',
   standalone: true,
+  imports: [PeriodPickerComponent],
   templateUrl: './standby-calendar.html',
   styleUrl: './standby-calendar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -42,6 +49,8 @@ export class StandbyCalendarComponent {
   readonly conflict = output<string>();
 
   currentDate = new Date();
+
+  readonly picker = signal<'month' | 'year' | null>(null);
 
   /** Fechas de inicio (viernes) de cada semana seleccionada. */
   selectedWeekStarts: Date[] = [];
@@ -467,6 +476,40 @@ export class StandbyCalendarComponent {
       );
 
     this.buildCalendar();
+
+  }
+
+  togglePicker(kind: 'month' | 'year'): void {
+
+    this.picker.update(current => current === kind ? null : kind);
+
+  }
+
+  applyPeriod(choice: PeriodChoice): void {
+
+    const kind = this.picker();
+
+    this.currentDate = new Date(
+      choice.year,
+      kind === 'month' ? choice.month : this.currentDate.getMonth(),
+      1
+    );
+    this.picker.set(null);
+    this.buildCalendar();
+
+  }
+
+  get monthName(): string {
+
+    return this.currentDate.toLocaleDateString('es-CO', {
+      month: 'long'
+    });
+
+  }
+
+  get yearLabel(): number {
+
+    return this.currentDate.getFullYear();
 
   }
 

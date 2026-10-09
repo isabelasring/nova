@@ -44,9 +44,6 @@ from '../../standby/services/standby-schedule-service';
 import { SaveSuccessService }
 from '../../shared/services/save-success-service';
 
-import { DownloadTrayService }
-from '../../shared/services/download-tray-service';
-
 @Component({
   selector: 'app-contacts-page',
   standalone: true,
@@ -74,9 +71,31 @@ export class ContactsPageComponent {
 
   readonly listPageSize = signal(10);
 
-  readonly pagedContacts = computed(() =>
+  readonly appGroups = computed(() => {
+
+    const groups = new Map<string, Contact[]>();
+
+    for (const contact of this.contactsService.filteredContacts()) {
+      const current = groups.get(contact.codigoAplicacion) ?? [];
+      current.push(contact);
+      groups.set(contact.codigoAplicacion, current);
+    }
+
+    return [...groups.entries()].map(([codigo, contacts]) => ({
+      codigo,
+      nombre: contacts[0].nombreAplicacion,
+      celula: contacts[0].celula,
+      ldc: contacts[0].ldc,
+      bvc: contacts[0].bvc,
+      contacts,
+      ids: contacts.map(item => item.id)
+    }));
+
+  });
+
+  readonly pagedGroups = computed(() =>
     pageSlice(
-      this.contactsService.filteredContacts(),
+      this.appGroups(),
       this.listPage(),
       this.listPageSize()
     )
@@ -85,8 +104,6 @@ export class ContactsPageComponent {
   private readonly standbySchedule = inject(StandbyScheduleService);
 
   private readonly saveSuccess = inject(SaveSuccessService);
-
-  private readonly downloads = inject(DownloadTrayService);
 
   readonly searchForm = this.fb.group({
     searchApp: ['']
@@ -184,6 +201,29 @@ export class ContactsPageComponent {
   isSelected(id: number): boolean {
 
     return this.selectedIds().has(id);
+
+  }
+
+  groupSelected(ids: number[]): boolean {
+
+    return ids.length > 0 && ids.every(id => this.selectedIds().has(id));
+
+  }
+
+  toggleGroup(ids: number[]): void {
+
+    const next = new Set(this.selectedIds());
+    const allSelected = ids.every(id => next.has(id));
+
+    for (const id of ids) {
+      if (allSelected) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+    }
+
+    this.selectedIds.set(next);
 
   }
 
@@ -318,41 +358,6 @@ export class ContactsPageComponent {
   openNewContactModal(): void {
 
     this.showNewContactModal.set(true);
-
-  }
-
-  downloadContacts(): void {
-
-    const rows: string[][] = [[
-      'Código',
-      'Aplicación',
-      'Nombre',
-      'Celular',
-      'Correo',
-      'Horario',
-      'Célula',
-      'BVC',
-      'LdC'
-    ]];
-
-    for (const contacto of this.contactsService.filteredContacts()) {
-      rows.push([
-        contacto.codigoAplicacion,
-        contacto.nombreAplicacion,
-        contacto.nombre,
-        contacto.celular,
-        contacto.correo,
-        contacto.horario,
-        contacto.celula,
-        contacto.bvc,
-        contacto.ldc
-      ]);
-    }
-
-    this.downloads.enqueue(
-      'contactos.csv',
-      () => DownloadTrayService.csv(rows)
-    );
 
   }
 

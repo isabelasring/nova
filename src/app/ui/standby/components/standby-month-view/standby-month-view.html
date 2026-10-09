@@ -48,7 +48,7 @@
 
               <span
                 class="color-dot"
-                [style.background]="group.responsables[0].color"
+                [style.background]="corporateColor(group.responsables[0].color)"
               ></span>
 
               <div class="assignment-info">
@@ -108,36 +108,27 @@
 
   <section class="calendar-container">
 
-    <div class="calendar-header">
+    <header class="month-nav">
+      <button type="button" aria-label="Mes anterior" (click)="previousMonth()">‹</button>
+      <button type="button" class="month-label" (click)="togglePicker('month')">
+        {{ monthName }}
+      </button>
+      <button type="button" aria-label="Mes siguiente" (click)="nextMonth()">›</button>
+      <button type="button" aria-label="Año anterior" (click)="previousYear()">‹</button>
+      <button type="button" class="month-label" (click)="togglePicker('year')">
+        {{ yearLabel }}
+      </button>
+      <button type="button" aria-label="Año siguiente" (click)="nextYear()">›</button>
+    </header>
 
-      <h3>
-        {{ monthLabel }}
-      </h3>
-
-      <div class="calendar-header-actions">
-
-        <span class="total-days">
-          Total días: {{ totalDays }}
-        </span>
-
-        <button
-          class="calendar-nav"
-          (click)="previousMonth()"
-        >
-          ‹
-        </button>
-
-        <button
-          class="calendar-nav"
-          (click)="nextMonth()"
-        >
-          ›
-        </button>
-
-      </div>
-
-    </div>
-
+    @if (picker(); as kind) {
+      <app-period-picker
+        [kind]="kind"
+        [year]="yearLabel"
+        [month]="currentDate.getMonth()"
+        (chosen)="applyPeriod($event)"
+      />
+    } @else {
     <div class="weekdays">
 
       @for (
@@ -168,16 +159,13 @@
             [class.is-range-start]="day.isRangeStart"
             [class.is-range-end]="day.isRangeEnd"
             [style.--assignment-color]="
-              day.assignment?.color ?? null
-            "
-            [style.background]="
-              !outlineMode() && day.assignment
-                ? day.assignment.color + '22'
+              day.assignment
+                ? corporateColor(day.assignment.color)
                 : null
             "
-            [style.borderColor]="
-              !outlineMode() && day.assignment
-                ? day.assignment.color
+            [style.--assignment-ink]="
+              day.assignment
+                ? inkFor(corporateColor(day.assignment.color))
                 : null
             "
           >
@@ -238,6 +226,7 @@
       }
 
     </div>
+    }
 
   </section>
 
